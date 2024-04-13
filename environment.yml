@@ -1,0 +1,4 @@
+name: alphatester
+channels:
+  - defaults
+prefix: /home/ionut/anaconda3/envs/alphatester
