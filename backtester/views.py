@@ -25,6 +25,8 @@ class StrategyCreateView(CreateView):
     fields = ["name", "description"] # Only these fields are shown in the form
     
     def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            return super().form_invalid(form)
         form.instance.user = self.request.user
         return super().form_valid(form)
     
