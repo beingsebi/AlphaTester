@@ -1,11 +1,12 @@
 from django.urls import path
 
-from . import views
+from .views import *
 
 app_name = "backtester"
 urlpatterns = [
-    path("", views.IndexView.as_view(), name="index"),
-    path("<int:pk>/", views.DetailView.as_view(), name="detail"),
-    path("<int:pk>/result/", views.ResultView.as_view(), name="result"),
-    # path("<int:question_id>/vote/", views.vote, name="vote"),
+    path("", IndexListView.as_view(), name="index-list"),
+    path("detail/<int:pk>/", DetailView.as_view(), name="detail"),
+    path("result/<int:pk>/", ResultView.as_view(), name="result"),
+    path("strategy/add/", StrategyCreateView.as_view(), name="strategy-add"),
+    path("strategy/<int:pk>/delete/", StrategyDeleteView.as_view(), name="strategy-delete"),
 ]

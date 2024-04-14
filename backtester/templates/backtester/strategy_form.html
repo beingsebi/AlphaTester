@@ -1,0 +1,10 @@
+{% comment "" %}{% extends "backtester/base.html" %}{% endcomment %}
+
+{% block content %}
+    <h2>Strategy Form</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

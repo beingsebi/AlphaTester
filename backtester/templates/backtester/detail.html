@@ -1,14 +1,13 @@
-<form action="" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <legend><h1>{{ strategy.name }}</h1></legend>
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% comment %} 
+{% extends "backtester/base.html" %}
+{% endcomment %}
 
-        {% comment %} {% for choice in strategy.choice_set.all %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-        {% endfor %} {% endcomment %}
-    
-    </fieldset>
-    <input type="submit" value="edit">
-</form>
+{% block content %}
+<h2>{{ strategy.name }}</h2>
+<p>{{ strategy.description }}</p>
+<p>Created: {{ strategy.created }}</p>
+<p>By user: {{ strategy.user.username }}</p>
+{% if request.user == strategy.user %}
+    <btn><a href="{% url 'backtester:strategy-delete' strategy.id %}">DELETE</a></btn>
+{% endif %}
+{% endblock %}
