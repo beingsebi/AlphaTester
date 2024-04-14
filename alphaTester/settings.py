@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from utils import constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,11 +84,11 @@ WSGI_APPLICATION = "alphaTester.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "alphatester",
-        "USER": "postgres",
-        "PASSWORD": "123456",
-        "HOST": "127.0.0.1",  # aka localhost
-        "PORT": "5432",
+        "NAME": constants.DbConstants.DB_PARAMS["database"],
+        "USER": constants.DbConstants.DB_PARAMS["user"],
+        "PASSWORD": constants.DbConstants.DB_PARAMS["password"],
+        "HOST": constants.DbConstants.DB_PARAMS["host"],
+        "PORT": constants.DbConstants.DB_PARAMS["port"],
     }
 }
 
