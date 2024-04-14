@@ -1,0 +1,16 @@
+{% block content %}
+
+<a href="{% url 'backtester:strategy-add' %}">Add new strategy</a>
+
+{% if latest_strategy_list %}
+    <ul>
+    {% for strategy in latest_strategy_list %}
+        <li><a href="{% url 'backtester:detail' strategy.id %}">{{ strategy.name }}</a></li>
+        {% comment %} <li><a href="#">{{ strategy.name }}</a></li> {% endcomment %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No strategies are available.</p>
+{% endif %}
+
+{% endblock %}
