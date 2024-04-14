@@ -1,0 +1,14 @@
+<form action="" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>{{ strategy.name }}</h1></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+        {% comment %} {% for choice in strategy.choice_set.all %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endfor %} {% endcomment %}
+    
+    </fieldset>
+    <input type="submit" value="edit">
+</form>
