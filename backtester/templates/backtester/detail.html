@@ -1,0 +1,13 @@
+{% comment %} 
+{% extends "backtester/base.html" %}
+{% endcomment %}
+
+{% block content %}
+<h2>{{ strategy.name }}</h2>
+<p>{{ strategy.description }}</p>
+<p>Created: {{ strategy.created }}</p>
+<p>By user: {{ strategy.user.username }}</p>
+{% if request.user == strategy.user %}
+    <btn><a href="{% url 'backtester:strategy-delete' strategy.id %}">DELETE</a></btn>
+{% endif %}
+{% endblock %}
