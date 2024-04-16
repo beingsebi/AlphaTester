@@ -2,6 +2,8 @@ from django.views import generic
 from .models import Strategy
 from django.views.generic.edit import CreateView, DeleteView
 from django.urls import reverse_lazy
+from utils.strategy.strategy import StrategyDetails
+import json
 
 class IndexListView(generic.ListView):
     template_name = "backtester/index.html"
@@ -22,12 +24,23 @@ class ResultView(generic.DetailView):
 class StrategyCreateView(CreateView):
     model = Strategy
     template_name = "backtester/strategy_form.html"
-    fields = ["name", "description"] # Only these fields are shown in the form
+    fields = ["name", "description", "strategyDetails"] # Only these fields are shown in the form
     
     def form_valid(self, form):
         if not self.request.user.is_authenticated:
             return super().form_invalid(form)
         form.instance.user = self.request.user
+        
+        try:
+            strategy = StrategyDetails.fromJSON(json.dumps(form.instance.strategyDetails))
+        except Exception as e:
+            # TODO: Add logging and replace prints.
+            print("Instanta " +form.instance.strategyDetails)
+            print("JSON " + json.dumps(form.instance.strategyDetails))
+            print("Eroare " + str(e))
+            form.add_error("strategyDetails", str(e))
+            return super().form_invalid(form)
+        
         return super().form_valid(form)
     
 class StrategyDeleteView(DeleteView):
