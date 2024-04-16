@@ -1,10 +1,10 @@
 import copy
-from signal import Signal
 from typing import List
 
 import jsonpickle
 
-from amount import Amount
+from .signal import Signal
+from .amount import Amount
 
 
 class StrategyDetails:
@@ -55,6 +55,7 @@ class StrategyDetails:
         self.SellSignal = copy.deepcopy(SellSignal)
         # same as BuySignal
 
+    @staticmethod
     def toJSON(self):
         return jsonpickle.encode(self)
 
@@ -67,21 +68,21 @@ class StrategyDetails:
 
 
 # example
-a = StrategyDetails(
-    200,
-    Amount(5, None),
-    "1m",
-    Amount(1, None),
-    Amount(1, None),
-    Amount(0.1, None),
-    "CNF",
-    [[Signal("indicator", 1, ">")]],
-    "DNF",
-    [[Signal("indicator", 1, ">")]],
-)
+# a = StrategyDetails(
+#     200,
+#     Amount(5, None),
+#     "1m",
+#     Amount(1, None),
+#     Amount(1, None),
+#     Amount(0.1, None),
+#     "CNF",
+#     [[Signal("indicator", 1, ">")]],
+#     "DNF",
+#     [[Signal("indicator", 1, ">")]],
+# )
 
-json = a.toJSON()
-print(json + "\n\n")
-b: StrategyDetails = StrategyDetails.fromJSON(json)
+# json_default = StrategyDetails.toJSON(a)
+# print(json_default + "\n\n")
+# b: StrategyDetails = StrategyDetails.fromJSON(json)
 
-b.dummy_print()
+# b.dummy_print()
