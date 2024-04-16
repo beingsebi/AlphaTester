@@ -1,29 +1,29 @@
 import copy
-from signal import signal
+from signal import Signal
 from typing import List
 
 import jsonpickle
 
-from amount import amount
+from amount import Amount
 
 
-class strategy:
+class StrategyDetails:
     def __init__(
         self,
         CapitalAllocation: int,
-        BidSize: amount,
+        BidSize: Amount,
         TimeFrame: str,
-        TakeProfit: amount,
-        StopLoss: amount,
-        ExchangeFee: amount,
+        TakeProfit: Amount,
+        StopLoss: Amount,
+        ExchangeFee: Amount | None,
         BuySignalMode: str,
-        BuySignal: List[List[signal]],
+        BuySignal: List[List[Signal]],
         SellSignalMode: str,
-        SellSignal: List[List[signal]],
+        SellSignal: List[List[Signal]],
     ) -> None:
 
         self.CapitalAllocation = CapitalAllocation
-        # total amount of capital allocated to the strategy
+        # total Amount of capital allocated to the strategy
 
         self.BidSize = BidSize
         # dictionary with the size of the bid
@@ -38,15 +38,16 @@ class strategy:
         self.StopLoss = StopLoss
         # ammount of dollars down or percentage (per trade) down
 
-        self.ExchangeFee = ExchangeFee  # you might want to also take into account the fee for currency conversion
-        # None (free) or {"fixed" : 0.1, "percentage" : None} or {"fixed" : None, "percentage" : 0.1}
+        self.ExchangeFee = ExchangeFee
+        # no ExchangeFee (None) or Amount
+        # you might want to also take into account the fee for currency conversion
 
         self.BuySignalMode = BuySignalMode
         # "CNF" -> (a1 or a2 or..) and (b1 or...) and ..
         # "DNF" -> (a1 and a2 and..) or (b1 and...) or ..
 
         self.BuySignal = copy.deepcopy(BuySignal)
-        # [[signal("indicator", 1, ">")]]
+        # [[Signal("indicator", 1, ">")]]
 
         self.SellSignalMode = SellSignalMode
         # same as BuySignalMode
@@ -61,26 +62,26 @@ class strategy:
     def fromJSON(JSONstr: str):
         return jsonpickle.decode(JSONstr)
 
-    # def dummy_print(self):
-    #     print("CapitalAllocation: ", self.CapitalAllocation)
+    def dummy_print(self):
+        print("CapitalAllocation: ", self.CapitalAllocation)
 
 
 # example
-# a = strategy(
-#     200,
-#     amount(5, None),
-#     "1m",
-#     amount(1, None),
-#     amount(1, None),
-#     amount(0.1, None),
-#     "CNF",
-#     [[signal("indicator", 1, ">")]],
-#     "DNF",
-#     [[signal("indicator", 1, ">")]],
-# )
+a = StrategyDetails(
+    200,
+    Amount(5, None),
+    "1m",
+    Amount(1, None),
+    Amount(1, None),
+    Amount(0.1, None),
+    "CNF",
+    [[Signal("indicator", 1, ">")]],
+    "DNF",
+    [[Signal("indicator", 1, ">")]],
+)
 
-# json = a.toJSON()
-# print(json + "\n\n")
-# b: strategy = strategy.fromJSON(json)
+json = a.toJSON()
+print(json + "\n\n")
+b: StrategyDetails = StrategyDetails.fromJSON(json)
 
-# b.dummy_print()
+b.dummy_print()
