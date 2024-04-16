@@ -139,3 +139,6 @@ GitHub.sublime-settings
 
 
 .code-workspace
+
+# ignore all .pyc files
+**/__pycache__ 

@@ -8,6 +8,7 @@ import psycopg2
 import pandas as pd
 import sqlalchemy
 from constants import DbConstants
+import sys
 
 
 def get_csv_files_from_directory(directory_path: str) -> List[str]:
@@ -117,4 +118,8 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
 
 
 # insert_data_into_table("/home/sebi/Desktop/test_csvs/XAUUSD_2024_02.csv")
-insert_data_into_table("ZXAUUSD_2024_01.csv")
+# insert_data_into_table("ZXAUUSD_2024_01.csv")
+
+
+path = sys.argv[1]
+insert_data_into_table(path)
