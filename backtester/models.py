@@ -12,5 +12,6 @@ class Strategy(models.Model):
     def __str__(self):
         return self.name + " by " + self.user.username
 
-    def get_absolute_url(self):  # pylint: disable=C0103  |  because it is a Django method
+    def get_absolute_url(self):  # pylint: disable=C0103
+        #   because it is a Django method
         return reverse("backtester:detail", kwargs={"pk": self.pk})
