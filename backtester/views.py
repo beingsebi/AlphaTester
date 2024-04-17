@@ -3,6 +3,7 @@ from .models import Strategy
 from django.views.generic.edit import CreateView, DeleteView
 from django.urls import reverse_lazy
 from utils.strategy.strategy import StrategyDetails
+from .forms import StrategyForm
 import json
 
 class IndexListView(generic.ListView):
@@ -22,21 +23,36 @@ class ResultView(generic.DetailView):
     template_name = "backtester/result.html"
     
 class StrategyCreateView(CreateView):
-    model = Strategy
+    form_class = StrategyForm
     template_name = "backtester/strategy_form.html"
-    fields = ["name", "description", "strategyDetails"] # Only these fields are shown in the form
     
     def form_valid(self, form):
+        # Check if the user is authenticated
         if not self.request.user.is_authenticated:
             return super().form_invalid(form)
         form.instance.user = self.request.user
         
+        # We try to create a StrategyDetails object from the form data
+        # If we fail, we add an error to the form and return the invalid form
+        # Otherwise, we convert the StrategyDetails object to JSON and save it in the form instance
         try:
-            strategy = StrategyDetails.fromJSON(json.dumps(form.instance.strategyDetails))
+            strategyDetails = StrategyDetails(
+                form.cleaned_data["capital_allocation"],
+                form.cleaned_data["bid_size"],
+                form.cleaned_data["time_frame"],
+                form.cleaned_data["take_profit"],
+                form.cleaned_data["stop_loss"],
+                form.cleaned_data["exchange_fee"],
+                form.cleaned_data["buy_signal_mode"],
+                # TODO: Add signals where we finalize the implementation
+                [], 
+                form.cleaned_data["sell_signal_mode"],
+                []
+            )
+            form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
         except Exception as e:
             # TODO: Add logging and replace prints.
-            print("Instanta " +form.instance.strategyDetails)
-            print("JSON " + json.dumps(form.instance.strategyDetails))
+            print("Instanta " + str(form.instance.strategyDetails))
             print("Eroare " + str(e))
             form.add_error("strategyDetails", str(e))
             return super().form_invalid(form)
