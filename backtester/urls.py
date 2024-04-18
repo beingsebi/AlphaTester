@@ -2,8 +2,8 @@ from django.urls import path
 
 from .views import IndexListView, DetailView, ResultView, StrategyCreateView, StrategyDeleteView
 
-# ! Constant name "app_name" doesn't conform to UPPER_CASE naming stylePylintC0103:invalid-name
-app_name = "backtester"  # ? Is this necessary?
+app_name = "backtester"  # pylint: disable=C0103
+#  because it is needed by Django
 
 urlpatterns = [
     path("", IndexListView.as_view(), name="index-list"),

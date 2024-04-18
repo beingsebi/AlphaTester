@@ -56,7 +56,7 @@ class StrategyDetails:
         # same as BuySignal
 
     @staticmethod
-    def toJSON(self):
+    def toJSON(self):  # pylint: disable=W0211
         return jsonpickle.encode(self)
 
     @staticmethod
