@@ -8,6 +8,7 @@ from .forms import StrategyForm
 from .models import Strategy
 
 
+
 class IndexListView(generic.ListView):
     template_name = "backtester/index.html"
     context_object_name = "latest_strategy_list"
@@ -56,6 +57,7 @@ class StrategyCreateView(CreateView):
             )
             form.instance.strategyDetails = StrategyDetails.toJSON(
                 strategyDetails)
+
         except Exception as e:
             # TODO: Add logging and replace prints.
             print("Instanta " + str(form.instance.strategyDetails))

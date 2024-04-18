@@ -55,6 +55,7 @@ class StrategyDetails:
         self.sellSignals = copy.deepcopy(sellSignals)
         # same as BuySignal
 
+    @staticmethod
     def toJSON(self):
         return jsonpickle.encode(self)
 

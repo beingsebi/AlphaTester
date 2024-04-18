@@ -1,6 +1,5 @@
 from django import forms
 from django.forms import ModelForm
-
 from .models import Strategy
 
 TIMEFRAME_CHOICES = [
@@ -53,7 +52,3 @@ class StrategyForm(ModelForm):
     buy_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
     sell_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
 
-    class Meta:
-        model = Strategy
-        # TODO: Remove unnecessary fields.
-        fields = "__all__"
