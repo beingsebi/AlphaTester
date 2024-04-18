@@ -6,27 +6,8 @@
         <h2>Strategy Form</h2>
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form }}
             <button type="submit">Submit</button>
-
-            {% if form.errors and not form.non_field_errors %}
-                <p class="errornote">
-                {% if form.errors.items|length == 1 %}
-                Please correct the error below.
-                {% else %}
-                Please correct the errors below.
-                {% endif %}
-                </p>
-            {% endif %}
-
-            {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                <p class="errornote">
-                    {{ error }}
-                </p>
-                {% endfor %}
-            {% endif %}
-
         </form>
     {% else %}
         <p>You must be logged in to add a strategy.</p>
