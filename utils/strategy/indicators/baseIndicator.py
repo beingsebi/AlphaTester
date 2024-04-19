@@ -6,14 +6,11 @@ from ... import constants
 
 
 class BaseIndicator(ABC):
-    def __init__(self, name: str, timeframe: constants.Timeframe) -> None:
-        if not name:
+    def __init__(self, indicatorName: constants.Indicators, timeframe: constants.Timeframe) -> None:
+        if not indicatorName:
             raise ValueError("Indicator name is required")
 
-        if name.lower() not in constants.supportedIndicators:
-            raise ValueError("Invalid indicator name")
-
-        self.name = name
+        self.name = indicatorName
         self.timeframe = timeframe
 
     @abstractmethod

@@ -43,6 +43,3 @@ class Indicators(Enum):
     EMA = "ema"
     RSI = "rsi"
     MACD = "macd"
-
-
-supportedIndicators = [indicator.value for indicator in Indicators]

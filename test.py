@@ -1,7 +1,7 @@
 from utils.strategy.indicators.sma import SMA
 from utils import constants
 
-sme = SMA("SMA", constants.Timeframe.D1,
+sme = SMA(constants.Indicators.EMA, constants.Timeframe.D1,
           length=20, source=constants.Sources.CLOSE)
 
-print(sme.name)
+print(sme.name.name)
