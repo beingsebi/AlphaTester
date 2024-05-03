@@ -38,7 +38,7 @@ class Sources(Enum):
     LOW = "low"
 
 
-class Indicators(Enum):
+class IndicatorNames(Enum):
     SMA = "sma"
     EMA = "ema"
     RSI = "rsi"

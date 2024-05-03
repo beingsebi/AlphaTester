@@ -6,7 +6,7 @@ from ... import constants
 
 
 class BaseIndicator(ABC):
-    def __init__(self, indicatorName: constants.Indicators, timeframe: constants.Timeframe) -> None:
+    def __init__(self, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe) -> None:
         if not indicatorName:
             raise ValueError("Indicator name is required")
 

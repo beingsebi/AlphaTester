@@ -4,7 +4,7 @@ from ... import constants
 
 
 class SMA(baseIndicator.BaseIndicator):
-    def __init__(self, indicatorName: constants.Indicators, timeframe: constants.Timeframe, **kwargs):
+    def __init__(self, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe, **kwargs):
         """
         Initialize the SMA (Simple Moving Average) indicator.
 
