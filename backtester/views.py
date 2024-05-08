@@ -18,6 +18,14 @@ class DetailView(generic.DetailView):
     model = Strategy
     template_name = "backtester/detail.html"
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['strategyDetails'] = StrategyDetails.fromJSON(self.object.strategyDetails)
+        except Exception as e:
+            print("Error: " + str(e))
+        return context
+    
 class ResultView(generic.DetailView):
     model = Strategy
     template_name = "backtester/result.html"

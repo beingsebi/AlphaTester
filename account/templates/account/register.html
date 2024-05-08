@@ -1,24 +1,17 @@
-{% block register %}
-{% endblock %}
+{% extends "backtester/base.html" %}
 
 {% block content %}
 {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'user/user-form.css' %}"> {% endcomment %}
 <body>
-	<div class="container py-5 h-100">
-	    <div class="row d-flex justify-content-center align-items-center h-100">
-	        <div class="col-md-6">
-	            <div class="card">
-	                <form method="post" class="box-user">
-	                    {% csrf_token %}
-	                    {{ form.as_p }}
-	                    <!-- <a class="forgot text-muted" href="#">Forgot password?</a>  -->
-	                    <input type="submit" value="Register" href="#">
-	             		
-	             		<span class="text-center"> If you already have an account <a href="{%url 'login' %}"> Login</a></span>
-		            </form>
-		        </div>
-		    </div>
-		</div>
-	</div>
+	<form method="post" class="box-user">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<!-- <a class="forgot text-muted" href="#">Forgot password?</a>  -->
+		<input type="submit" value="Register" href="#">
+	</form>
+	<span class="text-center"> If you already have an account <a href="{%url 'login' %}"> Login</a></span>
+	{% if user.is_authenticated %}
+		<p class="errornote">You are already logged in as {{ user.username }}. Do you want to log in to another account?</p>
+	{% endif %}
 </body>
 {% endblock %}
