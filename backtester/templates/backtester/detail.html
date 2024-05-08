@@ -1,16 +1,25 @@
-{% comment %} 
 {% extends "backtester/base.html" %}
-{% endcomment %}
 
 {% block content %}
-<h2>{{ strategy.name }}</h2>
-<p>{{ strategy.description }}</p>
-<p>Created: {{ strategy.created }}</p>
-<p>By user: {{ strategy.user.username }}</p> 
-<p>strategy details: {{strategy.strategyDetails}} </p>
+<div class="d-flex flex-column mb-3">
+    <h2>{{ strategy.name }}</h2>
+    <div class="p-2"> {{ strategy.description }}</div>
+    <div class="p-2">Created: {{ strategy.created }}</div>
+    <div class="p-2">By user: {{ strategy.user.username }}</div> 
 
+    {% comment %} <div class="p-2">strategy details: {{strategy.strategyDetails}} </div> {% endcomment %}
 
-{% if request.user == strategy.user %}
-    <btn><a href="{% url 'backtester:strategy-delete' strategy.id %}">DELETE</a></btn>
-{% endif %}
+    <div class="p-2">Capital Allocation: {{ strategyDetails.CapitalAllocation }}</div>
+    <div class="p-2">Bid Size: {{ strategyDetails.BidSize }}</div>
+    <div class="p-2">Time Frame: {{ strategyDetails.TimeFrame }}</div>
+    <div class="p-2">Take Profit: {{ strategyDetails.TakeProfit }}</div>
+    <div class="p-2">Stop Loss: {{ strategyDetails.StopLoss }}</div>
+    <div class="p-2">Exchange Fee: {{ strategyDetails.ExchangeFee }}</div>
+    <div class="p-2">Buy Signal Mode: {{ strategyDetails.BuySignalMode }}</div>
+    {% comment %} TODO: Add the BuySignal and SellSignal when ready.  {% endcomment %}
+    <div class="p-2">Sell Signal Mode: {{ strategyDetails.SellSignalMode }}</div>
+    {% if request.user == strategy.user %}
+        <btn><a href="{% url 'backtester:strategy-delete' strategy.id %}">DELETE</a></btn>
+    {% endif %}
+</div>
 {% endblock %}
