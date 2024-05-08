@@ -2,7 +2,7 @@
 
 {% block content %}
 {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'user/user-form.css' %}"> {% endcomment %}
-<body>
+<div class="d-flex flex-column mb-3">
 	<form method="post" class="box-user">
 		{% csrf_token %}
 		{{ form.as_p }}
@@ -13,5 +13,5 @@
 	{% if user.is_authenticated %}
 		<p class="errornote">You are already logged in as {{ user.username }}. Do you want to log in to another account?</p>
 	{% endif %}
-</body>
+</div>
 {% endblock %}

@@ -8,7 +8,7 @@
 
 
 
-<body>
+<div class='d-flex flex-column mb-3'>
   <form method="post" class="box-user">
     {% csrf_token %}
     {{ form.as_p }}
@@ -21,6 +21,6 @@
   {% else %}
       <span class="text-center"> If you don't have an account <a href="{%url 'register' %}"> Register</a></span>
   {% endif %}
-</body>
+</div>
 
 {% endblock %}
