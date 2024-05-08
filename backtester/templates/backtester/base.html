@@ -14,21 +14,33 @@
   <body>
     {% block sidebar %}
       <!-- insert default navigation text for every page -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="{% url 'backtester:index-list' %}">Backtester</a>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'backtester:index-list' %}">Backtester</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          
+          <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
             </div>
-            <div class="container-fluid">
-              {% if user.is_authenticated %}
-                  <p>Welcome, {{ user.username }}!</p>
-                  <a href="{% url 'logout' %}">Log out</a>
-              {% else %}
-                  <a href="{% url 'login' %}">Log in</a>
-                  <a href="{% url 'register' %}">Register</a>
-              {% endif %}
-            </div>
-        </nav>
+          </div>
+      </nav>
     {% endblock %}
+
     <div class="d-flex justify-content-center">
       {% block content %}
         <!-- default content text (typically empty) -->
