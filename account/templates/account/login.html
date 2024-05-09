@@ -1,26 +1,22 @@
-{% extends "backtester/base.html" %}
+{% extends 'backtester/base.html' %}
 
 {% block content %}
+  <div class="d-flex flex-column align-items-center justify-content-center">
+    <form method="post" class="box-user">
+      {% csrf_token %}
+      <div class="form-group">{{ form.as_p }}</div>
+      <!-- <a class="forgot text-muted" href="#">Forgot password?</a> -->
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
 
-{% comment %} {% block extrastyle %} {% endcomment %}
-{% comment %} <link rel="stylesheet" type="text/css" href="{% static 'user/user-form.css' %}"> {% endcomment %}
-{% comment %} {% endblock %} {% endcomment %}
-
-
-
-<div class='d-flex flex-column mb-3'>
-  <form method="post" class="box-user">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <!-- <a class="forgot text-muted" href="#">Forgot password?</a>  -->
-    <input type="submit" value="Login" href="#">
-  </form>
-
-  {% if user.is_authenticated %}
-      <p class="errornote">You are already logged in as {{ user.username }}. Do you want to log in to another account?</p>
-  {% else %}
-      <span class="text-center"> If you don't have an account <a href="{%url 'register' %}"> Register</a></span>
-  {% endif %}
-</div>
-
+    {% if user.is_authenticated %}
+      <div class="alert alert-warning" role="alert">You are already logged in as {{ user.username }}. Do you want to log in to another account?</div>
+    {% else %}
+      <div class="text-center">
+        If you don't have an account <a href="{% url 'register' %}" class="btn btn-link">Register</a>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

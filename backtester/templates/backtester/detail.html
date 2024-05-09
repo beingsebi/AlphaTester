@@ -1,25 +1,27 @@
-{% extends "backtester/base.html" %}
+{% extends 'backtester/base.html' %}
 
 {% block content %}
-<div class="d-flex flex-column mb-3">
-    <h2>{{ strategy.name }}</h2>
-    <div class="p-2"> {{ strategy.description }}</div>
-    <div class="p-2">Created: {{ strategy.created }}</div>
-    <div class="p-2">By user: {{ strategy.user.username }}</div> 
-
-    {% comment %} <div class="p-2">strategy details: {{strategy.strategyDetails}} </div> {% endcomment %}
-
-    <div class="p-2">Capital Allocation: {{ strategyDetails.CapitalAllocation }}</div>
-    <div class="p-2">Bid Size: {{ strategyDetails.BidSize }}</div>
-    <div class="p-2">Time Frame: {{ strategyDetails.TimeFrame }}</div>
-    <div class="p-2">Take Profit: {{ strategyDetails.TakeProfit }}</div>
-    <div class="p-2">Stop Loss: {{ strategyDetails.StopLoss }}</div>
-    <div class="p-2">Exchange Fee: {{ strategyDetails.ExchangeFee }}</div>
-    <div class="p-2">Buy Signal Mode: {{ strategyDetails.BuySignalMode }}</div>
-    {% comment %} TODO: Add the BuySignal and SellSignal when ready.  {% endcomment %}
-    <div class="p-2">Sell Signal Mode: {{ strategyDetails.SellSignalMode }}</div>
+  <div class="card">
+    <div class="card-header">
+      <h2>{{ strategy.name }}</h2>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Description: {{ strategy.description }}</li>
+      <li class="list-group-item">Created at: {{ strategy.created_at }}</li>
+      <li class="list-group-item">By user: {{ strategy.user.username }}</li>
+      <li class="list-group-item">Capital Allocation: {{ strategyDetails.CapitalAllocation }}</li>
+      <li class="list-group-item">Bid Size: {{ strategyDetails.BidSize }}</li>
+      <li class="list-group-item">Time Frame: {{ strategyDetails.TimeFrame }}</li>
+      <li class="list-group-item">Take Profit: {{ strategyDetails.TakeProfit }}</li>
+      <li class="list-group-item">Stop Loss: {{ strategyDetails.StopLoss }}</li>
+      <li class="list-group-item">Exchange Fee: {{ strategyDetails.ExchangeFee }}</li>
+      <li class="list-group-item">Buy Signal Mode: {{ strategyDetails.BuySignalMode }}</li>
+      <li class="list-group-item">Sell Signal Mode: {{ strategyDetails.SellSignalMode }}</li>
+    </ul>
     {% if request.user == strategy.user %}
-        <btn><a href="{% url 'backtester:strategy-delete' strategy.id %}">DELETE</a></btn>
+      <div class="card-footer">
+        <a href="{% url 'backtester:strategy-delete' strategy.id %}" class="btn btn-danger">DELETE</a>
+      </div>
     {% endif %}
-</div>
+  </div>
 {% endblock %}
