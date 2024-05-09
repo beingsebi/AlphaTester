@@ -1,11 +1,20 @@
-{% extends "backtester/base.html" %}
+{% extends 'backtester/base.html' %}
 
 {% block content %}
-    <h1>Delete Strategy</h1>
-    <p>Are you sure you want to delete the strategy "{{ strategy.name }}"?</p>
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Yes, delete</button>
-    </form>
-    <a href="{% url 'backtester:index-list' %}">No, take me back to the list</a>
+  <div class="d-flex flex-column align-items-center justify-content-center">
+    <div class="card w-50">
+      <div class="card-body">
+        <p>Are you sure you want to delete the strategy "{{ strategy.name }}"?</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <a href="{% url 'backtester:index-list' %}" class="btn btn-link">No, take me back to the list</a>
+      </div>
+    </div>
+  </div>
 {% endblock %}

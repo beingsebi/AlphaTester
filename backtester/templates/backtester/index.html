@@ -1,17 +1,21 @@
-{% extends "backtester/base.html" %}
+{% extends 'backtester/base.html' %}
 
 {% block content %}
-    <a href="{% url 'backtester:strategy-add' %}">Add new strategy</a>
+  <div>
+    <a href="{% url 'backtester:strategy-add' %}" class="btn btn-primary">Add new strategy</a>
 
-    {% if latest_strategy_list %}
-        <ul>
-        {% for strategy in latest_strategy_list %}
-            <li><a href="{% url 'backtester:detail' strategy.id %}">{{ strategy.name }}</a></li>
-            {% comment %} <li><a href="#">{{ strategy.name }}</a></li> {% endcomment %}
-            {% endfor %}
+    <div>
+      {% if latest_strategy_list %}
+        <ul class="list-group">
+          {% for strategy in latest_strategy_list %}
+            <li class="list-group-item">
+              <a href="{% url 'backtester:detail' strategy.id %}">{{ strategy.name }}</a>
+            </li>
+          {% endfor %}
         </ul>
-    {% else %}
-        <p>No strategies are available.</p>
-    {% endif %}
-
+      {% else %}
+        <div class="alert alert-info" role="alert">No strategies are available.</div>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}

@@ -1,14 +1,24 @@
-{% extends "backtester/base.html" %}
-{% block content %}
-    {% if user.is_authenticated %}
+{% extends 'backtester/base.html' %}
 
-        <h2>Strategy Form</h2>
-        <form method="POST">
+{% block content %}
+  <div class="d-flex flex-column align-items-center justify-content-center w-100">
+    {% if user.is_authenticated %}
+      <div class="card w-50">
+        <div class="card-header">
+          <h2>Add a new strategy</h2>
+        </div>
+        <div class="card-body">
+          <form method="POST">
             {% csrf_token %}
-            {{ form }}
-            <button type="submit">Submit</button>
-        </form>
+            <div class="form-group">{{ form.as_p }}</div>
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
     {% else %}
-        <p>You must be logged in to add a strategy.</p>
+      <div class="alert alert-warning" role="alert">You must be logged in to add a strategy.</div>
     {% endif %}
+  </div>
 {% endblock %}
