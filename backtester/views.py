@@ -1,12 +1,12 @@
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from utils.strategy.strategy import StrategyDetails
 
-from .forms import StrategyForm
+from .forms import *
 from .models import Strategy
-
+from django.views.generic.edit import FormView
 
 
 class IndexListView(generic.ListView):
@@ -21,15 +21,18 @@ class IndexListView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Strategy
     template_name = "backtester/detail.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context['strategyDetails'] = StrategyDetails.fromJSON(self.object.strategyDetails)
+            context["strategyDetails"] = StrategyDetails.fromJSON(
+                self.object.strategyDetails
+            )
         except Exception as e:
             print("Error: " + str(e))
         return context
-    
+
+
 class ResultView(generic.DetailView):
     model = Strategy
     template_name = "backtester/result.html"
@@ -38,6 +41,14 @@ class ResultView(generic.DetailView):
 class StrategyCreateView(CreateView):
     form_class = StrategyForm
     template_name = "backtester/strategy_form.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["indicators"] = IndicatorFormSet(self.request.POST)
+        else:
+            data["indicators"] = IndicatorFormSet()
+        return data
 
     def form_valid(self, form):
         # Check if the user is authenticated
@@ -60,10 +71,9 @@ class StrategyCreateView(CreateView):
                 # TODO: Add signals where we finalize the implementation
                 [],
                 form.cleaned_data["sell_signal_mode"],
-                []
+                [],
             )
-            form.instance.strategyDetails = StrategyDetails.toJSON(
-                strategyDetails)
+            form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
 
         except Exception as e:
             # TODO: Add logging and replace prints.
@@ -86,3 +96,10 @@ class StrategyDeleteView(DeleteView):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+
+# https://aalvarez.me/posts/django-formsets-with-generic-formviews/
+class UpdateStrategy(UpdateView):
+    model = Strategy
+    template_name = "backtester/update.html"
+    fields = "__all__"

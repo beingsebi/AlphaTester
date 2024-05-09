@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, formset_factory
 from .models import Strategy
-from ..utils.constants import TIMEFRAME_CHOICES, SIGNALS_CHOICES
+from utils.constants import TIMEFRAME_CHOICES, SIGNALS_CHOICES, INDICATORS_CHOICES
 
 
 class PercentageFloatField(forms.FloatField):
@@ -21,15 +21,16 @@ class PercentageFloatField(forms.FloatField):
         return value
 
 
-class MACDIndicatorForm(ModelForm):
-    days = forms.IntegerField()
-    low_signal = forms.IntegerField()
-    high_signal = forms.IntegerField()
+class AddIndicatorForm(forms.Form):
+    type = forms.MultipleChoiceField(choices=INDICATORS_CHOICES)
+    treshold = PercentageFloatField(
+        widget=forms.TextInput(
+            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
+        )
+    )
 
 
-class CrossIndicatorForm(ModelForm):
-    low_signal = forms.IntegerField()
-    high_signal = forms.IntegerField()
+IndicatorFormSet = formset_factory(form=AddIndicatorForm, extra=1, max_num=20)
 
 
 class StrategyForm(ModelForm):
@@ -56,8 +57,9 @@ class StrategyForm(ModelForm):
             attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
         )
     )
+    indicators = IndicatorFormSet
+
     buy_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
-    indicators = formset_factory(MACDIndicatorForm, CrossIndicatorForm)
     sell_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
 
     class Meta:

@@ -22,6 +22,9 @@
       <div class="card-footer">
         <a href="{% url 'backtester:strategy-delete' strategy.id %}" class="btn btn-danger">DELETE</a>
       </div>
+      <div class="card-footer">
+        <a href="{% url 'backtester:strategy-update' strategy.id %}" class="btn btn-primary">Update</a>
+      </div>
     {% endif %}
   </div>
 {% endblock %}
