@@ -10,61 +10,61 @@ from .amount import Amount
 class StrategyDetails:
     def __init__(
         self,
-        CapitalAllocation: int,
-        BidSize: Amount,
-        TimeFrame: str,
-        TakeProfit: Amount,
-        StopLoss: Amount,
-        ExchangeFee: Amount | None,
-        BuySignalMode: str,
-        BuySignal: List[List[Signal]],
-        SellSignalMode: str,
-        SellSignal: List[List[Signal]],
+        capitalAllocation: int,
+        bidSize: Amount,
+        timeFrame: str,
+        takeProfit: Amount,
+        stopLoss: Amount,
+        exchangeFee: Amount | None,
+        buySignalsMode: str,
+        buySignals: List[List[Signal]],
+        sellSignalsMode: str,
+        sellSignals: List[List[Signal]],
     ) -> None:
 
-        self.CapitalAllocation = CapitalAllocation
+        self.capitalAllocation = capitalAllocation
         # total Amount of capital allocated to the strategy
 
-        self.BidSize = BidSize
+        self.bidSize = bidSize
         # dictionary with the size of the bid
 
-        self.TimeFrame = TimeFrame
+        self.timeFrame = timeFrame
         # teoretic "1m", "5m", "15m", "30m", "1h", "4h", "1d", "1w", "1M"
         # practic deocamdata doar "1m". Pt celelalte trebuie agregate datele
 
-        self.TakeProfit = TakeProfit
+        self.takeProfit = takeProfit
         # ammount of dollars up or percentage (per trade) up
 
-        self.StopLoss = StopLoss
+        self.stopLoss = stopLoss
         # ammount of dollars down or percentage (per trade) down
 
-        self.ExchangeFee = ExchangeFee
+        self.exchangeFee = exchangeFee
         # no ExchangeFee (None) or Amount
         # you might want to also take into account the fee for currency conversion
 
-        self.BuySignalMode = BuySignalMode
+        self.buySignalMode = buySignalsMode
         # "CNF" -> (a1 or a2 or..) and (b1 or...) and ..
         # "DNF" -> (a1 and a2 and..) or (b1 and...) or ..
 
-        self.BuySignal = copy.deepcopy(BuySignal)
+        self.buySignals = copy.deepcopy(buySignals)  # buysignal SSSSS
         # [[Signal("indicator", 1, ">")]]
 
-        self.SellSignalMode = SellSignalMode
+        self.sellSignalMode = sellSignalsMode
         # same as BuySignalMode
 
-        self.SellSignal = copy.deepcopy(SellSignal)
+        self.sellSignals = copy.deepcopy(sellSignals)
         # same as BuySignal
 
     @staticmethod
-    def toJSON(self):
+    def toJSON(self):  # pylint: disable=W0211
         return jsonpickle.encode(self)
 
     @staticmethod
-    def fromJSON(JSONstr: str):
+    def fromJSON(JSONstr: str):  # pylint: disable=C0103
         return jsonpickle.decode(JSONstr)
 
-    def dummy_print(self):
-        print("CapitalAllocation: ", self.CapitalAllocation)
+    def dummyPrint(self):
+        print("CapitalAllocation: ", self.capitalAllocation)
 
 
 # example
