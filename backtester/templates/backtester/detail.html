@@ -1,16 +1,27 @@
-{% comment %} 
-{% extends "backtester/base.html" %}
-{% endcomment %}
+{% extends 'backtester/base.html' %}
 
 {% block content %}
-<h2>{{ strategy.name }}</h2>
-<p>{{ strategy.description }}</p>
-<p>Created: {{ strategy.created }}</p>
-<p>By user: {{ strategy.user.username }}</p> 
-<p>strategy details: {{strategy.strategyDetails}} </p>
-
-
-{% if request.user == strategy.user %}
-    <btn><a href="{% url 'backtester:strategy-delete' strategy.id %}">DELETE</a></btn>
-{% endif %}
+  <div class="card">
+    <div class="card-header">
+      <h2>{{ strategy.name }}</h2>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Description: {{ strategy.description }}</li>
+      <li class="list-group-item">Created at: {{ strategy.created_at }}</li>
+      <li class="list-group-item">By user: {{ strategy.user.username }}</li>
+      <li class="list-group-item">Capital Allocation: {{ strategyDetails.CapitalAllocation }}</li>
+      <li class="list-group-item">Bid Size: {{ strategyDetails.BidSize }}</li>
+      <li class="list-group-item">Time Frame: {{ strategyDetails.TimeFrame }}</li>
+      <li class="list-group-item">Take Profit: {{ strategyDetails.TakeProfit }}</li>
+      <li class="list-group-item">Stop Loss: {{ strategyDetails.StopLoss }}</li>
+      <li class="list-group-item">Exchange Fee: {{ strategyDetails.ExchangeFee }}</li>
+      <li class="list-group-item">Buy Signal Mode: {{ strategyDetails.BuySignalMode }}</li>
+      <li class="list-group-item">Sell Signal Mode: {{ strategyDetails.SellSignalMode }}</li>
+    </ul>
+    {% if request.user == strategy.user %}
+      <div class="card-footer">
+        <a href="{% url 'backtester:strategy-delete' strategy.id %}" class="btn btn-danger">DELETE</a>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}
