@@ -3,6 +3,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from utils.strategy.strategy import StrategyDetails
+from utils.strategy.signal import Signal
 
 from .forms import *
 from .models import Strategy
@@ -28,6 +29,7 @@ class DetailView(generic.DetailView):
             context["strategyDetails"] = StrategyDetails.fromJSON(
                 self.object.strategyDetails
             )
+            print(context["strategyDetails"])
         except Exception as e:
             print("Error: " + str(e))
         return context
@@ -56,6 +58,31 @@ class StrategyCreateView(CreateView):
             return super().form_invalid(form)
         form.instance.user = self.request.user
 
+        # Parse the indicators. If the formset is invalid, we return the invalid formset.
+        buySignals = []
+        sellSignals = []
+        context = self.get_context_data()
+        indicators = context["indicators"]
+        if indicators.is_valid():
+            indicators.instance = self.object
+            for indicator_form in indicators:
+                if indicator_form.is_valid():
+                    buySignal = Signal(
+                        indicator_form.cleaned_data["type"],
+                        indicator_form.cleaned_data["buy_treshold"],
+                        ">=",
+                    )
+                    buySignals.append(buySignal)
+
+                    sellSignal = Signal(
+                        indicator_form.cleaned_data["type"],
+                        indicator_form.cleaned_data["sell_treshold"],
+                        "<=",
+                    )
+                    sellSignals.append(sellSignal)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
         # We try to create a StrategyDetails object from the form data
         # If we fail, we add an error to the form and return the invalid form
         # Otherwise, we convert the StrategyDetails object to JSON and save it in the form instance
@@ -68,10 +95,9 @@ class StrategyCreateView(CreateView):
                 form.cleaned_data["stop_loss"],
                 form.cleaned_data["exchange_fee"],
                 form.cleaned_data["buy_signal_mode"],
-                # TODO: Add signals where we finalize the implementation
-                [],
+                buySignals,
                 form.cleaned_data["sell_signal_mode"],
-                [],
+                sellSignals,
             )
             form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
 

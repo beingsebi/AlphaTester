@@ -7,8 +7,8 @@
       {% csrf_token %}
       {{ form.as_p }}
 
+      {{ indicators.management_form }}
       <div class="form-group row nested-query-formset">
-        {{ indicators.management_form }}
         {% for indicator_form in indicators %}
           <div class="indicator-formset card mb-3">
             <div class="card-body">{{ indicator_form.as_table }}</div>

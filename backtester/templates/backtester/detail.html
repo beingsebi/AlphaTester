@@ -3,20 +3,26 @@
 {% block content %}
   <div class="card">
     <div class="card-header">
-      <h2>{{ strategy.name }}</h2>
+      <h2>{{ strategy.name|default:'[Unnamed]' }}</h2>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">Description: {{ strategy.description }}</li>
       <li class="list-group-item">Created at: {{ strategy.created_at }}</li>
       <li class="list-group-item">By user: {{ strategy.user.username }}</li>
-      <li class="list-group-item">Capital Allocation: {{ strategyDetails.CapitalAllocation }}</li>
-      <li class="list-group-item">Bid Size: {{ strategyDetails.BidSize }}</li>
-      <li class="list-group-item">Time Frame: {{ strategyDetails.TimeFrame }}</li>
-      <li class="list-group-item">Take Profit: {{ strategyDetails.TakeProfit }}</li>
-      <li class="list-group-item">Stop Loss: {{ strategyDetails.StopLoss }}</li>
-      <li class="list-group-item">Exchange Fee: {{ strategyDetails.ExchangeFee }}</li>
-      <li class="list-group-item">Buy Signal Mode: {{ strategyDetails.BuySignalMode }}</li>
-      <li class="list-group-item">Sell Signal Mode: {{ strategyDetails.SellSignalMode }}</li>
+      <li class="list-group-item">Capital Allocation: {{ strategyDetails.capitalAllocation }}</li>
+      <li class="list-group-item">Bid Size: {{ strategyDetails.bidSize }}</li>
+      <li class="list-group-item">Time Frame: {{ strategyDetails.timeFrame }}</li>
+      <li class="list-group-item">Take Profit: {{ strategyDetails.takeProfit }}</li>
+      <li class="list-group-item">Stop Loss: {{ strategyDetails.stopLoss }}</li>
+      <li class="list-group-item">Exchange Fee: {{ strategyDetails.exchangeFee }}</li>
+      <li class="list-group-item">Buy Signal Mode: {{ strategyDetails.buySignalMode }}</li>
+      {% for signal in strategyDetails.buySignals %}
+        <li class="list-group-item">Buy Signal: {{ signal }}</li>
+      {% endfor %}
+      <li class="list-group-item">Sell Signal Mode: {{ strategyDetails.sellSignalMode }}</li>
+      {% for signal in strategyDetails.sellSignals %}
+        <li class="list-group-item">Buy Signal: {{ signal }}</li>
+      {% endfor %}
     </ul>
     {% if request.user == strategy.user %}
       <div class="card-footer">

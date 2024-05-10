@@ -45,7 +45,7 @@ class IndicatorNames(Enum):
     MACD = "macd"
 
 
-INDICATORS_CHOICES = [(1, IndicatorNames.SMA), (2, IndicatorNames.EMA)]
+INDICATORS_CHOICES = [("sma", "SMA"), ("ema", "EMA")]
 
 SIGNALS_CHOICES = [
     ("CNF", "CNF"),

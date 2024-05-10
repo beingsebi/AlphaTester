@@ -21,16 +21,26 @@ class PercentageFloatField(forms.FloatField):
         return value
 
 
-class AddIndicatorForm(forms.Form):
-    type = forms.MultipleChoiceField(choices=INDICATORS_CHOICES)
-    treshold = PercentageFloatField(
+class IndicatorForm(forms.Form):
+    type = forms.ChoiceField(choices=INDICATORS_CHOICES)
+    buy_treshold = PercentageFloatField(
+        widget=forms.TextInput(
+            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
+        )
+    )
+    sell_treshold = PercentageFloatField(
+        widget=forms.TextInput(
+            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
+        )
+    )
+    position_size = PercentageFloatField(
         widget=forms.TextInput(
             attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
         )
     )
 
 
-IndicatorFormSet = formset_factory(form=AddIndicatorForm, extra=1, max_num=20)
+IndicatorFormSet = formset_factory(form=IndicatorForm, extra=1)
 
 
 class StrategyForm(ModelForm):
@@ -57,7 +67,8 @@ class StrategyForm(ModelForm):
             attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
         )
     )
-    indicators = IndicatorFormSet
+    # This field is always added for some reason
+    indicators = formset_factory(form=IndicatorForm, extra=1)
 
     buy_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
     sell_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
@@ -65,4 +76,13 @@ class StrategyForm(ModelForm):
     class Meta:
         model = Strategy
         # TODO: Remove unnecessary fields.
-        fields = "__all__"
+        fields = [
+            "capital_allocation",
+            "bid_size",
+            "time_frame",
+            "take_profit",
+            "stop_loss",
+            "exchange_fee",
+            "buy_signal_mode",
+            "sell_signal_mode",
+        ]
