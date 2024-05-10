@@ -17,5 +17,7 @@
         <div class="alert alert-info" role="alert">No strategies are available.</div>
       {% endif %}
     </div>
+
+    <a href="{% url 'backtester:instruments' %}" class="btn btn-info">See available instruments</a>
   </div>
 {% endblock %}

@@ -9,7 +9,7 @@ from .models import Strategy
 
 
 
-class IndexListView(generic.ListView):
+class StrategyListView(generic.ListView):
     template_name = "backtester/index.html"
     context_object_name = "latest_strategy_list"
 
@@ -18,7 +18,7 @@ class IndexListView(generic.ListView):
         return Strategy.objects.order_by("-created_at")[:5]
 
 
-class DetailView(generic.DetailView):
+class StrategyDetailView(generic.DetailView):
     model = Strategy
     template_name = "backtester/detail.html"
     
@@ -30,7 +30,7 @@ class DetailView(generic.DetailView):
             print("Error: " + str(e))
         return context
     
-class ResultView(generic.DetailView):
+class StrategyResultView(generic.DetailView):
     model = Strategy
     template_name = "backtester/result.html"
 
