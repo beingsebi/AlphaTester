@@ -1,3 +1,4 @@
+import json
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView
@@ -5,8 +6,7 @@ from django.views.generic.edit import CreateView, DeleteView
 from utils.strategy.strategy import StrategyDetails
 
 from .forms import StrategyForm
-from .models import Strategy
-
+from .models import *
 
 
 class StrategyListView(generic.ListView):
@@ -21,15 +21,18 @@ class StrategyListView(generic.ListView):
 class StrategyDetailView(generic.DetailView):
     model = Strategy
     template_name = "backtester/detail.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context['strategyDetails'] = StrategyDetails.fromJSON(self.object.strategyDetails)
+            context["strategyDetails"] = StrategyDetails.fromJSON(
+                self.object.strategyDetails
+            )
         except Exception as e:
             print("Error: " + str(e))
         return context
-    
+
+
 class StrategyResultView(generic.DetailView):
     model = Strategy
     template_name = "backtester/result.html"
@@ -60,10 +63,9 @@ class StrategyCreateView(CreateView):
                 # TODO: Add signals where we finalize the implementation
                 [],
                 form.cleaned_data["sell_signal_mode"],
-                []
+                [],
             )
-            form.instance.strategyDetails = StrategyDetails.toJSON(
-                strategyDetails)
+            form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
 
         except Exception as e:
             # TODO: Add logging and replace prints.
@@ -86,3 +88,15 @@ class StrategyDeleteView(DeleteView):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+
+class InstrumentDetailView(generic.DetailView):
+    model = Instrument
+    template_name = "backtester/instrument_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["x"] = json.dumps([1, 2, 3, 4, 5])
+        context["y"] = json.dumps([1, 2, 4, 8, 16])
+        return context

@@ -24,4 +24,9 @@ urlpatterns = [
         ),
         name="instruments",
     ),
+    path(
+        "instruemnt/<int:pk>/",
+        InstrumentDetailView.as_view(),
+        name="instrument-detail",
+    ),
 ]
