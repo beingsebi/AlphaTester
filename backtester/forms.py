@@ -76,13 +76,14 @@ class StrategyForm(ModelForm):
     class Meta:
         model = Strategy
         # TODO: Remove unnecessary fields.
-        fields = [
-            "capital_allocation",
-            "bid_size",
-            "time_frame",
-            "take_profit",
-            "stop_loss",
-            "exchange_fee",
-            "buy_signal_mode",
-            "sell_signal_mode",
-        ]
+        fields = "__all__"
+        # fields = [
+        #     "capital_allocation",
+        #     "bid_size",
+        #     "time_frame",
+        #     "take_profit",
+        #     "stop_loss",
+        #     "exchange_fee",
+        #     "buy_signal_mode",
+        #     "sell_signal_mode",
+        # ]

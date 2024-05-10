@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-  <div>
+  {% comment %} <div>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
@@ -17,16 +17,8 @@
       </div>
       <input type="submit" value="Submit" />
     </form>
-  </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="{% static 'backtester/jquery.formset.js' %}"></script>
-  <script type="text/javascript">
-    $('.nested-query-formset').formset({
-      addText: 'Add a new indicator',
-      deleteText: 'Remove this indicator'
-    })
-  </script>
-  {% comment %} <div class="d-flex flex-column align-items-center justify-content-center w-100">
+  </div> {% endcomment %}
+  <div class="d-flex flex-column align-items-center justify-content-center w-100">
     {% if user.is_authenticated %}
       <div class="card w-50">
         <div class="card-header">
@@ -37,6 +29,15 @@
             {% csrf_token %}
             <div class="form-group">{{ form.as_p }}</div>
 
+            {{ indicators.management_form }}
+            <div class="form-group row nested-query-formset">
+              {% for indicator_form in indicators %}
+                <div class="indicator-formset card mb-3">
+                  <div class="card-body">{{ indicator_form.as_table }}</div>
+                </div>
+              {% endfor %}
+            </div>
+
             <div class="d-flex justify-content-center">
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
@@ -46,5 +47,13 @@
     {% else %}
       <div class="alert alert-warning" role="alert">You must be logged in to add a strategy.</div>
     {% endif %}
-  </div> {% endcomment %}
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{% static 'backtester/jquery.formset.js' %}"></script>
+  <script type="text/javascript">
+    $('.nested-query-formset').formset({
+      addText: 'Add a new indicator',
+      deleteText: 'Remove this indicator'
+    })
+  </script>
 {% endblock %}

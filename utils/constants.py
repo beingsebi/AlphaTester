@@ -45,7 +45,7 @@ class IndicatorNames(Enum):
     MACD = "macd"
 
 
-INDICATORS_CHOICES = [("sma", "SMA"), ("ema", "EMA")]
+INDICATORS_CHOICES = [("SMA", "SMA"), ("EMA", "EMA")]
 
 SIGNALS_CHOICES = [
     ("CNF", "CNF"),
