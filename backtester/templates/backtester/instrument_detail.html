@@ -1,9 +1,88 @@
 {% extends 'backtester/base.html' %}
+{% load static %}
 
 {% block content %}
-  <div id="tester" style="width:600px;height:250px;"></div>
+  {% comment %} <div id="tester" style="width:600px;height:250px;"></div> {% endcomment %}
+  <div style="width:1200px;height:600px;">
+    <canvas id="chart"></canvas>
+    <div>
+      Bar Type:<select id="type">
+        <option value="candlestick" selected="">Candlestick</option>
+        <option value="ohlc">OHLC</option>
+      </select>Scale Type:<select id="scale-type">
+        <option value="linear" selected="">Linear</option>
+        <option value="logarithmic">Logarithmic</option>
+      </select>Color Scheme:<select id="color-scheme">
+        <option value="muted" selected="">Muted</option>
+        <option value="neon">Neon</option>
+      </select>Border:<select id="border">
+        <option value="true" selected="">Yes</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+  </div>
 
-  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+  <script src="{% static 'backtester/chartjs-chart-financial.js' %}" type="text/javascript"></script>
+  <script>
+    var ctx = document.getElementById('chart').getContext('2d')
+    ctx.canvas.width = 1000
+    ctx.canvas.height = 250
+    
+    var chart = new Chart(ctx, {
+      type: 'candlestick',
+      data: {
+        datasets: [
+          {
+            label: 'CHRT - Chart.js Corporation',
+            data: {{data|safe}},
+          }
+        ]
+      }
+    })
+    
+    var update = function () {
+      var dataset = chart.config.data.datasets[0]
+    
+      // candlestick vs ohlc
+      var type = document.getElementById('type').value
+      chart.config.type = type
+    
+      // linear vs log
+      var scaleType = document.getElementById('scale-type').value
+      chart.config.options.scales.y.type = scaleType
+    
+      // color
+      var colorScheme = document.getElementById('color-scheme').value
+      if (colorScheme === 'neon') {
+        chart.config.data.datasets[0].backgroundColors = {
+          up: '#01ff01',
+          down: '#fe0000',
+          unchanged: '#999'
+        }
+      } else {
+        delete chart.config.data.datasets[0].backgroundColors
+      }
+    
+      // border
+      var border = document.getElementById('border').value
+      if (border === 'false') {
+        dataset.borderColors = 'rgba(0, 0, 0, 0)'
+      } else {
+        delete dataset.borderColors
+      }
+    
+    
+      chart.update()
+    }
+    
+    ;[...document.getElementsByTagName('select')].forEach((element) => element.addEventListener('change', update))
+    
+  </script>
+
+  {% comment %} <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
   <script>
     TESTER = document.getElementById('tester')
     Plotly.newPlot(
@@ -18,5 +97,5 @@
         margin: { t: 0 }
       }
     )
-  </script>
+  </script> {% endcomment %}
 {% endblock %}

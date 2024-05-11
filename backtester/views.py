@@ -10,6 +10,7 @@ from .forms import *
 from .models import *
 from django.views.generic.edit import FormView
 
+
 class StrategyListView(generic.ListView):
     template_name = "backtester/index.html"
     context_object_name = "latest_strategy_list"
@@ -126,7 +127,26 @@ class InstrumentDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        # x: date.valueOf(),
+        # o: open,
+        # h: high,
+        # l: low,
+        # c: close
+        context["data"] = json.dumps(
+            [
+                {"x": 1715621935000, "o": 30.92, "h": 31.94, "l": 27.38, "c": 29.71},
+                {"x": 1715708335000, "o": 29.55, "h": 32.44, "l": 28.07, "c": 28.17},
+                {"x": 1715794735000, "o": 29.08, "h": 32.27, "l": 27.09, "c": 30.27},
+                {"x": 1715881135000, "o": 29.83, "h": 32.29, "l": 26.93, "c": 28.93},
+                {"x": 1715967535000, "o": 27.98, "h": 29.79, "l": 26.89, "c": 27.85},
+                {"x": 1716226735000, "o": 28.69, "h": 30.48, "l": 25.14, "c": 27.51},
+                {"x": 1716313135000, "o": 27.95, "h": 30.56, "l": 25.24, "c": 27.26},
+                {"x": 1716399535000, "o": 28.62, "h": 31.15, "l": 26.32, "c": 28.79},
+                {"x": 1716485935000, "o": 27.78, "h": 28.3, "l": 26.5, "c": 27.01},
+                {"x": 1716572335000, "o": 27.45, "h": 29.15, "l": 25.31, "c": 26.47},
+                {"x": 1716831535000, "o": 27.38, "h": 27.47, "l": 25.4, "c": 26.02},
+            ]
+        )
         context["x"] = json.dumps([1, 2, 3, 4, 5])
         context["y"] = json.dumps([1, 2, 4, 8, 16])
         return context
