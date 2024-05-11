@@ -21,7 +21,7 @@
       {% endfor %}
       <li class="list-group-item">Sell Signal Mode: {{ strategyDetails.sellSignalMode }}</li>
       {% for signal in strategyDetails.sellSignals %}
-        <li class="list-group-item">Buy Signal: {{ signal }}</li>
+        <li class="list-group-item">Sell Signal: {{ signal }}</li>
       {% endfor %}
     </ul>
     {% if request.user == strategy.user %}

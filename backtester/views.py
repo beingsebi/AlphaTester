@@ -67,19 +67,15 @@ class StrategyCreateView(CreateView):
             indicators.instance = self.object
             for indicator_form in indicators:
                 if indicator_form.is_valid():
-                    buySignal = Signal(
-                        indicator_form.cleaned_data["type"],
-                        indicator_form.cleaned_data["buy_treshold"],
-                        ">=",
+                    signal = Signal(
+                        indicator_form.cleaned_data["indicator_name"],
+                        indicator_form.cleaned_data["value"],
+                        indicator_form.cleaned_data["operator"],
                     )
-                    buySignals.append(buySignal)
-
-                    sellSignal = Signal(
-                        indicator_form.cleaned_data["type"],
-                        indicator_form.cleaned_data["sell_treshold"],
-                        "<=",
-                    )
-                    sellSignals.append(sellSignal)
+                    if indicator_form.cleaned_data["buy_or_sell"] == "BUY":
+                        buySignals.append(signal)
+                    else:
+                        sellSignals.append(signal)
         else:
             return self.render_to_response(self.get_context_data(form=form))
 
@@ -124,7 +120,6 @@ class StrategyDeleteView(DeleteView):
         return super().form_valid(form)
 
 
-# https://aalvarez.me/posts/django-formsets-with-generic-formviews/
 class UpdateStrategy(UpdateView):
     model = Strategy
     template_name = "backtester/update.html"

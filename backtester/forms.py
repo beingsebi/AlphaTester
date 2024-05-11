@@ -1,7 +1,13 @@
 from django import forms
 from django.forms import ModelForm, formset_factory
 from .models import Strategy
-from utils.constants import TIMEFRAME_CHOICES, SIGNALS_CHOICES, INDICATORS_CHOICES
+from utils.constants import (
+    TIMEFRAME_CHOICES,
+    SIGNALS_CHOICES,
+    INDICATORS_CHOICES,
+    TYPE_OF_SIGNAL_CHOICES,
+    TYPE_OF_OPERATOR_CHOICES,
+)
 
 
 class PercentageFloatField(forms.FloatField):
@@ -22,22 +28,10 @@ class PercentageFloatField(forms.FloatField):
 
 
 class IndicatorForm(forms.Form):
-    type = forms.ChoiceField(choices=INDICATORS_CHOICES)
-    buy_treshold = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
-    sell_treshold = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
-    position_size = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
+    indicator_name = forms.ChoiceField(choices=INDICATORS_CHOICES)
+    value = forms.FloatField()
+    operator = forms.ChoiceField(choices=TYPE_OF_OPERATOR_CHOICES)
+    buy_or_sell = forms.ChoiceField(choices=TYPE_OF_SIGNAL_CHOICES)
 
 
 IndicatorFormSet = formset_factory(form=IndicatorForm, extra=1)

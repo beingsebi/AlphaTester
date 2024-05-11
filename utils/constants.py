@@ -32,17 +32,22 @@ class Timeframe(Enum):
 
 
 class Sources(Enum):
-    CLOSE = "close"
-    OPEN = "open"
-    HIGH = "high"
-    LOW = "low"
+    CLOSE = "CLOSE"
+    OPEN = "OPEN"
+    HIGH = "HIGH"
+    LOW = "LOW"
 
 
 class IndicatorNames(Enum):
-    SMA = "sma"
-    EMA = "ema"
-    RSI = "rsi"
-    MACD = "macd"
+    SMA = "SMA"
+    EMA = "EMA"
+    RSI = "RSI"
+    MACD = "MACD"
+
+
+class TypeOfSignal(Enum):
+    BUY = "BUY"
+    SELL = "SELL"
 
 
 INDICATORS_CHOICES = [("SMA", "SMA"), ("EMA", "EMA")]
@@ -51,6 +56,10 @@ SIGNALS_CHOICES = [
     ("CNF", "CNF"),
     ("DNF", "DNF"),
 ]
+
+TYPE_OF_SIGNAL_CHOICES = [("BUY", "BUY"), ("SELL", "SELL")]
+
+TYPE_OF_OPERATOR_CHOICES = [(">=", ">="), ("<=", "<=")]
 
 TIMEFRAME_CHOICES = [
     ("1m", "1m"),
