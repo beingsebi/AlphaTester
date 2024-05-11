@@ -18,6 +18,11 @@ urlpatterns = [
         name="strategy-delete",
     ),
     path(
+        "strategy/<int:pk>/update/",
+        UpdateStrategy.as_view(),
+        name="strategy-update",
+    ),
+    path(
         "instruments/",
         generic.ListView.as_view(
             model=Instrument, template_name="backtester/instruments.html"
