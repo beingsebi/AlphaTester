@@ -63,6 +63,21 @@ class StrategyDetails:
     def fromJSON(JSONstr: str):  # pylint: disable=C0103
         return jsonpickle.decode(JSONstr)
 
+    def __str__(self) -> str:
+        return (
+            f"Strategy Details:\n"
+            f"Capital Allocation: {self.capitalAllocation}\n"
+            f"Bid Size: {self.bidSize}\n"
+            f"Time Frame: {self.timeFrame}\n"
+            f"Take Profit: {self.takeProfit}\n"
+            f"Stop Loss: {self.stopLoss}\n"
+            f"Exchange Fee: {self.exchangeFee}\n"
+            f"Buy Signals Mode: {self.buySignalMode}\n"
+            f"Buy Signals: {self.buySignals}\n"
+            f"Sell Signals Mode: {self.sellSignalMode}\n"
+            f"Sell Signals: {self.sellSignals}"
+        )
+
     def dummyPrint(self):
         print("CapitalAllocation: ", self.capitalAllocation)
 

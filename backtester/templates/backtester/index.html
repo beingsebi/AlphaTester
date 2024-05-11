@@ -9,7 +9,7 @@
         <ul class="list-group">
           {% for strategy in latest_strategy_list %}
             <li class="list-group-item">
-              <a href="{% url 'backtester:detail' strategy.id %}">{{ strategy.name }}</a>
+              <a href="{% url 'backtester:detail' strategy.id %}">{{ strategy.name|default:'[Unnamed]' }}</a>
             </li>
           {% endfor %}
         </ul>

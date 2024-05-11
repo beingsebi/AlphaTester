@@ -1,12 +1,13 @@
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from utils.strategy.strategy import StrategyDetails
+from utils.strategy.signal import Signal
 
-from .forms import StrategyForm
+from .forms import *
 from .models import Strategy
-
+from django.views.generic.edit import FormView
 
 
 class IndexListView(generic.ListView):
@@ -21,15 +22,19 @@ class IndexListView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Strategy
     template_name = "backtester/detail.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context['strategyDetails'] = StrategyDetails.fromJSON(self.object.strategyDetails)
+            context["strategyDetails"] = StrategyDetails.fromJSON(
+                self.object.strategyDetails
+            )
+            print(context["strategyDetails"])
         except Exception as e:
             print("Error: " + str(e))
         return context
-    
+
+
 class ResultView(generic.DetailView):
     model = Strategy
     template_name = "backtester/result.html"
@@ -39,11 +44,40 @@ class StrategyCreateView(CreateView):
     form_class = StrategyForm
     template_name = "backtester/strategy_form.html"
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["indicators"] = IndicatorFormSet(self.request.POST)
+        else:
+            data["indicators"] = IndicatorFormSet()
+        return data
+
     def form_valid(self, form):
         # Check if the user is authenticated
         if not self.request.user.is_authenticated:
             return super().form_invalid(form)
         form.instance.user = self.request.user
+
+        # Parse the indicators. If the formset is invalid, we return the invalid formset.
+        buySignals = []
+        sellSignals = []
+        context = self.get_context_data()
+        indicators = context["indicators"]
+        if indicators.is_valid():
+            indicators.instance = self.object
+            for indicator_form in indicators:
+                if indicator_form.is_valid():
+                    signal = Signal(
+                        indicator_form.cleaned_data["indicator_name"],
+                        indicator_form.cleaned_data["value"],
+                        indicator_form.cleaned_data["operator"],
+                    )
+                    if indicator_form.cleaned_data["buy_or_sell"] == "BUY":
+                        buySignals.append(signal)
+                    else:
+                        sellSignals.append(signal)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
         # We try to create a StrategyDetails object from the form data
         # If we fail, we add an error to the form and return the invalid form
@@ -57,13 +91,11 @@ class StrategyCreateView(CreateView):
                 form.cleaned_data["stop_loss"],
                 form.cleaned_data["exchange_fee"],
                 form.cleaned_data["buy_signal_mode"],
-                # TODO: Add signals where we finalize the implementation
-                [],
+                buySignals,
                 form.cleaned_data["sell_signal_mode"],
-                []
+                sellSignals,
             )
-            form.instance.strategyDetails = StrategyDetails.toJSON(
-                strategyDetails)
+            form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
 
         except Exception as e:
             # TODO: Add logging and replace prints.
@@ -86,3 +118,9 @@ class StrategyDeleteView(DeleteView):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+
+class UpdateStrategy(UpdateView):
+    model = Strategy
+    template_name = "backtester/update.html"
+    fields = "__all__"
