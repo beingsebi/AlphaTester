@@ -149,6 +149,7 @@ class InstrumentDetailView(generic.DetailView):
         )
         context["x"] = json.dumps([1, 2, 3, 4, 5])
         context["y"] = json.dumps([1, 2, 4, 8, 16])
+        context["symbol"] = self.object.name  # # "NASDAQ:GOOGL"
         return context
 
 
