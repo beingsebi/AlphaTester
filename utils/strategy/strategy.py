@@ -13,7 +13,7 @@ from .amount import Amount
 class StrategyDetails:
     def __init__(
         self,
-        instrumentName: str,  # has to be the same as the one in the database
+        instrumentName: str,  # has to be the same as the one in the database TODO: enum
         capitalAllocation: int,  # the currency in which the instrument is traded
         timeFrame: Timeframe,
         bidSize: Amount,

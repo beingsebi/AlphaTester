@@ -1,10 +1,11 @@
 import sqlalchemy
 from . import baseIndicator
 from ... import constants
+import random
 
 
 class SMA(baseIndicator.BaseIndicator):
-    def __init__(self, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe, **kwargs):
+    def __init__(self, instrumentName: str, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe, **kwargs):
         """
         Initialize the SMA (Simple Moving Average) indicator.
 
@@ -17,7 +18,7 @@ class SMA(baseIndicator.BaseIndicator):
         Returns:
         None
         """
-        super().__init__(indicatorName, timeframe)
+        super().__init__(instrumentName, indicatorName, timeframe)
         _kwargs = kwargs.copy()  # just in case we need it later in the caller
         self.length = _kwargs.pop("length", 14)
         self.close = _kwargs.pop("source", constants.Sources.CLOSE)
@@ -27,7 +28,8 @@ class SMA(baseIndicator.BaseIndicator):
     # override the abstract calculateValue method
     def calculateValue(self, date: sqlalchemy.types.Date, time: sqlalchemy.types.Time):
         # might change the types
-        pass
+        # TODO implement the calculation. get data from the database
+        return random.randint(80, 129)
 
     def __str__(self) -> str:
         return (f"{super().__str__()}"

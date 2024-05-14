@@ -69,6 +69,7 @@ class StrategyCreateView(CreateView):
             for indicator_form in indicators:
                 if indicator_form.is_valid():
                     signal = Signal(
+                        # TODO: refactor
                         indicator_form.cleaned_data["indicator_name"],
                         indicator_form.cleaned_data["value"],
                         indicator_form.cleaned_data["operator"],

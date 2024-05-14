@@ -1,23 +1,20 @@
-from ..constants import IndicatorNames, TypeOfOpOperatorChoices
+from utils.strategy.indicators.baseIndicator import BaseIndicator
+from ..constants import TypeOfOpOperatorChoices
 
 
 class Signal:
     def __init__(
-        self,
-        indicatorName: IndicatorNames,
-        value: float,
-        operator: TypeOfOpOperatorChoices,
-        **indicatorArgs,
-    ) -> None:
-        # TODO: here will also check if indicator is valid
-        self.indicator = indicatorName
+            self,
+            indicator: BaseIndicator,
+            value: float,
+            operator: TypeOfOpOperatorChoices) -> None:
+        self.indicator = indicator
         self.value = value
         # value might become Amount type if necessary
         self.operator = operator  # "<=" or ">="
-        self.indicatorArgs = indicatorArgs
 
     def __str__(self) -> str:
-        return f"{self.indicator} {self.operator} {self.value}"
+        return f"{self.indicator}  |  {self.operator} {self.value}"
 
     def __repr__(self) -> str:
-        return f"{self.indicator} {self.operator} {self.value}"
+        return f"{self.indicator}  |  {self.operator} {self.value}"

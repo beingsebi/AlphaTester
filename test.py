@@ -1,4 +1,5 @@
 from utils.strategy.amount import Amount
+from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.indicators.sma import SMA
 from utils import constants
 from utils import database as mdb
@@ -32,6 +33,10 @@ from utils.strategy.signal import Signal
 #         end_date: datetime | None = None,
 #     ) -> None:
 
+
+my_sma = IndicatorFactory.createIndicator(
+    "ZXAUUSD", constants.IndicatorNames.SMA, constants.Timeframe.M1, length=20, source=constants.Sources.CLOSE)
+
 strategy = StrategyDetails(
     "ZXAUUSD",
     1000,
@@ -39,12 +44,11 @@ strategy = StrategyDetails(
     Amount(10),
     None,
     None,
-    [SMA(constants.IndicatorNames.SMA, constants.Timeframe.M1,
-         length=20, source=constants.Sources.CLOSE)],
+    [my_sma],
     constants.SignalsChoicesMode.CNF,
-    [[Signal(constants.IndicatorNames.SMA, 1, ">=")]],
+    [[Signal(my_sma, 10, ">=")]],
     constants.SignalsChoicesMode.CNF,
-    [[Signal(constants.IndicatorNames.SMA, 1, "<=")]],
+    [[Signal(my_sma, 10, "<=")]],
 )
 
 print(strategy)
