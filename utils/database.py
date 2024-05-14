@@ -122,5 +122,5 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
 # insert_data_into_table("ZXAUUSD_2024_01.csv")
 
 
-path = sys.argv[1]
-insert_data_into_table(path)
+# path = sys.argv[1]
+# insert_data_into_table(path)

@@ -6,7 +6,8 @@ from ... import constants
 
 
 class BaseIndicator(ABC):
-    def __init__(self, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe) -> None:
+    # TODO: use a static buffer for data  ?? map<instrument,data>
+    def __init__(self, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe = constants.Timeframe.M1) -> None:
         if not indicatorName:
             raise ValueError("Indicator name is required")
 
@@ -16,3 +17,7 @@ class BaseIndicator(ABC):
     @abstractmethod
     def calculateValue(self, date: sqlalchemy.types.Date, time: sqlalchemy.types.Time):
         pass
+
+    @abstractmethod
+    def __str__(self) -> str:
+        return f"BaseIndicater: {self.name.name} | Timeframe: {self.timeframe.name}"

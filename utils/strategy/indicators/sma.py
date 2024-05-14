@@ -28,3 +28,11 @@ class SMA(baseIndicator.BaseIndicator):
     def calculateValue(self, date: sqlalchemy.types.Date, time: sqlalchemy.types.Time):
         # might change the types
         pass
+
+    def __str__(self) -> str:
+        return (f"{super().__str__()}"
+                f"(length: {self.length} | source: {self.close})")
+
+    def __repr__(self) -> str:
+        return (f"{super().__str__()}"
+                f"(length: {self.length} | source: {self.close})")

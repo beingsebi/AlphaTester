@@ -12,9 +12,9 @@ class DbConstants:
 
     DB_PARAMS = {
         "database": "alphatester",
-        "user": "server",
+        "user": "sebi",
         "host": "localhost",
-        "password": "123456",
+        "password": "1234",
         "port": 5432,
     }
 
@@ -48,6 +48,16 @@ class IndicatorNames(Enum):
 class TypeOfSignal(Enum):
     BUY = "BUY"
     SELL = "SELL"
+
+
+class SignalsChoicesMode(Enum):
+    CNF = "CNF"
+    DNF = "DNF"
+
+
+class TypeOfOpOperatorChoices(Enum):
+    GE = ">="
+    LE = "<="
 
 
 INDICATORS_CHOICES = [("SMA", "SMA"), ("EMA", "EMA")]
