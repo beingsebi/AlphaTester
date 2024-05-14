@@ -1,3 +1,4 @@
+import json
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -6,11 +7,11 @@ from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
 
 from .forms import *
-from .models import Strategy
+from .models import *
 from django.views.generic.edit import FormView
 
 
-class IndexListView(generic.ListView):
+class StrategyListView(generic.ListView):
     template_name = "backtester/index.html"
     context_object_name = "latest_strategy_list"
 
@@ -19,7 +20,7 @@ class IndexListView(generic.ListView):
         return Strategy.objects.order_by("-created_at")[:5]
 
 
-class DetailView(generic.DetailView):
+class StrategyDetailView(generic.DetailView):
     model = Strategy
     template_name = "backtester/detail.html"
 
@@ -35,7 +36,7 @@ class DetailView(generic.DetailView):
         return context
 
 
-class ResultView(generic.DetailView):
+class StrategyResultView(generic.DetailView):
     model = Strategy
     template_name = "backtester/result.html"
 
@@ -118,6 +119,16 @@ class StrategyDeleteView(DeleteView):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+
+class InstrumentDetailView(generic.DetailView):
+    model = Instrument
+    template_name = "backtester/instrument_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["symbol"] = self.object.name
+        return context
 
 
 class UpdateStrategy(UpdateView):
