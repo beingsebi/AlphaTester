@@ -25,8 +25,8 @@ class StrategyDetails:
         sellSignalsMode: SignalsChoicesMode,
         sellSignals: List[List[Signal]],
         exchangeFee: Amount | None = None,
-        start_date: datetime | None = None,
-        end_date: datetime | None = None,
+        startDatetime: datetime | None = None,
+        endDatetime: datetime | None = None,
     ) -> None:
         self.instrumentName = instrumentName
         # has to be the same as the one in the database
@@ -61,19 +61,19 @@ class StrategyDetails:
         # same as BuySignalMode
 
         self.sellSignals = copy.deepcopy(sellSignals)
-        # same as BuySignal
+        # same as BuySignals
+
+        self.startDatetime = startDatetime
+        # date and time from which the strategy will start trading
+        # if none => start trading from the first available date
+
+        self.endDatetime = endDatetime
+        # date and time from which the strategy will stop trading
+        # if none => stop trading at the last available date
 
         self.exchangeFee = exchangeFee
         # no ExchangeFee (None) or Amount
         # you might want to also take into account the fee for currency conversion
-
-        self.start_date = start_date
-        # date from which the strategy will start trading
-        # if none => start trading from the first available date
-
-        self.end_date = end_date
-        # date from which the strategy will stop trading
-        # if none => stop trading at the last available date
 
     @staticmethod
     def toJSON(self):  # pylint: disable=W0211
@@ -97,10 +97,9 @@ class StrategyDetails:
             f"buySignals: {self.buySignals}\n"
             f"sellSignalMode: {self.sellSignalMode}\n"
             f"sellSignals: {self.sellSignals}\n"
+            f"startDatetime: {self.startDatetime}\n"
+            f"endDatetime: {self.endDatetime}\n"
             f"exchangeFee: {self.exchangeFee}\n"
-            f"start_date: {self.start_date}\n"
-            f"end_date: {self.end_date}"
-
         )
 
     def dummyPrint(self):

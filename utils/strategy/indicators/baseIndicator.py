@@ -1,4 +1,5 @@
-from abc import ABC, abstractmethod  # Abstract Base Class
+from abc import ABC, abstractmethod
+from datetime import datetime  # Abstract Base Class
 
 import sqlalchemy
 
@@ -7,7 +8,12 @@ from utils.constants import IndicatorNames, Timeframe
 
 class BaseIndicator(ABC):
     # TODO: use a static buffer for data  ?? map<instrument,data>
-    def __init__(self, instrumentName: str, indicatorName: IndicatorNames, timeframe: Timeframe = Timeframe.M1) -> None:
+    def __init__(
+        self,
+        instrumentName: str,
+        indicatorName: IndicatorNames,
+        timeframe: Timeframe = Timeframe.M1,
+    ) -> None:
         if not instrumentName:
             raise ValueError("Instrument name is required")
 
@@ -19,7 +25,7 @@ class BaseIndicator(ABC):
         self.timeframe = timeframe
 
     @abstractmethod
-    def calculateValue(self, date: sqlalchemy.types.Date, time: sqlalchemy.types.Time):
+    def calculateValue(self, dateTime: datetime):
         pass
 
     @abstractmethod

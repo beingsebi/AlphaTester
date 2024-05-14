@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlalchemy
 from . import baseIndicator
 from utils.constants import IndicatorNames, Timeframe, Sources
@@ -5,7 +6,13 @@ import random
 
 
 class SMA(baseIndicator.BaseIndicator):
-    def __init__(self, instrumentName: str, indicatorName: IndicatorNames, timeframe: Timeframe, **kwargs):
+    def __init__(
+        self,
+        instrumentName: str,
+        indicatorName: IndicatorNames,
+        timeframe: Timeframe,
+        **kwargs,
+    ):
         """
         Initialize the SMA (Simple Moving Average) indicator.
 
@@ -26,15 +33,13 @@ class SMA(baseIndicator.BaseIndicator):
             raise ValueError(f"Invalid keyword arguments: {_kwargs}")
 
     # override the abstract calculateValue method
-    def calculateValue(self, date: sqlalchemy.types.Date, time: sqlalchemy.types.Time):
+    def calculateValue(self, dateTime: datetime):
         # might change the types
         # TODO implement the calculation. get data from the database
         return random.randint(80, 129)
 
     def __str__(self) -> str:
-        return (f"{super().__str__()}"
-                f"(length: {self.length} | source: {self.close})")
+        return f"{super().__str__()}" f"(length: {self.length} | source: {self.close})"
 
     def __repr__(self) -> str:
-        return (f"{super().__str__()}"
-                f"(length: {self.length} | source: {self.close})")
+        return f"{super().__str__()}" f"(length: {self.length} | source: {self.close})"
