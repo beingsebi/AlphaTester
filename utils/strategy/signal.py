@@ -1,5 +1,5 @@
 from utils.strategy.indicators.baseIndicator import BaseIndicator
-from ..constants import TypeOfOpOperatorChoices
+from utils.constants import TypeOfOpOperatorChoices
 
 
 class Signal:

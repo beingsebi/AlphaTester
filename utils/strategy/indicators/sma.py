@@ -1,11 +1,11 @@
 import sqlalchemy
 from . import baseIndicator
-from ... import constants
+from utils.constants import IndicatorNames, Timeframe, Sources
 import random
 
 
 class SMA(baseIndicator.BaseIndicator):
-    def __init__(self, instrumentName: str, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe, **kwargs):
+    def __init__(self, instrumentName: str, indicatorName: IndicatorNames, timeframe: Timeframe, **kwargs):
         """
         Initialize the SMA (Simple Moving Average) indicator.
 
@@ -21,7 +21,7 @@ class SMA(baseIndicator.BaseIndicator):
         super().__init__(instrumentName, indicatorName, timeframe)
         _kwargs = kwargs.copy()  # just in case we need it later in the caller
         self.length = _kwargs.pop("length", 14)
-        self.close = _kwargs.pop("source", constants.Sources.CLOSE)
+        self.close = _kwargs.pop("source", Sources.CLOSE)
         if _kwargs:
             raise ValueError(f"Invalid keyword arguments: {_kwargs}")
 

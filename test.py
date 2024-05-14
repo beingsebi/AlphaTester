@@ -2,7 +2,7 @@ from utils.strategy.amount import Amount
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.indicators.sma import SMA
 from utils import constants
-from utils import database as mdb
+from utils import database_scripts as mdb
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
 

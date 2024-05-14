@@ -2,12 +2,12 @@ from abc import ABC, abstractmethod  # Abstract Base Class
 
 import sqlalchemy
 
-from ... import constants
+from utils.constants import IndicatorNames, Timeframe
 
 
 class BaseIndicator(ABC):
     # TODO: use a static buffer for data  ?? map<instrument,data>
-    def __init__(self, instrumentName: str, indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe = constants.Timeframe.M1) -> None:
+    def __init__(self, instrumentName: str, indicatorName: IndicatorNames, timeframe: Timeframe = Timeframe.M1) -> None:
         if not instrumentName:
             raise ValueError("Instrument name is required")
 

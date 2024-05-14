@@ -9,7 +9,7 @@ from typing import List
 import pandas as pd
 import psycopg2
 import sqlalchemy
-from .constants import DbConstants
+from utils.constants import DbConstants
 
 
 def get_csv_files_from_directory(directory_path: str) -> List[str]:
