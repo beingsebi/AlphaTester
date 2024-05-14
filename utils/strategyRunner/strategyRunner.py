@@ -1,6 +1,6 @@
 from typing import List
 
-import sqlalchemy
+from datetime import date, time
 from utils.constants import TypeOfSignal
 from utils.strategy.strategy import StrategyDetails
 
@@ -8,9 +8,10 @@ from utils.strategy.strategy import StrategyDetails
 class Transaction:
     def __init__(
         self,
-        date: sqlalchemy.types.Date,
-        time: sqlalchemy.types.Time,
+        date: date,
+        time: time,
         price: float,
+        # TODO: (probably already done) metadata about the instrument , including currency
         amount: float,
         type: TypeOfSignal,
     ):
