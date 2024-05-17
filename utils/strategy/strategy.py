@@ -35,11 +35,10 @@ class StrategyDetails:
         # total Amount of capital allocated to the strategy
 
         self.timeFrame = timeFrame
-        # teoretic "1m", "5m", "15m", "30m", "1h", "4h", "1d", "1w", "1M"
-        # practic deocamdata doar "1m". Pt celelalte trebuie agregate datele
+        # timeFrame of the candles used in the strategy
 
         self.bidSize = bidSize
-        # dictionary with the size of the bid
+        # Amount of one trade
 
         self.takeProfit = takeProfit
         # with respect to the ammount traded at one particular time. liquidates all positions
@@ -54,8 +53,8 @@ class StrategyDetails:
         # "CNF" -> (a1 or a2 or..) and (b1 or...) and ..
         # "DNF" -> (a1 and a2 and..) or (b1 and...) or ..
 
-        self.buySignals = copy.deepcopy(buySignals)  # buysignal SSSSS
-        # [[Signal("indicator", 1, ">")]]
+        self.buySignals = copy.deepcopy(buySignals)
+        # [[Signal("indicator", thresh, ">=")]]
 
         self.sellSignalMode = sellSignalsMode
         # same as BuySignalMode

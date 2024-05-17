@@ -35,9 +35,7 @@ class StrategyRunner:
     def run(strategy: StrategyDetails) -> List[Transaction]:
         transactions = []
         # WARNING: for now, the transaction will buy the close price
-        # TODO: now assuming timeFrame is 1 minute
         # TODO: now assuming exchange fee is None
-        # TODO: now assuming startDatetime and endDatetime are not None
         # TODO: now assuming stopLoss and takeProfit are None
         # TODO: now assuming bidSize is fixed
         # TODO: now assuming buySignalsMode and sellSignalsMode are CNF
@@ -60,6 +58,7 @@ class StrategyRunner:
             traceback.print_exc()
 
         data = StrategyRunner.squashTimestamps(data, strategy.timeFrame)
+
         for row in data:
             print(row)
             date_time = datetime.combine(row[0], row[1])

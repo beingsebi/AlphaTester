@@ -24,7 +24,7 @@ def test_strat():
     strategy = StrategyDetails(
         "ZXAUUSD",
         1000,
-        constants.Timeframe.H4,
+        constants.Timeframe.W1,
         Amount(10),
         None,
         None,
@@ -34,8 +34,8 @@ def test_strat():
         constants.SignalsChoicesMode.CNF,
         [[Signal(my_sma, 100, "<=")]],
         None,
-        datetime(2024, 1, 2, 1, 0, 0),
-        datetime(2024, 1, 3, 1, 10, 0),
+        None,
+        None,
     )
 
     print(strategy)

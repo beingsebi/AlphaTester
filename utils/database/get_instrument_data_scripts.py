@@ -16,12 +16,16 @@ def get_data(
             password=DbConstants.DB_PARAMS["password"],
             port=DbConstants.DB_PARAMS["port"],
         ) as conn:
+            sql = f'SELECT date, time, open, high, low, close, spread FROM public."{instrument}" WHERE 0 = 0 '
+            if startDatetime is not None:
+                sql += f"AND (date > '{startDatetime.date()}' OR (date = '{startDatetime.date()}' AND time >= '{startDatetime.time()}')) "
+            if endDatetime is not None:
+                sql += f"AND (date < '{endDatetime.date()}' OR (date = '{endDatetime.date()}' AND time <= '{endDatetime.time()}'))"
 
-            sql = f"SELECT date, time, open, high, low, close, spread FROM public.\"{instrument}\" WHERE (date > '{startDatetime.date()}' OR (date = '{startDatetime.date()}' AND time >= '{startDatetime.time()}')) \
-                AND (date < '{endDatetime.date()}' OR (date = '{endDatetime.date()}' AND time <= '{endDatetime.time()}'))"
             cur = conn.cursor()
             cur.execute(sql)
             data = cur.fetchall()
+            # print(data)
             return data
     except Exception as e:
         print("Error: " + str(e))
