@@ -17,7 +17,8 @@ def get_data(
             port=DbConstants.DB_PARAMS["port"],
         ) as conn:
 
-            sql = f"SELECT date, time, open, high, low, close, spread FROM public.\"{instrument}\" WHERE date >= '{startDatetime.date()}' AND time >= '{startDatetime.time()}' AND date <= '{endDatetime.date()}' AND time <= '{endDatetime.time()}'"
+            sql = f"SELECT date, time, open, high, low, close, spread FROM public.\"{instrument}\" WHERE (date > '{startDatetime.date()}' OR (date = '{startDatetime.date()}' AND time >= '{startDatetime.time()}')) \
+                AND (date < '{endDatetime.date()}' OR (date = '{endDatetime.date()}' AND time <= '{endDatetime.time()}'))"
             cur = conn.cursor()
             cur.execute(sql)
             data = cur.fetchall()
