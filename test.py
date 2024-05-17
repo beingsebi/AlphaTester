@@ -16,15 +16,15 @@ def test_strat():
     my_sma = IndicatorFactory.createIndicator(
         "ZXAUUSD",
         constants.IndicatorNames.SMA,
-        constants.Timeframe.M1,
-        length=20,
+        constants.Timeframe.H1,
+        length=5,
         source=constants.Sources.CLOSE,
     )
 
     strategy = StrategyDetails(
         "ZXAUUSD",
         1000,
-        constants.Timeframe.W1,
+        constants.Timeframe.M1,
         Amount(10),
         None,
         None,
@@ -34,8 +34,8 @@ def test_strat():
         constants.SignalsChoicesMode.CNF,
         [[Signal(my_sma, 100, "<=")]],
         None,
-        None,
-        None,
+        datetime(2024, 1, 3, 9, 30, 0),
+        datetime(2024, 1, 3, 9, 35, 0),
     )
 
     print(strategy)

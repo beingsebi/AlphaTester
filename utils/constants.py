@@ -51,6 +51,14 @@ class Sources(Enum):
     LOW = "LOW"
 
 
+SourcesToIndex = {
+    Sources.OPEN: 2,
+    Sources.HIGH: 3,
+    Sources.LOW: 4,
+    Sources.CLOSE: 5,
+}
+
+
 class IndicatorNames(Enum):
     SMA = "SMA"
     EMA = "EMA"

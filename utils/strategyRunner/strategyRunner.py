@@ -34,16 +34,16 @@ class StrategyRunner:
     @staticmethod
     def run(strategy: StrategyDetails) -> List[Transaction]:
         transactions = []
-        # WARNING: for now, the transaction will buy the close price
         # TODO: now assuming exchange fee is None
         # TODO: now assuming stopLoss and takeProfit are None
         # TODO: now assuming bidSize is fixed
         # TODO: now assuming buySignalsMode and sellSignalsMode are CNF
         # TODO: now assuming signals use open price
         # TODO: now assuming trading starts late enough to have enough data for all indicators
-        # TODO: not checking if  enough money to buy
+        # TODO: not checking if enough money to buy
         # TODO: not checking if enough stock to sell
         # TODO: add squash transactions flag (if buy and sell at same time, then squash them into one transaction)
+        # WARNING: for now, the transaction will buy the close price
         # WARNING: intraday candle might actualy span multiple days
 
         try:
@@ -60,7 +60,7 @@ class StrategyRunner:
         data = StrategyRunner.squashTimestamps(data, strategy.timeFrame)
 
         for row in data:
-            print(row)
+            print("aa " + str(row))
             date_time = datetime.combine(row[0], row[1])
             condition = True
             for term in strategy.buySignals:
@@ -152,7 +152,9 @@ class StrategyRunner:
                 close = data[index][5]
                 spread = max(spread, data[index][6])
                 index += 1
-            if not complete_candle:
+            if (
+                not complete_candle
+            ):  # excluding last candle if it is not complete. might want to include it in the future
                 break
             new_data.append((date, time, open, high, low, close, spread))
             bucket_time_start = bucket_time_end
