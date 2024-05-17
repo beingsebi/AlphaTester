@@ -31,6 +31,19 @@ class Timeframe(Enum):
     MN1 = "1M"
 
 
+TimeframeToMinutes = {
+    Timeframe.M1: 1,
+    Timeframe.M5: 5,
+    Timeframe.M15: 15,
+    Timeframe.M30: 30,
+    Timeframe.H1: 60,
+    Timeframe.H4: 240,
+    Timeframe.D1: 1440,
+    Timeframe.W1: 10080,
+    Timeframe.MN1: 43200,
+}
+
+
 class Sources(Enum):
     CLOSE = "CLOSE"
     OPEN = "OPEN"
