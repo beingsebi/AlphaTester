@@ -13,10 +13,11 @@ from .amount import Amount
 class StrategyDetails:
     def __init__(
         self,
-        instrumentName: str,  # has to be the same as the one in the database TODO: enum
-        capitalAllocation: int,  # the currency in which the instrument is traded
+        instrumentName: str,  # has to be the same as the one in the database TODO: dynamic enum or something similar
+        capitalAllocation: float,  # the currency in which the instrument is traded
         timeFrame: Timeframe,
-        bidSize: Amount,
+        buySize: Amount,  # TODO: add flag if this means money or share for both fixed and percentage. now it means money (percentage of free funds)
+        sellSize: Amount,  # TODO: add flag if this means money or share for fixed. now it means money (percentage of current value of invested funds)
         takeProfit: Amount | None,
         stopLoss: Amount | None,
         indicators: List[BaseIndicator],
@@ -24,10 +25,12 @@ class StrategyDetails:
         buySignals: List[List[Signal]],
         sellSignalsMode: SignalsChoicesMode,
         sellSignals: List[List[Signal]],
-        exchangeFee: Amount | None = None,
+        exchangeBuyFee: Amount | None = None,
+        exchangeSellFee: Amount | None = None,
         startDatetime: datetime | None = None,
         endDatetime: datetime | None = None,
     ) -> None:
+        # TODO: set tick size for the instrument
         self.instrumentName = instrumentName
         # has to be the same as the one in the database
 
@@ -37,8 +40,11 @@ class StrategyDetails:
         self.timeFrame = timeFrame
         # timeFrame of the candles used in the strategy
 
-        self.bidSize = bidSize
-        # Amount of one trade
+        self.buySize = buySize
+        # Amount of one buy trade
+
+        self.sellSize = sellSize
+        # Amount of one sell trade
 
         self.takeProfit = takeProfit
         # with respect to the ammount traded at one particular time. liquidates all positions
@@ -62,6 +68,14 @@ class StrategyDetails:
         self.sellSignals = copy.deepcopy(sellSignals)
         # same as BuySignals
 
+        self.exchangeBuyFee = exchangeBuyFee
+        # no exchangeBuyFee (None) or Amount
+        # you might want to also take into account the fee for currency conversion
+
+        self.exchangeSellFee = exchangeSellFee
+        # no exchangeSellFee (None) or Amount
+        # you might want to also take into account the fee for currency conversion
+
         self.startDatetime = startDatetime
         # date and time from which the strategy will start trading
         # if none => start trading from the first available date
@@ -69,10 +83,6 @@ class StrategyDetails:
         self.endDatetime = endDatetime
         # date and time from which the strategy will stop trading
         # if none => stop trading at the last available date
-
-        self.exchangeFee = exchangeFee
-        # no ExchangeFee (None) or Amount
-        # you might want to also take into account the fee for currency conversion
 
     @staticmethod
     def toJSON(self):  # pylint: disable=W0211
@@ -88,7 +98,8 @@ class StrategyDetails:
             f"instrumentName: {self.instrumentName}\n"
             f"capitalAllocation: {self.capitalAllocation}\n"
             f"timeFrame: {self.timeFrame}\n"
-            f"bidSize: {self.bidSize}\n"
+            f"buySize: {self.buySize}\n"
+            f"sellSize: {self.sellSize}\n"
             f"takeProfit: {self.takeProfit}\n"
             f"stopLoss: {self.stopLoss}\n"
             f"indicators: {self.indicators}\n"
@@ -96,9 +107,10 @@ class StrategyDetails:
             f"buySignals: {self.buySignals}\n"
             f"sellSignalMode: {self.sellSignalMode}\n"
             f"sellSignals: {self.sellSignals}\n"
+            f"exchangeFee: {self.exchangeBuyFee}\n"
+            f"exchangeFee: {self.exchangeSellFee}\n"
             f"startDatetime: {self.startDatetime}\n"
             f"endDatetime: {self.endDatetime}\n"
-            f"exchangeFee: {self.exchangeFee}\n"
         )
 
     def dummyPrint(self):
