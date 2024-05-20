@@ -46,6 +46,7 @@ class StrategyDetails:
         self.sellSize = sellSize
         # Amount of one sell trade
 
+        # will keep the medium price of the shares bought and will compare with respect to it. not taking into account fees
         self.takeProfit = takeProfit
         # with respect to the ammount traded at one particular time. liquidates all positions
 

@@ -37,8 +37,6 @@ class StrategyRunner:
     @staticmethod
     def run(strategy: StrategyDetails) -> List[Transaction]:
         transactions = []
-        # TODO: now assuming stopLoss and takeProfit are None
-        # TODO: now assuming signals use open price ??? idk is this has to be solved here or in the signal class. same for indicators
         # TODO IMPORTANT: now assuming trading starts late enough to have enough data for all indicators
         # TODO: add squash transactions flag (if buy and sell at same time, then squash them into one transaction)
         # WARNING: for now, the transaction will buy the close price
@@ -61,10 +59,55 @@ class StrategyRunner:
 
         free_funds = strategy.capitalAllocation
         shares = 0.0
+        medium_price = 0.0
 
         for row in data:
+            # check here for stopLoss and takeProfit
+            old_len = len(transactions)
+            old_shares = shares
+            if shares > 0:
+                if row[5] > medium_price:
+                    if strategy.takeProfit is not None:
+                        if strategy.takeProfit.fixed is not None:
+                            if row[5] >= medium_price + strategy.takeProfit.fixed:
+                                StrategyRunner.liquidate_all(
+                                    row, transactions, strategy, shares
+                                )
+                                shares = 0
+                        elif strategy.takeProfit.percentage is not None:
+                            if row[5] >= medium_price * (
+                                1 + strategy.takeProfit.percentage
+                            ):
+                                StrategyRunner.liquidate_all(
+                                    row, transactions, strategy, shares
+                                )
+                                shares = 0
+                elif row[5] < medium_price:
+                    if strategy.stopLoss is not None:
+                        if strategy.stopLoss.fixed is not None:
+                            if row[5] <= medium_price - strategy.stopLoss.fixed:
+                                StrategyRunner.liquidate_all(
+                                    row, transactions, strategy, shares
+                                )
+                                shares = 0
+                        elif strategy.stopLoss.percentage is not None:
+                            if row[5] <= medium_price * (
+                                1 - strategy.stopLoss.percentage
+                            ):
+                                StrategyRunner.liquidate_all(
+                                    row, transactions, strategy, shares
+                                )
+                                shares = 0
+
             StrategyRunner.run_once(row, strategy, transactions, free_funds, shares)
-            # add SL and TP here
+            if (
+                len(transactions) > old_len
+                and transactions[-1].type == TypeOfSignal.BUY
+            ):
+                medium_price = (
+                    old_shares * medium_price
+                    + transactions[-1].price * transactions[-1].quantity
+                ) / (old_shares + transactions[-1].quantity)
         return transactions
 
     @staticmethod
@@ -320,6 +363,24 @@ class StrategyRunner:
             fee = 0.0
 
         return used_money, fee
+
+    @staticmethod
+    def liquidate_all(
+        row: tuple,
+        transactions: List[Transaction],
+        strategy: StrategyDetails,
+        shares: float,
+    ):
+        if strategy.exchangeSellFee is None:
+            fee = 0
+        elif strategy.exchangeSellFee.fixed is not None:
+            fee = strategy.exchangeSellFee.fixed
+        else:
+            fee = shares * row[5] * strategy.exchangeSellFee.percentage
+
+        transactions.append(
+            Transaction(row[0], row[1], row[5], shares, TypeOfSignal.SELL, fee)
+        )
 
 
 # TODO (in far future):  add market order/ limit order/ stop order/ stop limit order
