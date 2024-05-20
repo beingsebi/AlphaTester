@@ -48,7 +48,17 @@ def test_strat():
             print(i)
 
 
-test_strat()
+my_ema = IndicatorFactory.createIndicator(
+    "ZXAUUSD",
+    constants.IndicatorNames.EMA,
+    constants.Timeframe.M1,
+    length=5,
+    source=constants.Sources.CLOSE,
+)
+print(my_ema)
+aux = my_ema.calculateValue(datetime(2024, 1, 3, 9, 30, 0))
+print(aux)
+# test_strat()
 
 
 def test_get_data():

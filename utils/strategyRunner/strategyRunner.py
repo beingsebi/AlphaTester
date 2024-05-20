@@ -62,7 +62,6 @@ class StrategyRunner:
         medium_price = 0.0
 
         for row in data:
-            # check here for stopLoss and takeProfit
             old_len = len(transactions)
             old_shares = shares
             if shares > 0:
@@ -100,7 +99,7 @@ class StrategyRunner:
                                 shares = 0
 
             StrategyRunner.run_once(row, strategy, transactions, free_funds, shares)
-            if (
+            if (  # for TP and SL
                 len(transactions) > old_len
                 and transactions[-1].type == TypeOfSignal.BUY
             ):
