@@ -21,23 +21,31 @@ def test_strat():
         source=constants.Sources.CLOSE,
     )
 
+    my_ema = IndicatorFactory.createIndicator(
+        "ZXAUUSD",
+        constants.IndicatorNames.EMA,
+        constants.Timeframe.M1,
+        length=5,
+        source=constants.Sources.CLOSE,
+    )
+
     strategy = StrategyDetails(
         "ZXAUUSD",
         1000,
-        constants.Timeframe.M1,
+        constants.Timeframe.D1,
         Amount(10),
         Amount(5),
         None,
         None,
-        [my_sma],
+        [my_sma, my_ema],
         constants.SignalsChoicesMode.CNF,
         [[Signal(my_sma, 100, ">=")]],
         constants.SignalsChoicesMode.CNF,
         [[Signal(my_sma, 100, "<=")]],
         None,
         None,
-        datetime(2024, 1, 3, 9, 30, 0),
-        datetime(2024, 1, 3, 9, 35, 0),
+        datetime(2024, 1, 3, 11, 31, 0),
+        datetime(2024, 1, 5, 12, 35, 0),
     )
 
     print(strategy)
@@ -48,17 +56,10 @@ def test_strat():
             print(i)
 
 
-my_ema = IndicatorFactory.createIndicator(
-    "ZXAUUSD",
-    constants.IndicatorNames.EMA,
-    constants.Timeframe.M1,
-    length=5,
-    source=constants.Sources.CLOSE,
-)
-print(my_ema)
-aux = my_ema.calculateValue(datetime(2024, 1, 3, 9, 30, 0))
-print(aux)
-# test_strat()
+# print(my_ema)
+# aux = my_ema.calculateValue(datetime(2024, 1, 3, 9, 30, 0))
+# print(aux)
+test_strat()
 
 
 def test_get_data():

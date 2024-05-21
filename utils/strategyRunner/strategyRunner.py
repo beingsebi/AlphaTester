@@ -42,6 +42,23 @@ class StrategyRunner:
         # WARNING: for now, the transaction will buy the close price
         # WARNING: intraday candle might actualy span multiple days
 
+        #! IMPORTANT: here will modify strategy details
+
+        print("eee----eee")
+        print(strategy.startDatetime)
+        print(strategy.endDatetime)
+        print()
+        StrategyRunner.fixStartDatetime(strategy)
+        StrategyRunner.fixEndDatetime(strategy)
+        print(strategy.startDatetime)
+        print(strategy.endDatetime)
+        print("eee------eee")
+
+        if strategy.startDatetime >= strategy.endDatetime:
+            raise Exception(
+                "Actual start date of candle is greater than or equal to the actual end date of candle."
+            )
+
         try:
             data = get_data(  # TODO: process in batches
                 strategy.instrumentName,
@@ -380,6 +397,59 @@ class StrategyRunner:
         transactions.append(
             Transaction(row[0], row[1], row[5], shares, TypeOfSignal.SELL, fee)
         )
+
+    @staticmethod
+    def fixStartDatetime(strategy: StrategyDetails):
+        while True:
+            if StrategyRunner.isCandleDateValid(
+                strategy.startDatetime, strategy.timeFrame
+            ):
+                break
+            strategy.startDatetime += timedelta(minutes=1)
+
+    @staticmethod
+    def fixEndDatetime(strategy: StrategyDetails):
+        while True:
+            if StrategyRunner.isCandleDateValid(
+                strategy.endDatetime, strategy.timeFrame
+            ):
+                break
+            strategy.endDatetime -= timedelta(minutes=1)
+
+    @staticmethod
+    def isCandleDateValid(dateTime: datetime, timeFrame: Timeframe):
+        if dateTime == None or timeFrame == Timeframe.M1:
+            return True
+
+        start_hour = dateTime.hour
+        start_minute = dateTime.minute
+
+        if timeFrame == Timeframe.M5:
+            return start_minute % 5 == 0
+
+        if timeFrame == Timeframe.M15:
+            return start_minute % 15 == 0
+
+        if timeFrame == Timeframe.M30:
+            return start_minute % 30 == 0
+
+        if timeFrame == Timeframe.H1:
+            return start_minute == 0
+
+        if timeFrame == Timeframe.H4:
+            return (
+                start_minute == 0 and start_hour % 4 == 2
+            )  # might want to change here the modulo
+
+        if timeFrame == Timeframe.D1:
+            return start_minute == 0 and start_hour == 0
+
+        if timeFrame == Timeframe.W1:
+            return start_minute == 0 and start_hour == 0 and dateTime.weekday() == 0
+
+        if timeFrame == Timeframe.MN1:
+            return start_minute == 0 and start_hour == 0 and dateTime.day == 1
+        return False
 
 
 # TODO (in far future):  add market order/ limit order/ stop order/ stop limit order

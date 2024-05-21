@@ -58,10 +58,10 @@ class EMA(
         data = StrategyRunner.squashTimestamps(data, self.timeframe)
 
         index = SourcesToIndex[self.source]
-        print("------")
-        for i in data:
-            print(i[index])
-        print("------")
+        # print("------")
+        # for i in data:
+        #     print(i[index])
+        # print("------")
         # current candle is not included in the data
         if len(data) != self.length:
             return None  # not enough data

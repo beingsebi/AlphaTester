@@ -13,7 +13,7 @@ from .amount import Amount
 class StrategyDetails:
     def __init__(
         self,
-        instrumentName: str,  # has to be the same as the one in the database TODO: dynamic enum or something similar
+        instrumentName: str,  # has to be the same as the one in the database TODO: (nice to have) dynamic enum or something similar
         capitalAllocation: float,  # the currency in which the instrument is traded
         timeFrame: Timeframe,
         buySize: Amount,  # TODO: add flag if this means money or share for both fixed and percentage. now it means money (percentage of free funds)
@@ -30,7 +30,7 @@ class StrategyDetails:
         startDatetime: datetime | None = None,
         endDatetime: datetime | None = None,
     ) -> None:
-        # TODO: set tick size for the instrument
+        # TODO: (nice to have) set tick size for the instrument
         self.instrumentName = instrumentName
         # has to be the same as the one in the database
 
