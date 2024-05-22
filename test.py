@@ -9,6 +9,7 @@ from utils.database.get_instrument_data_scripts import get_data
 from utils.database.get_instrument_data_scripts import get_data
 from datetime import datetime
 
+from utils.strategyRunner.resultsInterpretor import resultsInterpretor
 from utils.strategyRunner.strategyRunner import StrategyRunner
 
 
@@ -24,35 +25,37 @@ def test_strat():
     my_ema = IndicatorFactory.createIndicator(
         "ZXAUUSD",
         constants.IndicatorNames.EMA,
-        constants.Timeframe.M1,
-        length=5,
+        constants.Timeframe.H1,
+        length=7,
         source=constants.Sources.CLOSE,
     )
 
     strategy = StrategyDetails(
         "ZXAUUSD",
-        1000,
-        constants.Timeframe.H1,
-        Amount(10),
-        Amount(5),
+        10000,
+        constants.Timeframe.M30,
+        Amount(1000),
+        Amount(1000),
         None,
         None,
         [my_sma, my_ema],
         constants.SignalsChoicesMode.CNF,
-        [[Signal(my_sma, 100, ">=")]],
+        [[Signal(my_ema, 2045.15, "<=")]],
         constants.SignalsChoicesMode.CNF,
-        [[Signal(my_sma, 100, "<=")]],
+        [[Signal(my_ema, 2045.16, ">=")]],
         None,
         None,
-        datetime(2024, 1, 2, 8, 31, 0),
-        datetime(2024, 1, 4, 12, 35, 0),
+        datetime(2024, 1, 4, 8, 31, 0),
+        datetime(2024, 1, 4, 14, 35, 0),
     )
 
     r = StrategyRunner.run(strategy)
     if r:
         for i in r:
             print(i)
-    print(strategy)
+    proc = resultsInterpretor.interpretResults(r, strategy.capitalAllocation)
+    print(proc[0])
+    print(proc[1])
 
 
 # print(my_ema)
