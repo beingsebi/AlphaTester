@@ -31,10 +31,17 @@ class Transaction:
         self.fee = fee
 
     def __str__(self) -> str:
-        return f"{self.date} {self.time} {self.price} {self.quantity} {self.type.name}"
+        return f"{self.date} {self.time} {self.price} {self.quantity} {self.type.name} {self.fee}"
 
     def __repr__(self) -> str:
-        return f"{self.date} {self.time} {self.price} {self.quantity} {self.type.name}"
+        return f"{self.date} {self.time} {self.price} {self.quantity} {self.type.name} {self.fee}"
+
+
+class TradingState:
+    def __init__(self, free_funds: float, shares: float, medium_price: float):
+        self.free_funds = free_funds
+        self.shares = shares
+        self.medium_price = medium_price
 
 
 class StrategyRunner:
@@ -75,54 +82,58 @@ class StrategyRunner:
             data, strategy.timeFrame
         )  # take into account the timeframe
 
-        free_funds = strategy.capitalAllocation
-        shares = 0.0
-        medium_price = 0.0
+        tradingState = TradingState(strategy.capitalAllocation, 0.0, 0.0)
 
         for row in data:
             old_len = len(transactions)
-            old_shares = shares
-            if shares > 0:
-                if row[5] > medium_price:
+            old_shares = tradingState.shares
+            if tradingState.shares > 0:
+                if row[5] > tradingState.medium_price:
                     if strategy.takeProfit is not None:
                         if strategy.takeProfit.fixed is not None:
-                            if row[5] >= medium_price + strategy.takeProfit.fixed:
+                            if (
+                                row[5]
+                                >= tradingState.medium_price + strategy.takeProfit.fixed
+                            ):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, shares
+                                    row, transactions, strategy, tradingState.shares
                                 )
-                                shares = 0
+                                tradingState.shares = 0
                         elif strategy.takeProfit.percentage is not None:
-                            if row[5] >= medium_price * (
+                            if row[5] >= tradingState.medium_price * (
                                 1 + strategy.takeProfit.percentage
                             ):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, shares
+                                    row, transactions, strategy, tradingState.shares
                                 )
-                                shares = 0
-                elif row[5] < medium_price:
+                                tradingState.shares = 0
+                elif row[5] < tradingState.medium_price:
                     if strategy.stopLoss is not None:
                         if strategy.stopLoss.fixed is not None:
-                            if row[5] <= medium_price - strategy.stopLoss.fixed:
+                            if (
+                                row[5]
+                                <= tradingState.medium_price - strategy.stopLoss.fixed
+                            ):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, shares
+                                    row, transactions, strategy, tradingState.shares
                                 )
-                                shares = 0
+                                tradingState.shares = 0
                         elif strategy.stopLoss.percentage is not None:
-                            if row[5] <= medium_price * (
+                            if row[5] <= tradingState.medium_price * (
                                 1 - strategy.stopLoss.percentage
                             ):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, shares
+                                    row, transactions, strategy, tradingState.shares
                                 )
-                                shares = 0
+                                tradingState.shares = 0
 
-            StrategyRunner.run_once(row, strategy, transactions, free_funds, shares)
+            StrategyRunner.run_once(row, strategy, transactions, tradingState)
             if (  # for TP and SL
                 len(transactions) > old_len
                 and transactions[-1].type == TypeOfSignal.BUY
             ):
-                medium_price = (
-                    old_shares * medium_price
+                tradingState.medium_price = (
+                    old_shares * tradingState.medium_price
                     + transactions[-1].price * transactions[-1].quantity
                 ) / (old_shares + transactions[-1].quantity)
         return transactions
@@ -171,16 +182,14 @@ class StrategyRunner:
         row: tuple,
         strategy: StrategyDetails,
         transactions: List[Transaction],
-        free_funds: float,
-        shares: float,
+        tradingState: TradingState,
     ):
         if strategy.sellSignalMode == "DNF":
             StrategyRunner.run_once_DNF(
                 row,
                 strategy,
                 transactions,
-                free_funds,
-                shares,
+                tradingState,
                 TypeOfSignal.SELL,
             )
         else:
@@ -188,8 +197,7 @@ class StrategyRunner:
                 row,
                 strategy,
                 transactions,
-                free_funds,
-                shares,
+                tradingState,
                 TypeOfSignal.SELL,
             )
 
@@ -198,8 +206,7 @@ class StrategyRunner:
                 row,
                 strategy,
                 transactions,
-                free_funds,
-                shares,
+                tradingState,
                 TypeOfSignal.BUY,
             )
         else:
@@ -207,8 +214,7 @@ class StrategyRunner:
                 row,
                 strategy,
                 transactions,
-                free_funds,
-                shares,
+                tradingState,
                 TypeOfSignal.BUY,
             )
 
@@ -238,8 +244,7 @@ class StrategyRunner:
         row: tuple,
         strategy: StrategyDetails,
         transactions: List[Transaction],
-        free_funds: float,
-        shares: float,
+        tradingState: TradingState,
         signalType: TypeOfSignal,
     ):
         date_time = datetime.combine(row[0], row[1])
@@ -253,16 +258,12 @@ class StrategyRunner:
             termCondition = False
             for signal in term:
                 if signal.operator == ">=":
-                    termCondition = (
-                        termCondition
-                        or signal.indicator.calculateValue(date_time)
-                        >= signal.threshold
+                    termCondition = termCondition or (
+                        signal.indicator.calculateValue(date_time) >= signal.threshold
                     )
                 elif signal.operator == "<=":
-                    termCondition = (
-                        termCondition
-                        or signal.indicator.calculateValue(date_time)
-                        <= signal.threshold
+                    termCondition = termCondition or (
+                        signal.indicator.calculateValue(date_time) <= signal.threshold
                     )
                 if termCondition == True:
                     break
@@ -272,7 +273,7 @@ class StrategyRunner:
 
         if condition == True:
             StrategyRunner.place_order(
-                signalType, strategy, transactions, free_funds, shares, row
+                signalType, strategy, transactions, tradingState, row
             )
 
     @staticmethod
@@ -295,16 +296,12 @@ class StrategyRunner:
             termCondition = True
             for signal in term:
                 if signal.operator == ">=":
-                    termCondition = (
-                        termCondition
-                        and signal.indicator.calculateValue(date_time)
-                        >= signal.threshold
+                    termCondition = termCondition and (
+                        signal.indicator.calculateValue(date_time) >= signal.threshold
                     )
                 elif signal.operator == "<=":
-                    termCondition = (
-                        termCondition
-                        and signal.indicator.calculateValue(date_time)
-                        <= signal.threshold
+                    termCondition = termCondition and (
+                        signal.indicator.calculateValue(date_time) <= signal.threshold
                     )
                 if termCondition == False:
                     break
@@ -322,33 +319,37 @@ class StrategyRunner:
         signalType: TypeOfSignal,
         strategy: StrategyDetails,
         transactions: List[Transaction],
-        free_funds: float,
-        shares: float,
+        tradingState: TradingState,
         row: tuple,
     ):
-        if StrategyRunner.canPlaceOrder(signalType, strategy, free_funds, shares):
+        if StrategyRunner.canPlaceOrder(
+            signalType, strategy, tradingState.free_funds, tradingState.shares
+        ):
             if signalType == TypeOfSignal.BUY:
                 used_money, fee = StrategyRunner.getUsedMoneyAndFee_BUY(
-                    strategy, free_funds
+                    strategy, tradingState.free_funds
                 )
             else:
                 used_money, fee = StrategyRunner.getUsedMoneyAndFee_SELL(
-                    strategy, shares, row[5]
+                    strategy, tradingState.shares, row[5]
                 )
+            if signalType == TypeOfSignal.BUY:
+                tradingState.shares += used_money / row[5]
+            else:
+                tradingState.shares -= used_money / row[5]
             transactions.append(
                 Transaction(
                     row[0], row[1], row[5], used_money / row[5], signalType, fee
                 )
             )
+            print(f"Transaction: {transactions[-1]}")
 
     @staticmethod
     def getUsedMoneyAndFee_BUY(strategy: StrategyDetails, free_funds: float):
         if strategy.buySize.fixed is not None:
             used_money = min(free_funds, strategy.buySize.fixed)
         else:
-            used_money = (
-                free_funds * strategy.buySize.percentage
-            )  # WARNING: might want to get percentage of free_funds + invested money
+            used_money = free_funds * strategy.buySize.percentage
 
         if strategy.exchangeBuyFee is not None:
             if strategy.exchangeBuyFee.fixed is not None:

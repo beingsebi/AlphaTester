@@ -63,7 +63,7 @@ class SMA(
         # print("---")
         # print(len(data))
         # current candle is not included in the data
-        # FIX TODO
+        # FIX TODO WARNING incomplete candles or maybe even empty??
         # if len(data) != self.length:
         #     return None  # not enough data
         avg = sum([x[index] for x in data]) / len(data)
