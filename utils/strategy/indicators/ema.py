@@ -37,8 +37,6 @@ class EMA(
         super().__init__(instrumentName, indicatorName, timeframe)
         _kwargs = kwargs.copy()  # just in case we need it later in the caller
         self.length = _kwargs.pop("length", 14)
-        if self.length <= 0:
-            raise ValueError("Length must be greater than 0")
         self.source = _kwargs.pop("source", Sources.CLOSE)  # default source is close
         if _kwargs:
             raise ValueError(f"Invalid keyword arguments: {_kwargs}")

@@ -32,7 +32,7 @@ def test_strat():
     strategy = StrategyDetails(
         "ZXAUUSD",
         1000,
-        constants.Timeframe.D1,
+        constants.Timeframe.H1,
         Amount(10),
         Amount(5),
         None,
@@ -44,16 +44,15 @@ def test_strat():
         [[Signal(my_sma, 100, "<=")]],
         None,
         None,
-        datetime(2024, 1, 3, 11, 31, 0),
-        datetime(2024, 1, 5, 12, 35, 0),
+        datetime(2024, 1, 2, 8, 31, 0),
+        datetime(2024, 1, 4, 12, 35, 0),
     )
-
-    print(strategy)
 
     r = StrategyRunner.run(strategy)
     if r:
         for i in r:
             print(i)
+    print(strategy)
 
 
 # print(my_ema)

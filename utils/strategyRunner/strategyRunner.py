@@ -2,7 +2,11 @@ from typing import List
 
 from datetime import date, datetime, time, timedelta
 from utils.constants import Timeframe, TimeframeToMinutes, TypeOfSignal
-from utils.database.get_instrument_data_scripts import get_data
+from utils.database.get_instrument_data_scripts import (
+    get_data,
+    get_last_available_date,
+    get_first_available_date,
+)
 from utils.strategy.amount import Amount
 from utils.strategy.signal import Signal
 from utils.strategy.strategy import StrategyDetails
@@ -40,19 +44,16 @@ class StrategyRunner:
         # TODO IMPORTANT: now assuming trading starts late enough to have enough data for all indicators
         # TODO: add squash transactions flag (if buy and sell at same time, then squash them into one transaction)
         # WARNING: for now, the transaction will buy the close price
-        # WARNING: intraday candle might actualy span multiple days
 
         #! IMPORTANT: here will modify strategy details
 
-        print("eee----eee")
-        print(strategy.startDatetime)
-        print(strategy.endDatetime)
-        print()
         StrategyRunner.fixStartDatetime(strategy)
         StrategyRunner.fixEndDatetime(strategy)
+
+        print("-----")
         print(strategy.startDatetime)
         print(strategy.endDatetime)
-        print("eee------eee")
+        print("-----")
 
         if strategy.startDatetime >= strategy.endDatetime:
             raise Exception(
@@ -400,6 +401,16 @@ class StrategyRunner:
 
     @staticmethod
     def fixStartDatetime(strategy: StrategyDetails):
+        firstAvailableDate = get_first_available_date(strategy.instrumentName)
+        print("ee " + str(firstAvailableDate))
+        if firstAvailableDate is None:
+            raise Exception("No data found")
+        maxim = 0
+        for i in strategy.indicators:
+            if hasattr(i, "length") and i.timeframe is not None:
+                maxim = max(maxim, (i.length + 1) * TimeframeToMinutes[i.timeframe])
+        firstAvailableDate += timedelta(minutes=maxim)
+        strategy.startDatetime = max(strategy.startDatetime, firstAvailableDate)
         while True:
             if StrategyRunner.isCandleDateValid(
                 strategy.startDatetime, strategy.timeFrame
@@ -409,6 +420,11 @@ class StrategyRunner:
 
     @staticmethod
     def fixEndDatetime(strategy: StrategyDetails):
+
+        lastAvailableDate = get_last_available_date(strategy.instrumentName)
+        if lastAvailableDate is None:
+            raise Exception("No data found")
+        strategy.endDatetime = min(strategy.endDatetime, lastAvailableDate)
         while True:
             if StrategyRunner.isCandleDateValid(
                 strategy.endDatetime, strategy.timeFrame

@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod
 from datetime import datetime  # Abstract Base Class
-
-import sqlalchemy
-
 from utils.constants import IndicatorNames, Timeframe
 
 
