@@ -136,6 +136,11 @@ class StrategyRunner:
                     old_shares * tradingState.medium_price
                     + transactions[-1].price * transactions[-1].quantity
                 ) / (old_shares + transactions[-1].quantity)
+
+        if tradingState.shares > 0:
+            StrategyRunner.liquidate_all(  # liquidate all at the end | WARNING: might want to change this
+                data[-1], transactions, strategy, tradingState.shares
+            )
         return transactions
 
     @staticmethod
