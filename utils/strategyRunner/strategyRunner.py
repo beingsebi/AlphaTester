@@ -347,7 +347,6 @@ class StrategyRunner:
                     row[0], row[1], row[5], used_money / row[5], signalType, fee
                 )
             )
-            print(f"Transaction: {transactions[-1]}")
 
     @staticmethod
     def getUsedMoneyAndFee_BUY(strategy: StrategyDetails, free_funds: float):

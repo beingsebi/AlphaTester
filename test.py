@@ -9,7 +9,7 @@ from utils.database.get_instrument_data_scripts import get_data
 from utils.database.get_instrument_data_scripts import get_data
 from datetime import datetime
 
-from utils.strategyRunner.resultsInterpretor import resultsInterpretor
+from utils.strategyRunner.resultsInterpretor import Results, ResultsInterpretor
 from utils.strategyRunner.strategyRunner import StrategyRunner
 
 
@@ -32,30 +32,48 @@ def test_strat():
 
     strategy = StrategyDetails(
         "ZXAUUSD",
-        10000,
+        10000,  # capital allocation
         constants.Timeframe.M30,
-        Amount(1000),
-        Amount(1000),
-        None,
-        None,
+        Amount(1500),  # buy size
+        Amount(100),  # sell size
+        None,  # take profit
+        None,  #   stop loss
         [my_sma, my_ema],
-        constants.SignalsChoicesMode.CNF,
+        constants.SignalsChoicesMode.CNF,  # buy signals mode
         [[Signal(my_ema, 2045.15, "<=")]],
-        constants.SignalsChoicesMode.CNF,
+        constants.SignalsChoicesMode.CNF,  # sell signals mode
         [[Signal(my_ema, 2045.16, ">=")]],
-        None,
-        None,
-        datetime(2024, 1, 4, 8, 31, 0),
-        datetime(2024, 1, 4, 14, 35, 0),
+        Amount(0.12),  # buy fee
+        Amount(0.1),  # sell fee
+        datetime(2024, 1, 4, 8, 31, 0),  # start datetime
+        datetime(2024, 1, 5, 14, 35, 0),  # end datetime
     )
 
     r = StrategyRunner.run(strategy)
     if r:
         for i in r:
             print(i)
-    proc = resultsInterpretor.interpretResults(r, strategy.capitalAllocation)
-    print(proc[0])
-    print(proc[1])
+    print(strategy.startDatetime)
+    proc: Results = ResultsInterpretor.interpretResults(
+        r, strategy.capitalAllocation, strategy.startDatetime
+    )
+    plott(proc)
+
+
+def plott(proc: Results):
+    import matplotlib.pyplot as plt
+
+    timeseries = proc.timeSeries
+    balance = proc.balanceOverTime
+    # print(balance)
+    fig, ax = plt.subplots()
+    ax.plot(timeseries, balance)
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Balance")
+    ax.set_title("Balance Over Time")
+    ax.set_ylim(min(balance) - 5, max(balance) + 5)  # Adjust y-axis limits
+    fig.autofmt_xdate()
+    plt.show()  # TODO SAVE the plot
 
 
 # print(my_ema)
