@@ -12,8 +12,8 @@ class DbConstants:
 
     DB_PARAMS = {
         "database": "alphatester",
-        "user": "sebi",
-        "host": "localhost",
+        "user": "postgres",
+        "host": "172.17.0.2",
         "password": "1234",
         "port": 5432,
     }
