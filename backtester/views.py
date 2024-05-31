@@ -86,19 +86,25 @@ class StrategyCreateView(CreateView):
         # Otherwise, we convert the StrategyDetails object to JSON and save it in the form instance
         try:
             strategyDetails = StrategyDetails(
-                # TODO: Add the rest of the fields and keep in mind the ORDER OF THE FIELDS
+                form.cleaned_data["instrument_name"],
                 form.cleaned_data["capital_allocation"],
-                form.cleaned_data["bid_size"],
-                form.cleaned_data["time_frame"],
+                form.cleaned_data["timeframe"],
+                form.cleaned_data["buy_size"],
+                form.cleaned_data["sell_size"],
                 form.cleaned_data["take_profit"],
                 form.cleaned_data["stop_loss"],
-                form.cleaned_data["exchange_fee"],
+                # TOOD indicators
                 form.cleaned_data["buy_signal_mode"],
                 buySignals,
                 form.cleaned_data["sell_signal_mode"],
                 sellSignals,
+                form.cleaned_data["exchange_buy_fee"],
+                form.cleaned_data["exchange_sell_fee"],
+                form.cleaned_data["start_datetime"],
+                form.cleaned_data["end_datetime"]
             )
-            form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
+            form.instance.strategyDetails = StrategyDetails.toJSON(
+                strategyDetails)
 
         except Exception as e:
             # TODO: Add logging and replace prints.

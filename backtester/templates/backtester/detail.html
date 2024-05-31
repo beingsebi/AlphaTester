@@ -9,21 +9,27 @@
       <li class="list-group-item">Description: {{ strategy.description }}</li>
       <li class="list-group-item">Created at: {{ strategy.created_at }}</li>
       <li class="list-group-item">By user: {{ strategy.user.username }}</li>
+      <li class="list-group-item">Instrument: {{ strategyDetails.instrumentName }}</li>
       <li class="list-group-item">Capital Allocation: {{ strategyDetails.capitalAllocation }}</li>
-      <li class="list-group-item">Bid Size: {{ strategyDetails.bidSize }}</li> 
-      <!-- TODO: fix here all fields -->
       <li class="list-group-item">Time Frame: {{ strategyDetails.timeFrame }}</li>
+      <li class="list-group-item">Buy Size: {{ strategyDetails.buySize }}</li> 
+      <li class="list-group-item">Sell Size: {{ strategyDetails.sellSize }}</li> 
       <li class="list-group-item">Take Profit: {{ strategyDetails.takeProfit }}</li>
       <li class="list-group-item">Stop Loss: {{ strategyDetails.stopLoss }}</li>
-      <li class="list-group-item">Exchange Fee: {{ strategyDetails.exchangeFee }}</li>
+
+      <!-- TODO: add indicators -->
       <li class="list-group-item">Buy Signal Mode: {{ strategyDetails.buySignalMode }}</li>
       {% for signal in strategyDetails.buySignals %}
-        <li class="list-group-item">Buy Signal: {{ signal }}</li>
+      <li class="list-group-item">Buy Signal: {{ signal }}</li>
       {% endfor %}
       <li class="list-group-item">Sell Signal Mode: {{ strategyDetails.sellSignalMode }}</li>
       {% for signal in strategyDetails.sellSignals %}
-        <li class="list-group-item">Sell Signal: {{ signal }}</li>
+      <li class="list-group-item">Sell Signal: {{ signal }}</li>
       {% endfor %}
+      <li class="list-group-item">Exchange Buy Fee: {{ strategyDetails.exchangeBuyFee }}</li>
+      <li class="list-group-item">Exchange Sell Fee: {{ strategyDetails.exchangeSellFee }}</li>
+      <li class="list-group-item">Start Date Time: {{ strategyDetails.startDatetime }}</li>
+      <li class="list-group-item">End Date Time: {{ strategyDetails.endDatetime }}</li>
     </ul>
     {% if request.user == strategy.user %}
       <div class="card-footer">

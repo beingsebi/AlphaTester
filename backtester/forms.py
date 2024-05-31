@@ -35,6 +35,7 @@ class IndicatorForm(forms.Form):
 
 
 IndicatorFormSet = formset_factory(form=IndicatorForm, extra=1)
+# todo here too i think
 
 
 class StrategyForm(ModelForm):
