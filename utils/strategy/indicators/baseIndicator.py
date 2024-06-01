@@ -27,4 +27,4 @@ class BaseIndicator(ABC):
 
     @abstractmethod
     def __str__(self) -> str:
-        return f"BaseIndicater: {self.name.name} | Timeframe: {self.timeframe.name}"
+        return f"{self.name} | Timeframe: {self.timeframe}"

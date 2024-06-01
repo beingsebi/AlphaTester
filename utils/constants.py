@@ -88,6 +88,13 @@ SIGNALS_CHOICES = [
     ("DNF", "DNF"),
 ]
 
+SOURCES_CHOICES = [
+    ("CLOSE", "CLOSE"),
+    ("OPEN", "OPEN"),
+    ("HIGH", "HIGH"),
+    ("LOW", "LOW"),
+]
+
 TYPE_OF_SIGNAL_CHOICES = [("BUY", "BUY"), ("SELL", "SELL")]
 
 TYPE_OF_OPERATOR_CHOICES = [(">=", ">="), ("<=", "<=")]
@@ -102,4 +109,8 @@ TIMEFRAME_CHOICES = [
     ("1d", "1d"),
     ("1w", "1w"),
     ("1M", "1M"),
+]
+
+INSTRUMENTS = [
+    ("ZXAUUSD", "ZXAUUSD"),
 ]

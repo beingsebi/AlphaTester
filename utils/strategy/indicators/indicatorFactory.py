@@ -11,7 +11,7 @@ class IndicatorFactory:  # pylint: disable=too-few-public-methods
         timeframe: Timeframe,
         **kwargs
     ):
-        if indicatorName == IndicatorNames.SMA:
+        if indicatorName == IndicatorNames.SMA.value:
             return SMA(instrumentName, indicatorName, timeframe, **kwargs)
-        if indicatorName == IndicatorNames.EMA:
+        if indicatorName == IndicatorNames.EMA.value:
             return EMA(instrumentName, indicatorName, timeframe, **kwargs)

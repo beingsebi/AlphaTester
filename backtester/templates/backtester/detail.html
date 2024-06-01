@@ -16,8 +16,9 @@
       <li class="list-group-item">Sell Size: {{ strategyDetails.sellSize }}</li> 
       <li class="list-group-item">Take Profit: {{ strategyDetails.takeProfit }}</li>
       <li class="list-group-item">Stop Loss: {{ strategyDetails.stopLoss }}</li>
-
-      <!-- TODO: add indicators -->
+      {% for indicator in strategyDetails.indicators %}
+      <li class="list-group-item">Indicator: {{ indicator }}</li>
+      {% endfor %}
       <li class="list-group-item">Buy Signal Mode: {{ strategyDetails.buySignalMode }}</li>
       {% for signal in strategyDetails.buySignals %}
       <li class="list-group-item">Buy Signal: {{ signal }}</li>
