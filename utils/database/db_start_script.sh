@@ -1,0 +1,2 @@
+sudo docker run --name some-postgres -e POSTGRES_PASSWORD=1234 -d postgres
+sudo docker run -p 80:80     -e 'PGADMIN_DEFAULT_EMAIL=sebi@sebi.sebi'     -e 'PGADMIN_DEFAULT_PASSWORD=1234'     -d dpage/pgadmin4

@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
 
@@ -60,45 +61,60 @@ class StrategyCreateView(CreateView):
         form.instance.user = self.request.user
 
         # Parse the indicators. If the formset is invalid, we return the invalid formset.
-        buySignals = []
-        sellSignals = []
+        # buySignals = []
+        # sellSignals = []
+        indicator_instances = []
         context = self.get_context_data()
         indicators = context["indicators"]
         if indicators.is_valid():
             indicators.instance = self.object
             for indicator_form in indicators:
                 if indicator_form.is_valid():
-                    signal = Signal(
+                    print(indicator_form.cleaned_data["indicator_name"])
+                    indicator = IndicatorFactory.createIndicator(
+                        indicator_form.cleaned_data["instrument_name"],
                         indicator_form.cleaned_data["indicator_name"],
-                        indicator_form.cleaned_data["value"],
-                        indicator_form.cleaned_data["operator"],
+                        indicator_form.cleaned_data["timeframe"],
+                        length=indicator_form.cleaned_data["length"],
+                        source=indicator_form.cleaned_data["source"],
                     )
-                    if indicator_form.cleaned_data["buy_or_sell"] == "BUY":
-                        buySignals.append(signal)
-                    else:
-                        sellSignals.append(signal)
+                    indicator_instances.append(indicator)
+                    # signal = Signal(
+                    #     # TODO: refactor
+                    #     indicator_form.cleaned_data["indicator_name"],
+                    #     indicator_form.cleaned_data["value"],
+                    #     indicator_form.cleaned_data["operator"],
+                    # )
+                    # if indicator_form.cleaned_data["buy_or_sell"] == "BUY":
+                    #     buySignals.append(signal)
+                    # else:
+                    #     sellSignals.append(signal)
         else:
             return self.render_to_response(self.get_context_data(form=form))
-
+        print(indicator_instances)
         # We try to create a StrategyDetails object from the form data
         # If we fail, we add an error to the form and return the invalid form
         # Otherwise, we convert the StrategyDetails object to JSON and save it in the form instance
         try:
             strategyDetails = StrategyDetails(
-                # TODO: Add the rest of the fields
+                form.cleaned_data["instrument"],
                 form.cleaned_data["capital_allocation"],
-                form.cleaned_data["bid_size"],
-                form.cleaned_data["time_frame"],
+                form.cleaned_data["timeframe"],
+                form.cleaned_data["buy_size"],
+                form.cleaned_data["sell_size"],
                 form.cleaned_data["take_profit"],
                 form.cleaned_data["stop_loss"],
-                form.cleaned_data["exchange_fee"],
+                indicator_instances,  # TOOD indicators
                 form.cleaned_data["buy_signal_mode"],
-                buySignals,
+                [],  # buySignals,
                 form.cleaned_data["sell_signal_mode"],
-                sellSignals,
+                [],  # sellSignals,
+                form.cleaned_data["exchange_buy_fee"],
+                form.cleaned_data["exchange_sell_fee"],
+                form.cleaned_data["start_datetime"],
+                form.cleaned_data["end_datetime"],
             )
-            form.instance.strategyDetails = StrategyDetails.toJSON(
-                strategyDetails)
+            form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
 
         except Exception as e:
             # TODO: Add logging and replace prints.

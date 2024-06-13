@@ -1,9 +1,17 @@
-from ... import constants
+from utils.constants import IndicatorNames, Timeframe
 from .sma import SMA
+from .ema import EMA
 
 
 class IndicatorFactory:  # pylint: disable=too-few-public-methods
     @staticmethod
-    def createIndicator(indicatorName: constants.IndicatorNames, timeframe: constants.Timeframe, **kwargs):
-        if indicatorName == constants.IndicatorNames.SMA:
-            return SMA(indicatorName, timeframe, **kwargs)
+    def createIndicator(
+        instrumentName: str,
+        indicatorName: IndicatorNames,
+        timeframe: Timeframe,
+        **kwargs
+    ):
+        if indicatorName == IndicatorNames.SMA.value:
+            return SMA(instrumentName, indicatorName, timeframe, **kwargs)
+        if indicatorName == IndicatorNames.EMA.value:
+            return EMA(instrumentName, indicatorName, timeframe, **kwargs)

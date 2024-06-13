@@ -142,3 +142,5 @@ GitHub.sublime-settings
 
 # ignore all .pyc files
 **/__pycache__ 
+
+utils/database/db_start_script.sh

@@ -12,9 +12,9 @@ from utils.constants import (
 )
 
 
-class SMA(
+class EMA(
     baseIndicator.BaseIndicator
-):  # simple moving average of previous `length` close prices
+):  # exponential moving average of previous `length` close prices
     def __init__(
         self,
         instrumentName: str,
@@ -23,7 +23,7 @@ class SMA(
         **kwargs,  # length = 14, source = close
     ):
         """
-        Initialize the SMA (Simple Moving Average) indicator.
+        Initialize the EMA (Exponential Moving Average) indicator.
 
         Parameters:
         - name (str): The name of the indicator.
@@ -37,8 +37,6 @@ class SMA(
         super().__init__(instrumentName, indicatorName, timeframe)
         _kwargs = kwargs.copy()  # just in case we need it later in the caller
         self.length = _kwargs.pop("length", 14)
-        if self.length <= 0:
-            raise ValueError("Length must be greater than 0")
         self.source = _kwargs.pop("source", Sources.CLOSE)  # default source is close
         if _kwargs:
             raise ValueError(f"Invalid keyword arguments: {_kwargs}")
@@ -56,18 +54,20 @@ class SMA(
         if not data:
             return None
         data = StrategyRunner.squashTimestamps(data, self.timeframe)
+
         index = SourcesToIndex[self.source]
-        # print("---")
+        # print("------")
         # for i in data:
-        #     print(i)
-        # print("---")
-        # print(len(data))
+        #     print(i[index])
+        # print("------")
         # current candle is not included in the data
-        # FIX TODO WARNING incomplete candles or maybe even empty??
-        # if len(data) != self.length:
+        # if len(data) != self.length: TODO WARNING FIX INCOMPLETE CANDLES
         #     return None  # not enough data
-        avg = sum([x[index] for x in data]) / len(data)
-        return avg
+        alpha = 2 / (self.length + 1)
+        ema = data[0][index]  # initialize EMA with first value
+        for i in range(1, len(data)):
+            ema = alpha * data[i][index] + (1 - alpha) * ema
+        return ema
 
     def __str__(self) -> str:
         return f"{super().__str__()}" f"(length: {self.length} | source: {self.source})"

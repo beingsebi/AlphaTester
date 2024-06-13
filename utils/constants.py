@@ -12,8 +12,8 @@ class DbConstants:
 
     DB_PARAMS = {
         "database": "alphatester",
-        "user": "sebi",
-        "host": "localhost",
+        "user": "postgres",
+        "host": "172.17.0.2",
         "password": "1234",
         "port": 5432,
     }
@@ -31,11 +31,32 @@ class Timeframe(Enum):
     MN1 = "1M"
 
 
+TimeframeToMinutes = {
+    Timeframe.M1: 1,
+    Timeframe.M5: 5,
+    Timeframe.M15: 15,
+    Timeframe.M30: 30,
+    Timeframe.H1: 60,
+    Timeframe.H4: 240,
+    Timeframe.D1: 1440,
+    Timeframe.W1: 10080,
+    Timeframe.MN1: 43200,
+}
+
+
 class Sources(Enum):
     CLOSE = "CLOSE"
     OPEN = "OPEN"
     HIGH = "HIGH"
     LOW = "LOW"
+
+
+SourcesToIndex = {
+    Sources.OPEN: 2,
+    Sources.HIGH: 3,
+    Sources.LOW: 4,
+    Sources.CLOSE: 5,
+}
 
 
 class IndicatorNames(Enum):
@@ -67,6 +88,13 @@ SIGNALS_CHOICES = [
     ("DNF", "DNF"),
 ]
 
+SOURCES_CHOICES = [
+    ("CLOSE", "CLOSE"),
+    ("OPEN", "OPEN"),
+    ("HIGH", "HIGH"),
+    ("LOW", "LOW"),
+]
+
 TYPE_OF_SIGNAL_CHOICES = [("BUY", "BUY"), ("SELL", "SELL")]
 
 TYPE_OF_OPERATOR_CHOICES = [(">=", ">="), ("<=", "<=")]
@@ -81,4 +109,8 @@ TIMEFRAME_CHOICES = [
     ("1d", "1d"),
     ("1w", "1w"),
     ("1M", "1M"),
+]
+
+INSTRUMENTS = [
+    ("ZXAUUSD", "ZXAUUSD"),
 ]
