@@ -12,6 +12,8 @@ from datetime import datetime
 from utils.strategyRunner.resultsInterpretor import Results, ResultsInterpretor
 from utils.strategyRunner.strategyRunner import StrategyRunner
 
+# mdb.insert_data_into_table("ZXAUUSD_2024_01.csv")
+
 
 def test_strat():
     my_sma = IndicatorFactory.createIndicator(
@@ -40,9 +42,9 @@ def test_strat():
         None,  #   stop loss
         [my_sma, my_ema],
         constants.SignalsChoicesMode.CNF,  # buy signals mode
-        [[Signal(my_ema, 2045.15, "<=")]],
+        [[Signal(my_sma, 2045.15, "<=")]],
         constants.SignalsChoicesMode.CNF,  # sell signals mode
-        [[Signal(my_ema, 2045.16, ">=")]],
+        [[Signal(my_sma, 2045.16, ">=")]],
         Amount(0.12),  # buy fee
         Amount(0.1),  # sell fee
         datetime(2024, 1, 4, 8, 31, 0),  # start datetime
@@ -54,10 +56,12 @@ def test_strat():
         for i in r:
             print(i)
     print(strategy.startDatetime)
+    print("------------------------")
     proc: Results = ResultsInterpretor.interpretResults(
         r, strategy.capitalAllocation, strategy.startDatetime
     )
-    plott(proc)
+    print(proc)
+    # plott(proc)
 
 
 def plott(proc: Results):

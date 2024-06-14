@@ -50,10 +50,9 @@ class StrategyRunner:
         transactions = []
         # TODO IMPORTANT: now assuming trading starts late enough to have enough data for all indicators
         # TODO: add squash transactions flag (if buy and sell at same time, then squash them into one transaction)
-        # WARNING: for now, the transaction will buy the close price
+        # WARNING: for now, the transaction will buy/sell the close price
 
         #! IMPORTANT: here will modify strategy details
-
         StrategyRunner.fixStartDatetime(strategy)
         StrategyRunner.fixEndDatetime(strategy)
 
@@ -87,7 +86,7 @@ class StrategyRunner:
         for row in data:
             old_len = len(transactions)
             old_shares = tradingState.shares
-            if tradingState.shares > 0:
+            if tradingState.shares > 0:  # TP and SL
                 if row[5] > tradingState.medium_price:
                     if strategy.takeProfit is not None:
                         if strategy.takeProfit.fixed is not None:
