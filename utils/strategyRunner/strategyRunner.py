@@ -339,8 +339,10 @@ class StrategyRunner:
                 )
             if signalType == TypeOfSignal.BUY:
                 tradingState.shares += used_money / row[5]
+                tradingState.free_funds -= used_money + fee
             else:
                 tradingState.shares -= used_money / row[5]
+                tradingState.free_funds += used_money - fee
             transactions.append(
                 Transaction(
                     row[0], row[1], row[5], used_money / row[5], signalType, fee
