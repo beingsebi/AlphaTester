@@ -9,6 +9,7 @@ class Strategy(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     strategyDetails = models.JSONField(null=True)
+    results = models.JSONField(null=True)
 
     def __str__(self):
         return self.name + " by " + self.user.username
