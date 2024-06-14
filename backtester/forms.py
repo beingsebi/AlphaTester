@@ -85,7 +85,7 @@ class StrategyForm(ModelForm):
 
     sell_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
 
-    # todo signals
+    # todo important: signals
 
     exchange_buy_fee = PercentageFloatField(
         widget=forms.TextInput(
