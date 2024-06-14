@@ -64,13 +64,13 @@ class ResultsInterpretor:
         freeFunds = initialBalance
         results.balanceOverTime = [initialBalance]
         results.freeFundsOverTime = [initialBalance]
-        results.timeseries = [initialTime]
+        results.timeSeries = [initialTime]
         stock = 0
         averageBuyPrice = 0
         winningSellTrades = 0
 
         for transaction in transactions:
-            results.timeseries.append(
+            results.timeSeries.append(
                 datetime.combine(transaction.date, transaction.time)
             )
             results.cntTrades += 1

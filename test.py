@@ -15,6 +15,22 @@ from utils.strategyRunner.strategyRunner import StrategyRunner
 # mdb.insert_data_into_table("ZXAUUSD_2024_01.csv")
 
 
+def plott(proc: Results):
+    import matplotlib.pyplot as plt
+
+    timeseries = proc.timeSeries
+    balance = proc.balanceOverTime
+    # print(balance)
+    fig, ax = plt.subplots()
+    ax.plot(timeseries, balance)
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Balance")
+    ax.set_title("Balance Over Time")
+    ax.set_ylim(min(balance) - 5, max(balance) + 5)  # Adjust y-axis limits
+    fig.autofmt_xdate()
+    plt.show()  # TODO SAVE the plot
+
+
 def test_strat():
     my_sma = IndicatorFactory.createIndicator(
         "ZXAUUSD",
@@ -61,23 +77,7 @@ def test_strat():
         r, strategy.capitalAllocation, strategy.startDatetime
     )
     print(proc)
-    # plott(proc)
-
-
-def plott(proc: Results):
-    import matplotlib.pyplot as plt
-
-    timeseries = proc.timeSeries
-    balance = proc.balanceOverTime
-    # print(balance)
-    fig, ax = plt.subplots()
-    ax.plot(timeseries, balance)
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Balance")
-    ax.set_title("Balance Over Time")
-    ax.set_ylim(min(balance) - 5, max(balance) + 5)  # Adjust y-axis limits
-    fig.autofmt_xdate()
-    plt.show()  # TODO SAVE the plot
+    plott(proc)
 
 
 # print(my_ema)
