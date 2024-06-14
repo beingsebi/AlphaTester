@@ -41,7 +41,6 @@ class PercentageFloatField(forms.FloatField):
 
 
 class IndicatorForm(forms.Form):
-    instrument_name = forms.ChoiceField(choices=INSTRUMENTS)
     indicator_name = forms.ChoiceField(choices=INDICATORS_CHOICES)
     timeframe = forms.ChoiceField(choices=TIMEFRAME_CHOICES)
     length = forms.IntegerField()

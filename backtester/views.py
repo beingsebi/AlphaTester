@@ -71,8 +71,9 @@ class StrategyCreateView(CreateView):
             for indicator_form in indicators:
                 if indicator_form.is_valid():
                     print(indicator_form.cleaned_data["indicator_name"])
+                    
                     indicator = IndicatorFactory.createIndicator(
-                        indicator_form.cleaned_data["instrument_name"],
+                        form.cleaned_data["instrument"].symbol,
                         indicator_form.cleaned_data["indicator_name"],
                         indicator_form.cleaned_data["timeframe"],
                         length=indicator_form.cleaned_data["length"],
