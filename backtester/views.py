@@ -111,8 +111,8 @@ class StrategyCreateView(CreateView):
                 [],  # sellSignals,
                 form.cleaned_data["exchange_buy_fee"],
                 form.cleaned_data["exchange_sell_fee"],
-                form.cleaned_data["start_datetime"],
-                form.cleaned_data["end_datetime"],
+                form.cleaned_data["start_date"],
+                form.cleaned_data["end_date"],
             )
             form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
 

@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.forms import ModelForm, formset_factory
 
@@ -99,9 +100,11 @@ class StrategyForm(ModelForm):
         )
     )
 
-    start_datetime = forms.DateTimeField(widget=forms.DateTimeInput())
+    start_date = forms.DateField(
+        initial=datetime.datetime.now() - datetime.timedelta(weeks=4 * 12)
+    )
 
-    end_datetime = forms.DateTimeField(widget=forms.DateTimeInput())
+    end_date = forms.DateField(initial=datetime.datetime.now())
     # This field is always added for some reason
     indicators = formset_factory(form=IndicatorForm, extra=1)
 
@@ -125,6 +128,6 @@ class StrategyForm(ModelForm):
             # todo sell_signals
             "exchange_buy_fee",
             "exchange_sell_fee",
-            "start_datetime",
-            "end_datetime",
+            "start_date",
+            "end_date",
         ]
