@@ -166,4 +166,15 @@ class InstrumentDetailView(generic.DetailView):
 class UpdateStrategy(UpdateView):
     model = Strategy
     template_name = "backtester/update.html"
-    fields = "__all__"
+    fields = ["name", "instrument", "description"]
+
+    def form_valid(self, form):
+        # Check if the user is the owner of the strategy
+        if self.request.user != self.object.user:
+            return super().form_invalid(form)
+
+        self.object.results = None  # the following line save the object
+        response = super().form_valid(form)
+        # Start the expensive task in the background
+        expensive_task.delay(self.object.pk)
+        return response
