@@ -61,8 +61,8 @@ class StrategyCreateView(CreateView):
         form.instance.user = self.request.user
 
         # Parse the indicators. If the formset is invalid, we return the invalid formset.
-        # buySignals = []
-        # sellSignals = []
+        buySignals = []
+        sellSignals = []
         indicator_instances = []
         context = self.get_context_data()
         indicators = context["indicators"]
@@ -70,25 +70,24 @@ class StrategyCreateView(CreateView):
             indicators.instance = self.object
             for indicator_form in indicators:
                 if indicator_form.is_valid():
-                    print(indicator_form.cleaned_data["indicator_name"])
+
                     indicator = IndicatorFactory.createIndicator(
-                        indicator_form.cleaned_data["instrument_name"],
+                        form.cleaned_data["instrument"].symbol,
                         indicator_form.cleaned_data["indicator_name"],
                         indicator_form.cleaned_data["timeframe"],
                         length=indicator_form.cleaned_data["length"],
                         source=indicator_form.cleaned_data["source"],
                     )
                     indicator_instances.append(indicator)
-                    # signal = Signal(
-                    #     # TODO: refactor
-                    #     indicator_form.cleaned_data["indicator_name"],
-                    #     indicator_form.cleaned_data["value"],
-                    #     indicator_form.cleaned_data["operator"],
-                    # )
-                    # if indicator_form.cleaned_data["buy_or_sell"] == "BUY":
-                    #     buySignals.append(signal)
-                    # else:
-                    #     sellSignals.append(signal)
+                    signal = Signal(
+                        indicator,
+                        indicator_form.cleaned_data["threshold"],
+                        indicator_form.cleaned_data["operator"],
+                    )
+                    if indicator_form.cleaned_data["buy_or_sell"] == "BUY":
+                        buySignals.append(signal)
+                    else:
+                        sellSignals.append(signal)
         else:
             return self.render_to_response(self.get_context_data(form=form))
         print(indicator_instances)
@@ -106,9 +105,9 @@ class StrategyCreateView(CreateView):
                 form.cleaned_data["stop_loss"],
                 indicator_instances,  # TOOD indicators
                 form.cleaned_data["buy_signal_mode"],
-                [],  # buySignals,
+                [buySignals],
                 form.cleaned_data["sell_signal_mode"],
-                [],  # sellSignals,
+                [sellSignals],
                 form.cleaned_data["exchange_buy_fee"],
                 form.cleaned_data["exchange_sell_fee"],
                 form.cleaned_data["start_datetime"],

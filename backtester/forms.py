@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.forms import ModelForm, formset_factory
 
@@ -40,11 +41,13 @@ class PercentageFloatField(forms.FloatField):
 
 
 class IndicatorForm(forms.Form):
-    instrument_name = forms.ChoiceField(choices=INSTRUMENTS)
     indicator_name = forms.ChoiceField(choices=INDICATORS_CHOICES)
     timeframe = forms.ChoiceField(choices=TIMEFRAME_CHOICES)
     length = forms.IntegerField()
     source = forms.ChoiceField(choices=SOURCES_CHOICES)
+    threshold = forms.FloatField()
+    operator = forms.ChoiceField(choices=TYPE_OF_OPERATOR_CHOICES)
+    buy_or_sell = forms.ChoiceField(choices=TYPE_OF_SIGNAL_CHOICES)
 
 
 IndicatorFormSet = formset_factory(form=IndicatorForm, extra=1)
@@ -99,9 +102,13 @@ class StrategyForm(ModelForm):
         )
     )
 
-    start_datetime = forms.DateTimeField(widget=forms.DateTimeInput())
-
-    end_datetime = forms.DateTimeField(widget=forms.DateTimeInput())
+    start_datetime = forms.DateTimeField(
+        widget=forms.DateTimeInput(), initial=datetime.datetime.now()
+    )
+    end_datetime = forms.DateTimeField(
+        widget=forms.DateTimeInput,
+        initial=datetime.datetime.now() - datetime.timedelta(days=365),
+    )
     # This field is always added for some reason
     indicators = formset_factory(form=IndicatorForm, extra=1)
 
@@ -120,9 +127,7 @@ class StrategyForm(ModelForm):
             "take_profit",
             "stop_loss",
             "buy_signal_mode",
-            # todo buy_signals
             "sell_signal_mode",
-            # todo sell_signals
             "exchange_buy_fee",
             "exchange_sell_fee",
             "start_datetime",
