@@ -105,9 +105,9 @@ class StrategyCreateView(CreateView):
                 form.cleaned_data["stop_loss"],
                 indicator_instances,  # TOOD indicators
                 form.cleaned_data["buy_signal_mode"],
-                buySignals,
+                [buySignals],
                 form.cleaned_data["sell_signal_mode"],
-                sellSignals,
+                [sellSignals],
                 form.cleaned_data["exchange_buy_fee"],
                 form.cleaned_data["exchange_sell_fee"],
                 form.cleaned_data["start_date"],
