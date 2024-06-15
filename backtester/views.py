@@ -9,6 +9,7 @@ from utils.database.strat_runner_results_to_db import update_results
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
+from utils.strategyRunner.resultsInterpretor import Results
 
 from .forms import *
 from .models import *
@@ -36,13 +37,13 @@ class StrategyDetailView(generic.DetailView):
             )
             print(context["strategyDetails"])
         except Exception as e:
-            print("Error: " + str(e))
+            print("Error strategyDetails: " + str(e))
+
+        try:
+            context["results"] = Results.fromJSON(self.object.results)
+        except Exception as e:
+            print("Error results: " + str(e))
         return context
-
-
-class StrategyResultView(generic.DetailView):
-    model = Strategy
-    template_name = "backtester/result.html"
 
 
 class StrategyCreateView(CreateView):

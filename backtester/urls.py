@@ -10,7 +10,6 @@ app_name = "backtester"  # pylint: disable=C0103
 urlpatterns = [
     path("", StrategyListView.as_view(), name="index-list"),
     path("detail/<int:pk>/", StrategyDetailView.as_view(), name="detail"),
-    path("result/<int:pk>/", StrategyResultView.as_view(), name="result"),
     path("strategy/add/", StrategyCreateView.as_view(), name="strategy-add"),
     path(
         "strategy/<int:pk>/delete/",
