@@ -45,6 +45,9 @@ class IndicatorForm(forms.Form):
     timeframe = forms.ChoiceField(choices=TIMEFRAME_CHOICES)
     length = forms.IntegerField()
     source = forms.ChoiceField(choices=SOURCES_CHOICES)
+    threshold = forms.FloatField()
+    operator = forms.ChoiceField(choices=TYPE_OF_OPERATOR_CHOICES)
+    buy_or_sell = forms.ChoiceField(choices=TYPE_OF_SIGNAL_CHOICES)
 
 
 IndicatorFormSet = formset_factory(form=IndicatorForm, extra=1)
@@ -122,9 +125,7 @@ class StrategyForm(ModelForm):
             "take_profit",
             "stop_loss",
             "buy_signal_mode",
-            # todo buy_signals
             "sell_signal_mode",
-            # todo sell_signals
             "exchange_buy_fee",
             "exchange_sell_fee",
             "start_date",
