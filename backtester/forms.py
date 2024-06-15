@@ -102,11 +102,13 @@ class StrategyForm(ModelForm):
         )
     )
 
-    start_date = forms.DateField(
-        initial=datetime.datetime.now() - datetime.timedelta(weeks=4 * 12)
+    start_datetime = forms.DateTimeField(
+        widget=forms.DateTimeInput(), initial=datetime.datetime.now()
     )
-
-    end_date = forms.DateField(initial=datetime.datetime.now())
+    end_datetime = forms.DateTimeField(
+        widget=forms.DateTimeInput,
+        initial=datetime.datetime.now() - datetime.timedelta(days=365),
+    )
     # This field is always added for some reason
     indicators = formset_factory(form=IndicatorForm, extra=1)
 
@@ -128,6 +130,6 @@ class StrategyForm(ModelForm):
             "sell_signal_mode",
             "exchange_buy_fee",
             "exchange_sell_fee",
-            "start_date",
-            "end_date",
+            "start_datetime",
+            "end_datetime",
         ]
