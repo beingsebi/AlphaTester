@@ -69,8 +69,7 @@ class Results:
 class ResultsInterpretor:
 
     @staticmethod
-    def interpretResults(transactions: List[Transaction],
-                         initialBalance: float,
+    def interpretResults(transactions: List[Transaction], initialBalance: float,
                          initialTime: datetime) -> Results:
         results = Results()
         freeFunds = initialBalance

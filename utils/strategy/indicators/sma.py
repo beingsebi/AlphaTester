@@ -13,7 +13,7 @@ from utils.constants import (
 
 
 class SMA(baseIndicator.BaseIndicator
-          ):  # simple moving average of previous `length` close prices
+         ):  # simple moving average of previous `length` close prices
 
     def __init__(
             self,
@@ -46,8 +46,8 @@ class SMA(baseIndicator.BaseIndicator
 
     # override the abstract calculateValue method
     def calculateValue(self, dateTime: datetime):
-        startDateTime = dateTime - timedelta(
-            minutes=self.length * TimeframeToMinutes[self.timeframe])
+        startDateTime = dateTime - timedelta(minutes=self.length *
+                                             TimeframeToMinutes[self.timeframe])
         data = get_data(
             self.instrumentName,
             startDateTime,

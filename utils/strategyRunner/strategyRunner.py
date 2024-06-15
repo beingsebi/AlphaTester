@@ -124,8 +124,8 @@ class StrategyRunner:
 
             StrategyRunner.run_once(row, strategy, transactions, tradingState)
             if (  # for TP and SL
-                    len(transactions) > old_len
-                    and transactions[-1].type == TypeOfSignal.BUY):
+                    len(transactions) > old_len and
+                    transactions[-1].type == TypeOfSignal.BUY):
                 if old_shares + transactions[-1].quantity == 0:
                     tradingState.medium_price = 0
                 else:
@@ -228,9 +228,9 @@ class StrategyRunner:
         if signalType == TypeOfSignal.BUY:
             if free_funds <= 0:
                 return False
-            if (strategy.exchangeBuyFee is not None
-                    and strategy.exchangeBuyFee.fixed is not None
-                    and strategy.exchangeBuyFee.fixed > free_funds):
+            if (strategy.exchangeBuyFee is not None and
+                    strategy.exchangeBuyFee.fixed is not None and
+                    strategy.exchangeBuyFee.fixed > free_funds):
                 return False
         else:
             if shares == 0:
@@ -392,8 +392,7 @@ class StrategyRunner:
             fee = shares * row[5] * strategy.exchangeSellFee.percentage
 
         transactions.append(
-            Transaction(row[0], row[1], row[5], shares, TypeOfSignal.SELL,
-                        fee))
+            Transaction(row[0], row[1], row[5], shares, TypeOfSignal.SELL, fee))
 
     @staticmethod
     def fixStartDatetime(strategy: StrategyDetails):
@@ -407,8 +406,7 @@ class StrategyRunner:
                 maxim = max(maxim,
                             (i.length + 1) * TimeframeToMinutes[i.timeframe])
         firstAvailableDate += timedelta(minutes=maxim)
-        strategy.startDatetime = max(strategy.startDatetime,
-                                     firstAvailableDate)
+        strategy.startDatetime = max(strategy.startDatetime, firstAvailableDate)
         while True:
             if StrategyRunner.isCandleDateValid(strategy.startDatetime,
                                                 strategy.timeFrame):
@@ -449,8 +447,8 @@ class StrategyRunner:
             return start_minute == 0
 
         if timeFrame == Timeframe.H4:
-            return (start_minute == 0 and start_hour % 4 == 2
-                    )  # might want to change here the modulo
+            return (start_minute == 0 and
+                    start_hour % 4 == 2)  # might want to change here the modulo
 
         if timeFrame == Timeframe.D1:
             return start_minute == 0 and start_hour == 0

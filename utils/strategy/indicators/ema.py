@@ -13,7 +13,7 @@ from utils.constants import (
 
 
 class EMA(baseIndicator.BaseIndicator
-          ):  # exponential moving average of previous `length` close prices
+         ):  # exponential moving average of previous `length` close prices
 
     def __init__(
             self,
@@ -44,8 +44,8 @@ class EMA(baseIndicator.BaseIndicator
 
     # override the abstract calculateValue method
     def calculateValue(self, dateTime: datetime):
-        startDateTime = dateTime - timedelta(
-            minutes=self.length * TimeframeToMinutes[self.timeframe])
+        startDateTime = dateTime - timedelta(minutes=self.length *
+                                             TimeframeToMinutes[self.timeframe])
         data = get_data(
             self.instrumentName,
             startDateTime,

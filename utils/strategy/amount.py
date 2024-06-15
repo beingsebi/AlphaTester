@@ -10,8 +10,8 @@ class Amount:
         if fixed is None and percentage is None:
             raise ValueError("You can't have both fixed and percentage None")
 
-        if percentage is not None and not (percentage >= 0
-                                           and percentage <= 100):
+        if percentage is not None and not (percentage >= 0 and
+                                           percentage <= 100):
             raise ValueError("Percentage must be between 0 and 100")
 
         self.fixed = fixed
