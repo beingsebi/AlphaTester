@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from utils.constants import IndicatorNames
+from utils.constants import IndicatorNames, Timeframe
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
@@ -75,9 +75,9 @@ class StrategyCreateView(CreateView):
                     indicator = IndicatorFactory.createIndicator(
                         form.cleaned_data["instrument"].symbol,
                         IndicatorNames[indicator_form.cleaned_data["indicator_name"]],
-                        indicator_form.cleaned_data["timeframe"],
+                        Timeframe[indicator_form.cleaned_data["timeframe"]],
                         length=indicator_form.cleaned_data["length"],
-                        source=indicator_form.cleaned_data["source"],
+                        source=Sources[indicator_form.cleaned_data["source"]],
                     )
                     indicator_instances.append(indicator)
                     signal = Signal(
@@ -97,9 +97,9 @@ class StrategyCreateView(CreateView):
         # Otherwise, we convert the StrategyDetails object to JSON and save it in the form instance
         try:
             strategyDetails = StrategyDetails(
-                form.cleaned_data["instrument"],
+                form.cleaned_data["instrument"].symbol,
                 form.cleaned_data["capital_allocation"],
-                form.cleaned_data["timeframe"],
+                Timeframe[form.cleaned_data["timeframe"]],
                 form.cleaned_data["buy_size"],
                 form.cleaned_data["sell_size"],
                 form.cleaned_data["take_profit"],
@@ -111,8 +111,8 @@ class StrategyCreateView(CreateView):
                 [sellSignals],
                 form.cleaned_data["exchange_buy_fee"],
                 form.cleaned_data["exchange_sell_fee"],
-                form.cleaned_data["start_datetime"],
-                form.cleaned_data["end_datetime"],
+                form.cleaned_data["start_datetime"].replace(tzinfo=None),
+                form.cleaned_data["end_datetime"].replace(tzinfo=None),
             )
             form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
 

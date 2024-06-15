@@ -1,5 +1,7 @@
 from datetime import datetime
 from typing import List
+
+import jsonpickle
 from utils.constants import TypeOfSignal
 from utils.strategyRunner.strategyRunner import Transaction
 
@@ -54,6 +56,14 @@ class Results:
             f"winningSellingTradesPercentage={self.winningSellingTradesPercentage})"
         )
 
+    @staticmethod
+    def toJSON(self):  # pylint: disable=W0211
+        return jsonpickle.encode(self)
+
+    @staticmethod
+    def fromJSON(JSONstr: str):  # pylint: disable=C0103
+        return jsonpickle.decode(JSONstr)
+
 
 class ResultsInterpretor:
     @staticmethod
@@ -101,7 +111,20 @@ class ResultsInterpretor:
             results.balanceOverTime.append(freeFunds + stock * transaction.price)
             results.stockQuantityOverTime.append(stock)
 
-        results.averageBuySize = results.totalBuySize / results.cntBuys
-        results.averageSellSize = results.totalSellSize / results.cntSells
-        results.winningSellingTradesPercentage = winningSellTrades / results.cntSells
+        if results.cntBuys != 0:
+            results.averageBuySize = results.totalBuySize / results.cntBuys
+        else:
+            results.averageBuySize = 0
+
+        if results.cntSells != 0:
+            results.averageSellSize = results.totalSellSize / results.cntSells
+        else:
+            results.averageSellSize = 0
+
+        if results.cntSells != 0:
+            results.winningSellingTradesPercentage = (
+                winningSellTrades / results.cntSells
+            )
+        else:
+            results.winningSellingTradesPercentage = 0
         return results
