@@ -48,6 +48,24 @@ class StrategyDetailView(generic.DetailView):
                     context["results"].timeSeries[i].isoformat()
                 )
 
+            context["results"].averageBuySize = round(
+                context["results"].averageBuySize, 2
+            )
+            context["results"].averageSellSize = round(
+                context["results"].averageSellSize, 2
+            )
+
+            context["results"].totalBuySize = round(context["results"].totalBuySize, 2)
+            context["results"].totalSellSize = round(
+                context["results"].totalSellSize, 2
+            )
+            context["results"].totalFees = round(context["results"].totalFees, 2)
+
+            context["results"].winningSellingTradesPercentage = Amount(
+                None,
+                round(context["results"].winningSellingTradesPercentage, 2),
+            )
+
             print(context["results"])
         except Exception as e:
             print("Error results: " + str(e))
