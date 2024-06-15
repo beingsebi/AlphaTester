@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from utils.constants import IndicatorNames
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
@@ -73,7 +74,7 @@ class StrategyCreateView(CreateView):
 
                     indicator = IndicatorFactory.createIndicator(
                         form.cleaned_data["instrument"].symbol,
-                        indicator_form.cleaned_data["indicator_name"],
+                        IndicatorNames[indicator_form.cleaned_data["indicator_name"]],
                         indicator_form.cleaned_data["timeframe"],
                         length=indicator_form.cleaned_data["length"],
                         source=indicator_form.cleaned_data["source"],
