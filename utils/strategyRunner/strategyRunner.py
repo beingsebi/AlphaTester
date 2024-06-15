@@ -131,10 +131,13 @@ class StrategyRunner:
                 len(transactions) > old_len
                 and transactions[-1].type == TypeOfSignal.BUY
             ):
-                tradingState.medium_price = (
-                    old_shares * tradingState.medium_price
-                    + transactions[-1].price * transactions[-1].quantity
-                ) / (old_shares + transactions[-1].quantity)
+                if old_shares + transactions[-1].quantity == 0:
+                    tradingState.medium_price = 0
+                else:
+                    tradingState.medium_price = (
+                        old_shares * tradingState.medium_price
+                        + transactions[-1].price * transactions[-1].quantity
+                    ) / (old_shares + transactions[-1].quantity)
 
         if tradingState.shares > 0:
             StrategyRunner.liquidate_all(  # liquidate all at the end | WARNING: might want to change this

@@ -3,10 +3,13 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from backtester.tasks import expensive_task
 from utils.constants import IndicatorNames, Timeframe
+from utils.database.strat_runner_results_to_db import update_results
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
+from utils.strategyRunner.resultsInterpretor import Results
 
 from .forms import *
 from .models import *
@@ -34,13 +37,21 @@ class StrategyDetailView(generic.DetailView):
             )
             print(context["strategyDetails"])
         except Exception as e:
-            print("Error: " + str(e))
+            print("Error strategyDetails: " + str(e))
+
+        try:
+            context["results"] = Results.fromJSON(self.object.results)
+
+            # Convert timeseries to isoformat
+            for i in range(len(context["results"].timeSeries)):
+                context["results"].timeSeries[i] = (
+                    context["results"].timeSeries[i].isoformat()
+                )
+
+            print(context["results"])
+        except Exception as e:
+            print("Error results: " + str(e))
         return context
-
-
-class StrategyResultView(generic.DetailView):
-    model = Strategy
-    template_name = "backtester/result.html"
 
 
 class StrategyCreateView(CreateView):
@@ -123,7 +134,10 @@ class StrategyCreateView(CreateView):
             form.add_error("strategyDetails", str(e))
             return super().form_invalid(form)
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        # Start the expensive task in the background
+        expensive_task.delay(self.object.pk)
+        return response
 
 
 class StrategyDeleteView(DeleteView):
