@@ -110,7 +110,3 @@ TIMEFRAME_CHOICES = [
     ("W1", "W1"),
     ("MN1", "MN1"),
 ]
-
-INSTRUMENTS = [
-    ("ZXAUUSD", "ZXAUUSD"),
-]
