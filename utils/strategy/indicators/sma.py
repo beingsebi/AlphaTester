@@ -66,7 +66,7 @@ class SMA(baseIndicator.BaseIndicator
         return avg
 
     def __str__(self) -> str:
-        return f"{super().__str__()}" f"(length: {self.length} | source: {self.source})"
+        return f"{super().__str__()}" f" (length: {self.length} | source: {self.source})"
 
     def __repr__(self) -> str:
-        return f"{super().__str__()}" f"(length: {self.length} | source: {self.source})"
+        return f"{super().__str__()}" f" (length: {self.length} | source: {self.source})"

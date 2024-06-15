@@ -21,6 +21,8 @@ from utils.strategyRunner.strategyRunner import StrategyRunner
 
 # mdb.insert_data_into_table("ZXAUUSD_2024_01.csv")
 
+# mdb.insert_data_into_table("XAGUSD_M1_01.csv")
+
 
 def plott(proc: Results):
     import matplotlib.pyplot as plt

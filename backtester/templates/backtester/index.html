@@ -2,27 +2,32 @@
 
 {% block content %}
   <div style="width: 300px;">
-    <br>
-    <a href="{% url 'backtester:strategy-add' %}" class="btn btn-primary w-100">Add new strategy</a>
-
+    
     <br>
     <br>
     <div>
       {% if latest_strategy_list %}
-        <ul class="list-group">
-          {% for strategy in latest_strategy_list %}
+      <ul class="list-group">
+        {% for strategy in latest_strategy_list %}
+        {% if request.user == strategy.user %}
+        <br>
+        <li class="list-group-item text-center">
+          <a href="{% url 'backtester:detail' strategy.id %}">{{ strategy.name|default:'[Unnamed]' }}</a>
           <br>
-            <li class="list-group-item text-center">
-              <a href="{% url 'backtester:detail' strategy.id %}">{{ strategy.name|default:'[Unnamed]' }}</a>
-              <br>
-            </li>
-          {% endfor %}
-        </ul>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
       {% else %}
-        <div class="alert alert-info" role="alert">No strategies are available.</div>
+      <div class="alert alert-info" role="alert">No strategies are available.</div>
       {% endif %}
     </div>
     <br>
+
+    <a href="{% url 'backtester:strategy-add' %}" class="btn btn-primary w-100">Add new strategy</a>
+    <br>
+    <br>
+
     <a href="{% url 'backtester:instruments' %}" class="btn btn-info w-100">See available instruments</a>
   </div>
 {% endblock %}
