@@ -20,4 +20,4 @@ class Amount:
     def __str__(self) -> str:
         if self.fixed is not None:
             return f"{self.fixed}"
-        return f"{self.percentage}%"
+        return f"{round(self.percentage*100,2)}%"
