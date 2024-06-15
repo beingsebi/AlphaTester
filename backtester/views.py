@@ -3,7 +3,9 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from backtester.tasks import expensive_task
 from utils.constants import IndicatorNames, Timeframe
+from utils.database.strat_runner_results_to_db import update_results
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
@@ -123,7 +125,10 @@ class StrategyCreateView(CreateView):
             form.add_error("strategyDetails", str(e))
             return super().form_invalid(form)
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        # Start the expensive task in the background
+        expensive_task.delay(self.object.pk)
+        return response
 
 
 class StrategyDeleteView(DeleteView):
