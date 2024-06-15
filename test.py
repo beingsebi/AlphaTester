@@ -106,13 +106,12 @@ def test_get_data():
 # test_strat()
 
 
-def test_runn():
+# def test_runn():
 
-    # print("muie\n")
-    strt = Strategy.objects.get(id=1)
-    # strt.strategyDetails = StrategyDetails.fromJSON(strt.strategyDetails)
-    # print(strt.strategyDetails)
-    strat_runner_results_to_db.update_results(strt)
+#     strt = Strategy.objects.get(id=1)
+#     # strt.strategyDetails = StrategyDetails.fromJSON(strt.strategyDetails)
+#     # print(strt.strategyDetails)
+#     strat_runner_results_to_db.update_results(strt)
 
 
-test_runn()
+# test_runn()
