@@ -17,6 +17,7 @@ from utils.constants import (
 
 
 class PercentageFloatField(forms.FloatField):
+
     def clean(self, value):
         # value = super().clean(value)
         if isinstance(value, str) and value.endswith("%"):
@@ -60,29 +61,17 @@ class StrategyForm(ModelForm):
 
     timeframe = forms.ChoiceField(choices=TIMEFRAME_CHOICES)
 
-    buy_size = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
+    buy_size = PercentageFloatField(widget=forms.TextInput(
+        attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}))
 
-    sell_size = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
+    sell_size = PercentageFloatField(widget=forms.TextInput(
+        attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}))
 
-    take_profit = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
+    take_profit = PercentageFloatField(widget=forms.TextInput(
+        attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}))
 
-    stop_loss = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
+    stop_loss = PercentageFloatField(widget=forms.TextInput(
+        attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}))
 
     buy_signal_mode = forms.ChoiceField(choices=SIGNALS_CHOICES)
 
@@ -90,21 +79,14 @@ class StrategyForm(ModelForm):
 
     # todo important: signals
 
-    exchange_buy_fee = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
+    exchange_buy_fee = PercentageFloatField(widget=forms.TextInput(
+        attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}))
 
-    exchange_sell_fee = PercentageFloatField(
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}
-        )
-    )
+    exchange_sell_fee = PercentageFloatField(widget=forms.TextInput(
+        attrs={"placeholder": "Enter a value or percentage (e.g., 50%)"}))
 
-    start_datetime = forms.DateTimeField(
-        widget=forms.DateTimeInput(), initial=datetime.datetime.now()
-    )
+    start_datetime = forms.DateTimeField(widget=forms.DateTimeInput(),
+                                         initial=datetime.datetime.now())
     end_datetime = forms.DateTimeField(
         widget=forms.DateTimeInput,
         initial=datetime.datetime.now() - datetime.timedelta(days=365),

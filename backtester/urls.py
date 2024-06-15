@@ -23,9 +23,8 @@ urlpatterns = [
     ),
     path(
         "instruments/",
-        generic.ListView.as_view(
-            model=Instrument, template_name="backtester/instruments.html"
-        ),
+        generic.ListView.as_view(model=Instrument,
+                                 template_name="backtester/instruments.html"),
         name="instruments",
     ),
     path(

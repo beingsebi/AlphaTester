@@ -10,11 +10,11 @@ def get_data(
 ):
     try:
         with psycopg2.connect(
-            database=DbConstants.DB_PARAMS["database"],
-            user=DbConstants.DB_PARAMS["user"],
-            host=DbConstants.DB_PARAMS["host"],
-            password=DbConstants.DB_PARAMS["password"],
-            port=DbConstants.DB_PARAMS["port"],
+                database=DbConstants.DB_PARAMS["database"],
+                user=DbConstants.DB_PARAMS["user"],
+                host=DbConstants.DB_PARAMS["host"],
+                password=DbConstants.DB_PARAMS["password"],
+                port=DbConstants.DB_PARAMS["port"],
         ) as conn:
             sql = f'SELECT date, time, open, high, low, close, spread FROM public."{instrument}" WHERE 0 = 0 '
             if startDatetime is not None:
@@ -34,11 +34,11 @@ def get_data(
 def get_last_available_date(instrument: str):
     try:
         with psycopg2.connect(
-            database=DbConstants.DB_PARAMS["database"],
-            user=DbConstants.DB_PARAMS["user"],
-            host=DbConstants.DB_PARAMS["host"],
-            password=DbConstants.DB_PARAMS["password"],
-            port=DbConstants.DB_PARAMS["port"],
+                database=DbConstants.DB_PARAMS["database"],
+                user=DbConstants.DB_PARAMS["user"],
+                host=DbConstants.DB_PARAMS["host"],
+                password=DbConstants.DB_PARAMS["password"],
+                port=DbConstants.DB_PARAMS["port"],
         ) as conn:
             sql = f'SELECT date, time FROM public."{instrument}" ORDER BY date DESC, time DESC LIMIT 1'
             cur = conn.cursor()
@@ -54,11 +54,11 @@ def get_last_available_date(instrument: str):
 def get_first_available_date(instrument: str):
     try:
         with psycopg2.connect(
-            database=DbConstants.DB_PARAMS["database"],
-            user=DbConstants.DB_PARAMS["user"],
-            host=DbConstants.DB_PARAMS["host"],
-            password=DbConstants.DB_PARAMS["password"],
-            port=DbConstants.DB_PARAMS["port"],
+                database=DbConstants.DB_PARAMS["database"],
+                user=DbConstants.DB_PARAMS["user"],
+                host=DbConstants.DB_PARAMS["host"],
+                password=DbConstants.DB_PARAMS["password"],
+                port=DbConstants.DB_PARAMS["port"],
         ) as conn:
             sql = f'SELECT date, time FROM public."{instrument}" ORDER BY date ASC, time ASC LIMIT 1'
             cur = conn.cursor()

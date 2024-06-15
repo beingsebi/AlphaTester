@@ -81,8 +81,7 @@ def test_strat():
     print(strategy.startDatetime)
     print("------------------------")
     proc: Results = ResultsInterpretor.interpretResults(
-        r, strategy.capitalAllocation, strategy.startDatetime
-    )
+        r, strategy.capitalAllocation, strategy.startDatetime)
     print(proc)
     plott(proc)
 
@@ -105,13 +104,11 @@ def test_get_data():
 
 # test_strat()
 
-
 # def test_runn():
 
 #     strt = Strategy.objects.get(id=1)
 #     # strt.strategyDetails = StrategyDetails.fromJSON(strt.strategyDetails)
 #     # print(strt.strategyDetails)
 #     strat_runner_results_to_db.update_results(strt)
-
 
 # test_runn()

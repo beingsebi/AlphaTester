@@ -4,5 +4,14 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": true,
+		"black-formatter.importStrategy": "fromEnvironment",
+		"isort.importStrategy": "fromEnvironment",
+		"[python]": {
+			"editor.defaultFormatter": "eeyore.yapf",
+			},
+		"yapf.args": ["--style", "{based_on_style: google, indent_width: 4}"]
+	},
 }

@@ -3,6 +3,7 @@ from utils.constants import TypeOfOpOperatorChoices
 
 
 class Signal:
+
     def __init__(
         self,
         indicator: BaseIndicator,

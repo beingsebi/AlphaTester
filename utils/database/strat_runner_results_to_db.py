@@ -14,8 +14,7 @@ def update_results(strategy_id):
     transactions: List[Transaction] = StrategyRunner.run(strat)
 
     results: Results = ResultsInterpretor.interpretResults(
-        transactions, strat.capitalAllocation, strat.startDatetime
-    )
+        transactions, strat.capitalAllocation, strat.startDatetime)
     # print("-----------------------")
     # print(results)
     strategy.results = Results.toJSON(results)

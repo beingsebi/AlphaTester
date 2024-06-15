@@ -12,15 +12,15 @@ from utils.constants import (
 )
 
 
-class SMA(
-    baseIndicator.BaseIndicator
-):  # simple moving average of previous `length` close prices
+class SMA(baseIndicator.BaseIndicator
+          ):  # simple moving average of previous `length` close prices
+
     def __init__(
-        self,
-        instrumentName: str,
-        indicatorName: IndicatorNames,
-        timeframe: Timeframe,
-        **kwargs,  # length = 14, source = close
+            self,
+            instrumentName: str,
+            indicatorName: IndicatorNames,
+            timeframe: Timeframe,
+            **kwargs,  # length = 14, source = close
     ):
         """
         Initialize the SMA (Simple Moving Average) indicator.
@@ -39,15 +39,15 @@ class SMA(
         self.length = _kwargs.pop("length", 14)
         if self.length <= 0:
             raise ValueError("Length must be greater than 0")
-        self.source = _kwargs.pop("source", Sources.CLOSE)  # default source is close
+        self.source = _kwargs.pop("source",
+                                  Sources.CLOSE)  # default source is close
         if _kwargs:
             raise ValueError(f"Invalid keyword arguments: {_kwargs}")
 
     # override the abstract calculateValue method
     def calculateValue(self, dateTime: datetime):
         startDateTime = dateTime - timedelta(
-            minutes=self.length * TimeframeToMinutes[self.timeframe]
-        )
+            minutes=self.length * TimeframeToMinutes[self.timeframe])
         data = get_data(
             self.instrumentName,
             startDateTime,
