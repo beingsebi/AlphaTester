@@ -1,16 +1,41 @@
+import django
+
+django.setup()
+from backtester.models import Strategy
 from utils.strategy.amount import Amount
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
 from utils.strategy.indicators.sma import SMA
-from utils import constants
+from utils import constants, strategy
 from utils.database import populate_database_scripts as mdb
+from utils.database import strat_runner_results_to_db
 from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
 from utils.database.get_instrument_data_scripts import get_data
 from utils.database.get_instrument_data_scripts import get_data
 from datetime import datetime
-
 from utils.strategyRunner.resultsInterpretor import Results, ResultsInterpretor
 from utils.strategyRunner.strategyRunner import StrategyRunner
+
+# mdb.insert_data_into_table("ZXAUUSD_2024_01.csv")
+
+from django.conf import settings
+import pickle
+
+
+def plott(proc: Results):
+    import matplotlib.pyplot as plt
+
+    timeseries = proc.timeSeries
+    balance = proc.balanceOverTime
+    # print(balance)
+    fig, ax = plt.subplots()
+    ax.plot(timeseries, balance)
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Balance")
+    ax.set_title("Balance Over Time")
+    ax.set_ylim(min(balance) - 5, max(balance) + 5)  # Adjust y-axis limits
+    fig.autofmt_xdate()
+    plt.show()  # TODO SAVE the plot
 
 
 def test_strat():
@@ -40,9 +65,9 @@ def test_strat():
         None,  #   stop loss
         [my_sma, my_ema],
         constants.SignalsChoicesMode.CNF,  # buy signals mode
-        [[Signal(my_ema, 2045.15, "<=")]],
+        [[Signal(my_sma, 2045.15, "<=")]],
         constants.SignalsChoicesMode.CNF,  # sell signals mode
-        [[Signal(my_ema, 2045.16, ">=")]],
+        [[Signal(my_sma, 2045.16, ">=")]],
         Amount(0.12),  # buy fee
         Amount(0.1),  # sell fee
         datetime(2024, 1, 4, 8, 31, 0),  # start datetime
@@ -54,32 +79,17 @@ def test_strat():
         for i in r:
             print(i)
     print(strategy.startDatetime)
+    print("------------------------")
     proc: Results = ResultsInterpretor.interpretResults(
         r, strategy.capitalAllocation, strategy.startDatetime
     )
+    print(proc)
     plott(proc)
-
-
-def plott(proc: Results):
-    import matplotlib.pyplot as plt
-
-    timeseries = proc.timeSeries
-    balance = proc.balanceOverTime
-    # print(balance)
-    fig, ax = plt.subplots()
-    ax.plot(timeseries, balance)
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Balance")
-    ax.set_title("Balance Over Time")
-    ax.set_ylim(min(balance) - 5, max(balance) + 5)  # Adjust y-axis limits
-    fig.autofmt_xdate()
-    plt.show()  # TODO SAVE the plot
 
 
 # print(my_ema)
 # aux = my_ema.calculateValue(datetime(2024, 1, 3, 9, 30, 0))
 # print(aux)
-test_strat()
 
 
 def test_get_data():
@@ -91,3 +101,18 @@ def test_get_data():
 
     for i in data:
         print(i)
+
+
+# test_strat()
+
+
+def test_runn():
+
+    # print("muie\n")
+    strt = Strategy.objects.get(id=1)
+    # strt.strategyDetails = StrategyDetails.fromJSON(strt.strategyDetails)
+    # print(strt.strategyDetails)
+    strat_runner_results_to_db.update_results(strt)
+
+
+test_runn()
