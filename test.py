@@ -1,25 +1,25 @@
 import django
 
 django.setup()
+import pickle
+from datetime import datetime
+
+from django.conf import settings
+
 from backtester.models import Strategy
-from utils.strategy.amount import Amount
-from utils.strategy.indicators.indicatorFactory import IndicatorFactory
-from utils.strategy.indicators.sma import SMA
 from utils import constants, strategy
 from utils.database import populate_database_scripts as mdb
 from utils.database import strat_runner_results_to_db
-from utils.strategy.strategy import StrategyDetails
+from utils.database.get_instrument_data_scripts import get_data
+from utils.strategy.amount import Amount
+from utils.strategy.indicators.indicatorFactory import IndicatorFactory
+from utils.strategy.indicators.sma import SMA
 from utils.strategy.signal import Signal
-from utils.database.get_instrument_data_scripts import get_data
-from utils.database.get_instrument_data_scripts import get_data
-from datetime import datetime
+from utils.strategy.strategy import StrategyDetails
 from utils.strategyRunner.resultsInterpretor import Results, ResultsInterpretor
 from utils.strategyRunner.strategyRunner import StrategyRunner
 
 # mdb.insert_data_into_table("ZXAUUSD_2024_01.csv")
-
-from django.conf import settings
-import pickle
 
 
 def plott(proc: Results):
@@ -81,8 +81,7 @@ def test_strat():
     print(strategy.startDatetime)
     print("------------------------")
     proc: Results = ResultsInterpretor.interpretResults(
-        r, strategy.capitalAllocation, strategy.startDatetime
-    )
+        r, strategy.capitalAllocation, strategy.startDatetime)
     print(proc)
     plott(proc)
 
@@ -105,13 +104,11 @@ def test_get_data():
 
 # test_strat()
 
-
 # def test_runn():
 
 #     strt = Strategy.objects.get(id=1)
 #     # strt.strategyDetails = StrategyDetails.fromJSON(strt.strategyDetails)
 #     # print(strt.strategyDetails)
 #     strat_runner_results_to_db.update_results(strt)
-
 
 # test_runn()

@@ -1,8 +1,9 @@
-from utils.strategy.indicators.baseIndicator import BaseIndicator
 from utils.constants import TypeOfOpOperatorChoices
+from utils.strategy.indicators.baseIndicator import BaseIndicator
 
 
 class Signal:
+
     def __init__(
         self,
         indicator: BaseIndicator,

@@ -1,8 +1,8 @@
 from django.urls import path
+from django.views import generic
 
 from .models import Instrument
 from .views import *
-from django.views import generic
 
 app_name = "backtester"  # pylint: disable=C0103
 #  because it is needed by Django
@@ -23,9 +23,8 @@ urlpatterns = [
     ),
     path(
         "instruments/",
-        generic.ListView.as_view(
-            model=Instrument, template_name="backtester/instruments.html"
-        ),
+        generic.ListView.as_view(model=Instrument,
+                                 template_name="backtester/instruments.html"),
         name="instruments",
     ),
     path(

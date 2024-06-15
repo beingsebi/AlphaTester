@@ -5,7 +5,9 @@ from django.urls import reverse
 class Strategy(models.Model):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    instrument = models.ForeignKey("Instrument", on_delete=models.SET_NULL, null=True)
+    instrument = models.ForeignKey("Instrument",
+                                   on_delete=models.SET_NULL,
+                                   null=True)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     strategyDetails = models.JSONField(null=True)
