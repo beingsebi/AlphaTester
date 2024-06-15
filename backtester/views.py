@@ -41,6 +41,14 @@ class StrategyDetailView(generic.DetailView):
 
         try:
             context["results"] = Results.fromJSON(self.object.results)
+
+            # Convert timeseries to isoformat
+            for i in range(len(context["results"].timeSeries)):
+                context["results"].timeSeries[i] = (
+                    context["results"].timeSeries[i].isoformat()
+                )
+
+            print(context["results"])
         except Exception as e:
             print("Error results: " + str(e))
         return context

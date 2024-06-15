@@ -51,6 +51,12 @@
         <li class="list-group-item">Average Sell Size: {{ results.averageSellSize }}</li>
         <li class="list-group-item">Winning Selling Trades Percentage: {{ results.winningSellingTradesPercentage }}</li>
       </ul>
+      <div class="card-body">
+        <canvas id="chart_freeFundsOverTime"></canvas>
+      </div>
+      <div class="card-body">
+        <canvas id="chart_balanceOverTime"></canvas>
+      </div>
     {% else %}
       <div class="card-footer">
         <p>Results are still processing...</p>
@@ -66,4 +72,55 @@
       </div>
     {% endif %}
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const dataTimeSeries = {{ results.timeSeries|safe }};
+    const len = dataTimeSeries.length;
+    let ctxFreeFundsOverTime = document.getElementById('chart_freeFundsOverTime').getContext('2d');
+    let dataFreeFundsOverTime = {{ results.freeFundsOverTime|safe }};
+    let chartFreeFundsOverTime = new Chart(ctxFreeFundsOverTime, {
+        type: 'line',
+        data: {
+            labels: dataTimeSeries,
+            datasets: [{
+                label: 'Free Funds Over Time',
+                data: dataFreeFundsOverTime
+            }]
+        },
+        options: {
+          scales: {
+              x: {
+                  ticks: {
+                    callback: function(val, index) {
+                      return index % Math.floor(len/5) === 0 ? this.getLabelForValue(val) : '';
+                    },
+                  }
+              }
+          }
+        }
+      });
+    let ctxBalanceOverTime = document.getElementById('chart_balanceOverTime').getContext('2d');
+    let dataBalanceOverTime = {{ results.balanceOverTime|safe }};
+    let chartBalanceOverTime = new Chart(ctxBalanceOverTime, {
+        type: 'line',
+        data: {
+            labels: dataTimeSeries,
+            datasets: [{
+                label: 'Balance Over Time',
+                data: dataBalanceOverTime
+            }]
+        },
+        options: {
+          scales: {
+              x: {
+                  ticks: {
+                    callback: function(val, index) {
+                      return index % Math.floor(len/5) === 0 ? this.getLabelForValue(val) : '';
+                    },
+                  }
+              }
+          }
+        }
+      });
+  </script>
 {% endblock %}
