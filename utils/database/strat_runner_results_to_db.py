@@ -1,5 +1,7 @@
 from typing import List
+
 import jsonpickle
+
 from backtester.models import Strategy
 from utils.strategy.strategy import StrategyDetails
 from utils.strategyRunner.resultsInterpretor import Results, ResultsInterpretor

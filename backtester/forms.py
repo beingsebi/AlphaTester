@@ -1,19 +1,15 @@
 import datetime
+
 from django import forms
 from django.forms import ModelForm, formset_factory
 
+from utils.constants import (INDICATORS_CHOICES, INSTRUMENTS, SIGNALS_CHOICES,
+                             SOURCES_CHOICES, TIMEFRAME_CHOICES,
+                             TYPE_OF_OPERATOR_CHOICES, TYPE_OF_SIGNAL_CHOICES,
+                             Sources)
 from utils.strategy.amount import Amount
+
 from .models import Strategy
-from utils.constants import (
-    INSTRUMENTS,
-    SOURCES_CHOICES,
-    TIMEFRAME_CHOICES,
-    SIGNALS_CHOICES,
-    INDICATORS_CHOICES,
-    TYPE_OF_SIGNAL_CHOICES,
-    TYPE_OF_OPERATOR_CHOICES,
-    Sources,
-)
 
 
 class PercentageFloatField(forms.FloatField):

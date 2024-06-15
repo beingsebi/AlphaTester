@@ -1,8 +1,8 @@
 from django.urls import path
+from django.views import generic
 
 from .models import Instrument
 from .views import *
-from django.views import generic
 
 app_name = "backtester"  # pylint: disable=C0103
 #  because it is needed by Django

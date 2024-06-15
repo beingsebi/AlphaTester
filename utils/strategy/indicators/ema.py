@@ -1,15 +1,11 @@
 from datetime import datetime, timedelta
 
+from utils.constants import (IndicatorNames, Sources, SourcesToIndex, Timeframe,
+                             TimeframeToMinutes)
 from utils.database.get_instrument_data_scripts import get_data
 from utils.strategyRunner.strategyRunner import StrategyRunner
+
 from . import baseIndicator
-from utils.constants import (
-    IndicatorNames,
-    SourcesToIndex,
-    Timeframe,
-    Sources,
-    TimeframeToMinutes,
-)
 
 
 class EMA(baseIndicator.BaseIndicator

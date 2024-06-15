@@ -9,6 +9,7 @@ from typing import List
 import pandas as pd
 import psycopg2
 import sqlalchemy
+
 from utils.constants import DbConstants
 
 

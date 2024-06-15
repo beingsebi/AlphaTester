@@ -1,6 +1,7 @@
 from utils.constants import IndicatorNames, Timeframe
-from .sma import SMA
+
 from .ema import EMA
+from .sma import SMA
 
 
 class IndicatorFactory:  # pylint: disable=too-few-public-methods

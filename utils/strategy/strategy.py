@@ -1,13 +1,14 @@
 import copy
-from typing import List
 from datetime import datetime
+from typing import List
+
 import jsonpickle
 
 from utils.constants import SignalsChoicesMode, Timeframe
 from utils.strategy.indicators.baseIndicator import BaseIndicator
 
-from .signal import Signal
 from .amount import Amount
+from .signal import Signal
 
 
 class StrategyDetails:

@@ -13,3 +13,6 @@
 		"yapf.args": ["--style", "{based_on_style: google, indent_width: 4}"]
 	},
 }
+// Terminal command for formatiing all python files in a directory
+// find *  -name '*.py' -exec yapf -i {} --style "google" \;
+// find  -name '*.py' -exec isort {} \;

@@ -1,19 +1,20 @@
 import json
+
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import (CreateView, DeleteView, FormView,
+                                       UpdateView)
 
 from backtester.tasks import expensive_task
 from utils.constants import IndicatorNames, Timeframe
 from utils.database.strat_runner_results_to_db import update_results
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
-from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
+from utils.strategy.strategy import StrategyDetails
 from utils.strategyRunner.resultsInterpretor import Results
 
 from .forms import *
 from .models import *
-from django.views.generic.edit import FormView
 
 
 class StrategyListView(generic.ListView):

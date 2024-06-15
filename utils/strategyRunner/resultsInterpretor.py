@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 
 import jsonpickle
+
 from utils.constants import TypeOfSignal
 from utils.strategyRunner.strategyRunner import Transaction
 

@@ -1,16 +1,13 @@
+import traceback
+from datetime import date, datetime, time, timedelta
 from typing import List
 
-from datetime import date, datetime, time, timedelta
 from utils.constants import Timeframe, TimeframeToMinutes, TypeOfSignal
 from utils.database.get_instrument_data_scripts import (
-    get_data,
-    get_last_available_date,
-    get_first_available_date,
-)
+    get_data, get_first_available_date, get_last_available_date)
 from utils.strategy.amount import Amount
 from utils.strategy.signal import Signal
 from utils.strategy.strategy import StrategyDetails
-import traceback
 
 
 class Transaction:
