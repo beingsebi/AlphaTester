@@ -1,26 +1,22 @@
 from datetime import datetime, timedelta
 
+from utils.constants import (IndicatorNames, Sources, SourcesToIndex, Timeframe,
+                             TimeframeToMinutes)
 from utils.database.get_instrument_data_scripts import get_data
 from utils.strategyRunner.strategyRunner import StrategyRunner
+
 from . import baseIndicator
-from utils.constants import (
-    IndicatorNames,
-    SourcesToIndex,
-    Timeframe,
-    Sources,
-    TimeframeToMinutes,
-)
 
 
-class EMA(
-    baseIndicator.BaseIndicator
-):  # exponential moving average of previous `length` close prices
+class EMA(baseIndicator.BaseIndicator
+         ):  # exponential moving average of previous `length` close prices
+
     def __init__(
-        self,
-        instrumentName: str,
-        indicatorName: IndicatorNames,
-        timeframe: Timeframe,
-        **kwargs,  # length = 14, source = close
+            self,
+            instrumentName: str,
+            indicatorName: IndicatorNames,
+            timeframe: Timeframe,
+            **kwargs,  # length = 14, source = close
     ):
         """
         Initialize the EMA (Exponential Moving Average) indicator.
@@ -37,15 +33,15 @@ class EMA(
         super().__init__(instrumentName, indicatorName, timeframe)
         _kwargs = kwargs.copy()  # just in case we need it later in the caller
         self.length = _kwargs.pop("length", 14)
-        self.source = _kwargs.pop("source", Sources.CLOSE)  # default source is close
+        self.source = _kwargs.pop("source",
+                                  Sources.CLOSE)  # default source is close
         if _kwargs:
             raise ValueError(f"Invalid keyword arguments: {_kwargs}")
 
     # override the abstract calculateValue method
     def calculateValue(self, dateTime: datetime):
-        startDateTime = dateTime - timedelta(
-            minutes=self.length * TimeframeToMinutes[self.timeframe]
-        )
+        startDateTime = dateTime - timedelta(minutes=self.length *
+                                             TimeframeToMinutes[self.timeframe])
         data = get_data(
             self.instrumentName,
             startDateTime,

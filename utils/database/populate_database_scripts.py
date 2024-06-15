@@ -9,6 +9,7 @@ from typing import List
 import pandas as pd
 import psycopg2
 import sqlalchemy
+
 from utils.constants import DbConstants
 
 
@@ -20,7 +21,8 @@ def get_csv_files_from_directory(directory_path: str) -> List[str]:
     """
     csv_files = []
     for file in os.listdir(directory_path):
-        if os.path.isfile(os.path.join(directory_path, file)) and file.endswith(".csv"):
+        if os.path.isfile(os.path.join(directory_path,
+                                       file)) and file.endswith(".csv"):
             csv_files.append(directory_path + file)
     return csv_files
 
@@ -58,11 +60,11 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
 
     try:
         with psycopg2.connect(
-            database=DbConstants.DB_PARAMS["database"],
-            user=DbConstants.DB_PARAMS["user"],
-            host=DbConstants.DB_PARAMS["host"],
-            password=DbConstants.DB_PARAMS["password"],
-            port=DbConstants.DB_PARAMS["port"],
+                database=DbConstants.DB_PARAMS["database"],
+                user=DbConstants.DB_PARAMS["user"],
+                host=DbConstants.DB_PARAMS["host"],
+                password=DbConstants.DB_PARAMS["password"],
+                port=DbConstants.DB_PARAMS["port"],
         ) as conn:
             print("Connected to the PostgreSQL server.", table_name, sep="\n")
 
@@ -86,7 +88,8 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
 
             engine = sqlalchemy.create_engine(
                 f'postgresql://{DbConstants.DB_PARAMS["user"]}:{DbConstants.DB_PARAMS["password"]}'
-                + f'@{DbConstants.DB_PARAMS["host"]}/{DbConstants.DB_PARAMS["database"]}'
+                +
+                f'@{DbConstants.DB_PARAMS["host"]}/{DbConstants.DB_PARAMS["database"]}'
             )
 
             data.to_sql(
@@ -120,7 +123,6 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
 
 # insert_data_into_table("/home/sebi/Desktop/test_csvs/XAUUSD_2024_02.csv")
 # insert_data_into_table("ZXAUUSD_2024_01.csv")
-
 
 # path = sys.argv[1]
 # insert_data_into_table(path)

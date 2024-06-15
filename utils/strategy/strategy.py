@@ -1,23 +1,29 @@
 import copy
-from typing import List
 from datetime import datetime
+from typing import List
+
 import jsonpickle
 
 from utils.constants import SignalsChoicesMode, Timeframe
 from utils.strategy.indicators.baseIndicator import BaseIndicator
 
-from .signal import Signal
 from .amount import Amount
+from .signal import Signal
 
 
 class StrategyDetails:
+
     def __init__(
         self,
-        instrumentName: str,  # has to be the same as the one in the database TODO: (nice to have) dynamic enum or something similar
-        capitalAllocation: float,  # the currency in which the instrument is traded
+        instrumentName:
+        str,  # has to be the same as the one in the database TODO: (nice to have) dynamic enum or something similar
+        capitalAllocation:
+        float,  # the currency in which the instrument is traded
         timeFrame: Timeframe,
-        buySize: Amount,  # TODO: add flag if this means money or share for both fixed and percentage. now it means money (percentage of free funds)
-        sellSize: Amount,  # TODO: add flag if this means money or share for fixed. now it means money (percentage of current value of invested funds)
+        buySize:
+        Amount,  # TODO: add flag if this means money or share for both fixed and percentage. now it means money (percentage of free funds)
+        sellSize:
+        Amount,  # TODO: add flag if this means money or share for fixed. now it means money (percentage of current value of invested funds)
         takeProfit: Amount | None,
         stopLoss: Amount | None,
         indicators: List[BaseIndicator],
@@ -94,25 +100,23 @@ class StrategyDetails:
         return jsonpickle.decode(JSONstr)
 
     def __str__(self) -> str:
-        return (
-            f"Strategy Details:\n"
-            f"instrumentName: {self.instrumentName}\n"
-            f"capitalAllocation: {self.capitalAllocation}\n"
-            f"timeFrame: {self.timeFrame}\n"
-            f"buySize: {self.buySize}\n"
-            f"sellSize: {self.sellSize}\n"
-            f"takeProfit: {self.takeProfit}\n"
-            f"stopLoss: {self.stopLoss}\n"
-            f"indicators: {self.indicators}\n"
-            f"buySignalMode: {self.buySignalMode}\n"
-            f"buySignals: {self.buySignals}\n"
-            f"sellSignalMode: {self.sellSignalMode}\n"
-            f"sellSignals: {self.sellSignals}\n"
-            f"exchangeFee: {self.exchangeBuyFee}\n"
-            f"exchangeFee: {self.exchangeSellFee}\n"
-            f"startDatetime: {self.startDatetime}\n"
-            f"endDatetime: {self.endDatetime}\n"
-        )
+        return (f"Strategy Details:\n"
+                f"instrumentName: {self.instrumentName}\n"
+                f"capitalAllocation: {self.capitalAllocation}\n"
+                f"timeFrame: {self.timeFrame}\n"
+                f"buySize: {self.buySize}\n"
+                f"sellSize: {self.sellSize}\n"
+                f"takeProfit: {self.takeProfit}\n"
+                f"stopLoss: {self.stopLoss}\n"
+                f"indicators: {self.indicators}\n"
+                f"buySignalMode: {self.buySignalMode}\n"
+                f"buySignals: {self.buySignals}\n"
+                f"sellSignalMode: {self.sellSignalMode}\n"
+                f"sellSignals: {self.sellSignals}\n"
+                f"exchangeFee: {self.exchangeBuyFee}\n"
+                f"exchangeFee: {self.exchangeSellFee}\n"
+                f"startDatetime: {self.startDatetime}\n"
+                f"endDatetime: {self.endDatetime}\n")
 
     def dummyPrint(self):
         print("CapitalAllocation: ", self.capitalAllocation)

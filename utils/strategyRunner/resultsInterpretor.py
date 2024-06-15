@@ -2,11 +2,13 @@ from datetime import datetime
 from typing import List
 
 import jsonpickle
+
 from utils.constants import TypeOfSignal
 from utils.strategyRunner.strategyRunner import Transaction
 
 
 class Results:
+
     def __init__(
         self,
         balanceOverTime: List[float] = [],
@@ -66,10 +68,10 @@ class Results:
 
 
 class ResultsInterpretor:
+
     @staticmethod
-    def interpretResults(
-        transactions: List[Transaction], initialBalance: float, initialTime: datetime
-    ) -> Results:
+    def interpretResults(transactions: List[Transaction], initialBalance: float,
+                         initialTime: datetime) -> Results:
         results = Results()
         freeFunds = initialBalance
         results.balanceOverTime = [initialBalance]
@@ -81,17 +83,15 @@ class ResultsInterpretor:
 
         for transaction in transactions:
             results.timeSeries.append(
-                datetime.combine(transaction.date, transaction.time)
-            )
+                datetime.combine(transaction.date, transaction.time))
             results.cntTrades += 1
             if transaction.type == TypeOfSignal.BUY:
                 print(f"buy {transaction.quantity} @ {transaction.price}")
                 results.cntBuys += 1
                 averageBuyPrice = averageBuyPrice * (
-                    stock / (stock + transaction.quantity)
-                ) + transaction.price * (
-                    transaction.quantity / (stock + transaction.quantity)
-                )
+                    stock /
+                    (stock + transaction.quantity)) + transaction.price * (
+                        transaction.quantity / (stock + transaction.quantity))
                 stock += transaction.quantity
                 freeFunds -= transaction.price * transaction.quantity + transaction.fee
                 results.totalFees += transaction.fee
@@ -108,7 +108,8 @@ class ResultsInterpretor:
                 results.totalSellSize += transaction.price * transaction.quantity
 
             results.freeFundsOverTime.append(freeFunds)
-            results.balanceOverTime.append(freeFunds + stock * transaction.price)
+            results.balanceOverTime.append(freeFunds +
+                                           stock * transaction.price)
             results.stockQuantityOverTime.append(stock)
 
         if results.cntBuys != 0:
@@ -122,9 +123,8 @@ class ResultsInterpretor:
             results.averageSellSize = 0
 
         if results.cntSells != 0:
-            results.winningSellingTradesPercentage = (
-                winningSellTrades / results.cntSells
-            )
+            results.winningSellingTradesPercentage = (winningSellTrades /
+                                                      results.cntSells)
         else:
             results.winningSellingTradesPercentage = 0
         return results

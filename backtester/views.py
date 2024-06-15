@@ -1,19 +1,20 @@
 import json
+
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import (CreateView, DeleteView, FormView,
+                                       UpdateView)
 
 from backtester.tasks import expensive_task
 from utils.constants import IndicatorNames, Timeframe
 from utils.database.strat_runner_results_to_db import update_results
 from utils.strategy.indicators.indicatorFactory import IndicatorFactory
-from utils.strategy.strategy import StrategyDetails
 from utils.strategy.signal import Signal
+from utils.strategy.strategy import StrategyDetails
 from utils.strategyRunner.resultsInterpretor import Results
 
 from .forms import *
 from .models import *
-from django.views.generic.edit import FormView
 
 
 class StrategyListView(generic.ListView):
@@ -33,8 +34,7 @@ class StrategyDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         try:
             context["strategyDetails"] = StrategyDetails.fromJSON(
-                self.object.strategyDetails
-            )
+                self.object.strategyDetails)
             print(context["strategyDetails"])
         except Exception as e:
             print("Error strategyDetails: " + str(e))
@@ -45,21 +45,19 @@ class StrategyDetailView(generic.DetailView):
             # Convert timeseries to isoformat
             for i in range(len(context["results"].timeSeries)):
                 context["results"].timeSeries[i] = (
-                    context["results"].timeSeries[i].isoformat()
-                )
+                    context["results"].timeSeries[i].isoformat())
 
             context["results"].averageBuySize = round(
-                context["results"].averageBuySize, 2
-            )
+                context["results"].averageBuySize, 2)
             context["results"].averageSellSize = round(
-                context["results"].averageSellSize, 2
-            )
+                context["results"].averageSellSize, 2)
 
-            context["results"].totalBuySize = round(context["results"].totalBuySize, 2)
+            context["results"].totalBuySize = round(
+                context["results"].totalBuySize, 2)
             context["results"].totalSellSize = round(
-                context["results"].totalSellSize, 2
-            )
-            context["results"].totalFees = round(context["results"].totalFees, 2)
+                context["results"].totalSellSize, 2)
+            context["results"].totalFees = round(context["results"].totalFees,
+                                                 2)
 
             context["results"].winningSellingTradesPercentage = Amount(
                 None,
@@ -103,7 +101,8 @@ class StrategyCreateView(CreateView):
 
                     indicator = IndicatorFactory.createIndicator(
                         form.cleaned_data["instrument"].symbol,
-                        IndicatorNames[indicator_form.cleaned_data["indicator_name"]],
+                        IndicatorNames[
+                            indicator_form.cleaned_data["indicator_name"]],
                         Timeframe[indicator_form.cleaned_data["timeframe"]],
                         length=indicator_form.cleaned_data["length"],
                         source=Sources[indicator_form.cleaned_data["source"]],
@@ -143,7 +142,8 @@ class StrategyCreateView(CreateView):
                 form.cleaned_data["start_datetime"].replace(tzinfo=None),
                 form.cleaned_data["end_datetime"].replace(tzinfo=None),
             )
-            form.instance.strategyDetails = StrategyDetails.toJSON(strategyDetails)
+            form.instance.strategyDetails = StrategyDetails.toJSON(
+                strategyDetails)
 
         except Exception as e:
             # TODO: Add logging and replace prints.

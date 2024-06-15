@@ -1,5 +1,7 @@
 from typing import List
+
 import jsonpickle
+
 from backtester.models import Strategy
 from utils.strategy.strategy import StrategyDetails
 from utils.strategyRunner.resultsInterpretor import Results, ResultsInterpretor
@@ -14,8 +16,7 @@ def update_results(strategy_id):
     transactions: List[Transaction] = StrategyRunner.run(strat)
 
     results: Results = ResultsInterpretor.interpretResults(
-        transactions, strat.capitalAllocation, strat.startDatetime
-    )
+        transactions, strat.capitalAllocation, strat.startDatetime)
     # print("-----------------------")
     # print(results)
     strategy.results = Results.toJSON(results)

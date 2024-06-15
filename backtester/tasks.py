@@ -1,6 +1,8 @@
 from time import sleep
-from backtester.models import Strategy
+
 from celery import shared_task
+
+from backtester.models import Strategy
 from utils.database.strat_runner_results_to_db import update_results
 
 

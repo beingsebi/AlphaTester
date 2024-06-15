@@ -1,19 +1,17 @@
+import traceback
+from datetime import date, datetime, time, timedelta
 from typing import List
 
-from datetime import date, datetime, time, timedelta
 from utils.constants import Timeframe, TimeframeToMinutes, TypeOfSignal
 from utils.database.get_instrument_data_scripts import (
-    get_data,
-    get_last_available_date,
-    get_first_available_date,
-)
+    get_data, get_first_available_date, get_last_available_date)
 from utils.strategy.amount import Amount
 from utils.strategy.signal import Signal
 from utils.strategy.strategy import StrategyDetails
-import traceback
 
 
 class Transaction:
+
     def __init__(
         self,
         date: date,
@@ -38,6 +36,7 @@ class Transaction:
 
 
 class TradingState:
+
     def __init__(self, free_funds: float, shares: float, medium_price: float):
         self.free_funds = free_funds
         self.shares = shares
@@ -45,6 +44,7 @@ class TradingState:
 
 
 class StrategyRunner:
+
     @staticmethod
     def run(strategy: StrategyDetails) -> List[Transaction]:
         transactions = []
@@ -78,8 +78,7 @@ class StrategyRunner:
             traceback.print_exc()
 
         data = StrategyRunner.squashTimestamps(
-            data, strategy.timeFrame
-        )  # take into account the timeframe
+            data, strategy.timeFrame)  # take into account the timeframe
 
         tradingState = TradingState(strategy.capitalAllocation, 0.0, 0.0)
 
@@ -90,59 +89,51 @@ class StrategyRunner:
                 if row[5] > tradingState.medium_price:
                     if strategy.takeProfit is not None:
                         if strategy.takeProfit.fixed is not None:
-                            if (
-                                row[5]
-                                >= tradingState.medium_price + strategy.takeProfit.fixed
-                            ):
+                            if (row[5] >= tradingState.medium_price +
+                                    strategy.takeProfit.fixed):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, tradingState.shares
-                                )
+                                    row, transactions, strategy,
+                                    tradingState.shares)
                                 tradingState.shares = 0
                         elif strategy.takeProfit.percentage is not None:
                             if row[5] >= tradingState.medium_price * (
-                                1 + strategy.takeProfit.percentage
-                            ):
+                                    1 + strategy.takeProfit.percentage):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, tradingState.shares
-                                )
+                                    row, transactions, strategy,
+                                    tradingState.shares)
                                 tradingState.shares = 0
                 elif row[5] < tradingState.medium_price:
                     if strategy.stopLoss is not None:
                         if strategy.stopLoss.fixed is not None:
-                            if (
-                                row[5]
-                                <= tradingState.medium_price - strategy.stopLoss.fixed
-                            ):
+                            if (row[5] <= tradingState.medium_price -
+                                    strategy.stopLoss.fixed):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, tradingState.shares
-                                )
+                                    row, transactions, strategy,
+                                    tradingState.shares)
                                 tradingState.shares = 0
                         elif strategy.stopLoss.percentage is not None:
                             if row[5] <= tradingState.medium_price * (
-                                1 - strategy.stopLoss.percentage
-                            ):
+                                    1 - strategy.stopLoss.percentage):
                                 StrategyRunner.liquidate_all(
-                                    row, transactions, strategy, tradingState.shares
-                                )
+                                    row, transactions, strategy,
+                                    tradingState.shares)
                                 tradingState.shares = 0
 
             StrategyRunner.run_once(row, strategy, transactions, tradingState)
             if (  # for TP and SL
-                len(transactions) > old_len
-                and transactions[-1].type == TypeOfSignal.BUY
-            ):
+                    len(transactions) > old_len and
+                    transactions[-1].type == TypeOfSignal.BUY):
                 if old_shares + transactions[-1].quantity == 0:
                     tradingState.medium_price = 0
                 else:
                     tradingState.medium_price = (
-                        old_shares * tradingState.medium_price
-                        + transactions[-1].price * transactions[-1].quantity
-                    ) / (old_shares + transactions[-1].quantity)
+                        old_shares * tradingState.medium_price +
+                        transactions[-1].price * transactions[-1].quantity) / (
+                            old_shares + transactions[-1].quantity)
 
         if tradingState.shares > 0:
             StrategyRunner.liquidate_all(  # liquidate all at the end | WARNING: might want to change this
-                data[-1], transactions, strategy, tradingState.shares
-            )
+                data[-1], transactions, strategy, tradingState.shares)
         return transactions
 
     @staticmethod
@@ -151,8 +142,7 @@ class StrategyRunner:
         index = 0
         bucket_time_start = datetime.combine(data[0][0], data[0][1])
         bucket_time_end = bucket_time_start + timedelta(
-            minutes=TimeframeToMinutes[timeframe]
-        )
+            minutes=TimeframeToMinutes[timeframe])
         while index < len(data):
             date = data[index][0]
             time = data[index][1]
@@ -164,7 +154,8 @@ class StrategyRunner:
             index += 1
             complete_candle = False
             while index < len(data):
-                if datetime.combine(data[index][0], data[index][1]) >= bucket_time_end:
+                if datetime.combine(data[index][0],
+                                    data[index][1]) >= bucket_time_end:
                     complete_candle = True
                     break
                 high = max(high, data[index][3])
@@ -173,14 +164,13 @@ class StrategyRunner:
                 spread = max(spread, data[index][6])
                 index += 1
             if (
-                not complete_candle
+                    not complete_candle
             ):  # excluding last candle if it is not complete. might want to include it in the future
                 break
             new_data.append((date, time, open, high, low, close, spread))
             bucket_time_start = bucket_time_end
             bucket_time_end = bucket_time_start + timedelta(
-                minutes=TimeframeToMinutes[timeframe]
-            )
+                minutes=TimeframeToMinutes[timeframe])
 
         return new_data
 
@@ -235,11 +225,9 @@ class StrategyRunner:
         if signalType == TypeOfSignal.BUY:
             if free_funds <= 0:
                 return False
-            if (
-                strategy.exchangeBuyFee is not None
-                and strategy.exchangeBuyFee.fixed is not None
-                and strategy.exchangeBuyFee.fixed > free_funds
-            ):
+            if (strategy.exchangeBuyFee is not None and
+                    strategy.exchangeBuyFee.fixed is not None and
+                    strategy.exchangeBuyFee.fixed > free_funds):
                 return False
         else:
             if shares == 0:
@@ -266,12 +254,12 @@ class StrategyRunner:
             for signal in term:
                 if signal.operator == ">=":
                     termCondition = termCondition or (
-                        signal.indicator.calculateValue(date_time) >= signal.threshold
-                    )
+                        signal.indicator.calculateValue(date_time)
+                        >= signal.threshold)
                 elif signal.operator == "<=":
                     termCondition = termCondition or (
-                        signal.indicator.calculateValue(date_time) <= signal.threshold
-                    )
+                        signal.indicator.calculateValue(date_time)
+                        <= signal.threshold)
                 if termCondition == True:
                     break
             condition = condition and termCondition
@@ -279,9 +267,8 @@ class StrategyRunner:
                 break
 
         if condition == True:
-            StrategyRunner.place_order(
-                signalType, strategy, transactions, tradingState, row
-            )
+            StrategyRunner.place_order(signalType, strategy, transactions,
+                                       tradingState, row)
 
     @staticmethod
     def run_once_DNF(
@@ -304,12 +291,12 @@ class StrategyRunner:
             for signal in term:
                 if signal.operator == ">=":
                     termCondition = termCondition and (
-                        signal.indicator.calculateValue(date_time) >= signal.threshold
-                    )
+                        signal.indicator.calculateValue(date_time)
+                        >= signal.threshold)
                 elif signal.operator == "<=":
                     termCondition = termCondition and (
-                        signal.indicator.calculateValue(date_time) <= signal.threshold
-                    )
+                        signal.indicator.calculateValue(date_time)
+                        <= signal.threshold)
                 if termCondition == False:
                     break
             condition = condition or termCondition
@@ -317,9 +304,8 @@ class StrategyRunner:
                 break
 
         if condition == True:
-            StrategyRunner.place_order(
-                signalType, strategy, transactions, free_funds, shares, row
-            )
+            StrategyRunner.place_order(signalType, strategy, transactions,
+                                       free_funds, shares, row)
 
     @staticmethod
     def place_order(
@@ -329,17 +315,15 @@ class StrategyRunner:
         tradingState: TradingState,
         row: tuple,
     ):
-        if StrategyRunner.canPlaceOrder(
-            signalType, strategy, tradingState.free_funds, tradingState.shares
-        ):
+        if StrategyRunner.canPlaceOrder(signalType, strategy,
+                                        tradingState.free_funds,
+                                        tradingState.shares):
             if signalType == TypeOfSignal.BUY:
                 used_money, fee = StrategyRunner.getUsedMoneyAndFee_BUY(
-                    strategy, tradingState.free_funds
-                )
+                    strategy, tradingState.free_funds)
             else:
                 used_money, fee = StrategyRunner.getUsedMoneyAndFee_SELL(
-                    strategy, tradingState.shares, row[5]
-                )
+                    strategy, tradingState.shares, row[5])
             if signalType == TypeOfSignal.BUY:
                 tradingState.shares += used_money / row[5]
                 tradingState.free_funds -= used_money + fee
@@ -347,10 +331,8 @@ class StrategyRunner:
                 tradingState.shares -= used_money / row[5]
                 tradingState.free_funds += used_money - fee
             transactions.append(
-                Transaction(
-                    row[0], row[1], row[5], used_money / row[5], signalType, fee
-                )
-            )
+                Transaction(row[0], row[1], row[5], used_money / row[5],
+                            signalType, fee))
 
     @staticmethod
     def getUsedMoneyAndFee_BUY(strategy: StrategyDetails, free_funds: float):
@@ -364,7 +346,8 @@ class StrategyRunner:
                 used_money -= strategy.exchangeBuyFee.fixed
                 fee = strategy.exchangeBuyFee.fixed
             else:
-                used_money = used_money / (1 + strategy.exchangeBuyFee.percentage)
+                used_money = used_money / (1 +
+                                           strategy.exchangeBuyFee.percentage)
                 fee = used_money * strategy.exchangeBuyFee.percentage
         else:
             fee = 0.0
@@ -372,7 +355,8 @@ class StrategyRunner:
         return used_money, fee
 
     @staticmethod
-    def getUsedMoneyAndFee_SELL(strategy: StrategyDetails, shares: float, price: float):
+    def getUsedMoneyAndFee_SELL(strategy: StrategyDetails, shares: float,
+                                price: float):
         curr_invested_value = shares * price
 
         if strategy.sellSize.fixed is not None:
@@ -405,8 +389,7 @@ class StrategyRunner:
             fee = shares * row[5] * strategy.exchangeSellFee.percentage
 
         transactions.append(
-            Transaction(row[0], row[1], row[5], shares, TypeOfSignal.SELL, fee)
-        )
+            Transaction(row[0], row[1], row[5], shares, TypeOfSignal.SELL, fee))
 
     @staticmethod
     def fixStartDatetime(strategy: StrategyDetails):
@@ -417,13 +400,13 @@ class StrategyRunner:
         maxim = 0
         for i in strategy.indicators:
             if hasattr(i, "length") and i.timeframe is not None:
-                maxim = max(maxim, (i.length + 1) * TimeframeToMinutes[i.timeframe])
+                maxim = max(maxim,
+                            (i.length + 1) * TimeframeToMinutes[i.timeframe])
         firstAvailableDate += timedelta(minutes=maxim)
         strategy.startDatetime = max(strategy.startDatetime, firstAvailableDate)
         while True:
-            if StrategyRunner.isCandleDateValid(
-                strategy.startDatetime, strategy.timeFrame
-            ):
+            if StrategyRunner.isCandleDateValid(strategy.startDatetime,
+                                                strategy.timeFrame):
                 break
             strategy.startDatetime += timedelta(minutes=1)
 
@@ -435,9 +418,8 @@ class StrategyRunner:
             raise Exception("No data found")
         strategy.endDatetime = min(strategy.endDatetime, lastAvailableDate)
         while True:
-            if StrategyRunner.isCandleDateValid(
-                strategy.endDatetime, strategy.timeFrame
-            ):
+            if StrategyRunner.isCandleDateValid(strategy.endDatetime,
+                                                strategy.timeFrame):
                 break
             strategy.endDatetime -= timedelta(minutes=1)
 
@@ -462,15 +444,15 @@ class StrategyRunner:
             return start_minute == 0
 
         if timeFrame == Timeframe.H4:
-            return (
-                start_minute == 0 and start_hour % 4 == 2
-            )  # might want to change here the modulo
+            return (start_minute == 0 and
+                    start_hour % 4 == 2)  # might want to change here the modulo
 
         if timeFrame == Timeframe.D1:
             return start_minute == 0 and start_hour == 0
 
         if timeFrame == Timeframe.W1:
-            return start_minute == 0 and start_hour == 0 and dateTime.weekday() == 0
+            return start_minute == 0 and start_hour == 0 and dateTime.weekday(
+            ) == 0
 
         if timeFrame == Timeframe.MN1:
             return start_minute == 0 and start_hour == 0 and dateTime.day == 1
