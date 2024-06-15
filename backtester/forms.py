@@ -25,12 +25,12 @@ class PercentageFloatField(forms.FloatField):
                 percentage = float(value[:-1])
                 if not 0 <= percentage <= 100:
                     raise ValueError("Percentage must be between 0 and 100")
-                return Amount(None, percentage)
+                return Amount(None, percentage / 100)
             except ValueError:
                 raise forms.ValidationError(
                     "Invalid percentage format. Enter a number between 0 and 100 or a value without a percentage sign."
                 )
-        return Amount(value)
+        return Amount(float(value))
 
 
 # class IndicatorForm(forms.Form):
