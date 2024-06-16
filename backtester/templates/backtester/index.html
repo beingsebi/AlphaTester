@@ -4,8 +4,14 @@
   <div style="width: 300px;">
     
     <br>
-    <br>
     <div>
+
+      <a href="{% url 'backtester:instruments' %}" class="btn btn-info w-100">See available instruments</a>
+      <br>
+      <br>
+      <a href="{% url 'backtester:strategy-add' %}" class="btn btn-primary w-100">Add new strategy</a>
+      <br>
+      <br>
       {% if latest_strategy_list %}
       <ul class="list-group">
         {% for strategy in latest_strategy_list %}
@@ -22,12 +28,6 @@
       <div class="alert alert-info" role="alert">No strategies are available.</div>
       {% endif %}
     </div>
-    <br>
-
-    <a href="{% url 'backtester:strategy-add' %}" class="btn btn-primary w-100">Add new strategy</a>
-    <br>
-    <br>
-
-    <a href="{% url 'backtester:instruments' %}" class="btn btn-info w-100">See available instruments</a>
+    
   </div>
 {% endblock %}

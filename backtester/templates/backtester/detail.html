@@ -9,7 +9,7 @@
     <ul class="list-group list-group-flush">
       <li class="list-group-item">Description: {{ strategy.description }}</li>
       <li class="list-group-item">Created at: {{ strategy.created_at }}</li>
-      <li class="list-group-item">By user: {{ strategy.user.username }}</li>
+      <li class="list-group-item">Created by: {{ strategy.user.username }}</li>
       <li class="list-group-item">Instrument: {{ strategyDetails.instrumentName }}</li>
       <li class="list-group-item">Capital Allocation: {{ strategyDetails.capitalAllocation }}</li>
       <li class="list-group-item">Time Frame: {{ strategyDetails.timeFrame }}</li>
@@ -38,25 +38,26 @@
         <h2>Results</h2>
       </div>
       <ul class="list-group list-group-flush">
+        <li class="list-group-item">Profit: {{ results.profit }}</li>
         <li class="list-group-item">Total Fees: {{ results.totalFees }}</li>
-        <li class="list-group-item">Count of Trades: {{ results.cntTrades }}</li>
+        <li class="list-group-item">Number of Trades: {{ results.cntTrades }}</li>
         <li class="list-group-item">Total Buy Size: {{ results.totalBuySize }}</li>
         <li class="list-group-item">Total Sell Size: {{ results.totalSellSize }}</li>
-        <li class="list-group-item">Count of Buys: {{ results.cntBuys }}</li>
-        <li class="list-group-item">Count of Sells: {{ results.cntSells }}</li>
+        <li class="list-group-item">Number of Buys: {{ results.cntBuys }}</li>
+        <li class="list-group-item">Number of Sells: {{ results.cntSells }}</li>
         <li class="list-group-item">Average Buy Size: {{ results.averageBuySize }}</li>
         <li class="list-group-item">Average Sell Size: {{ results.averageSellSize }}</li>
         <li class="list-group-item">Winning Selling Trades Percentage: {{ results.winningSellingTradesPercentage }}</li>
       </ul>
       <div class="card-body">
-        <canvas id="chart_freeFundsOverTime"></canvas>
+        <canvas id="chart_balanceOverTime"></canvas>
       </div>
       <div class="card-body">
-        <canvas id="chart_balanceOverTime"></canvas>
+        <canvas id="chart_freeFundsOverTime"></canvas>
       </div>
     {% else %}
       <div class="card-footer">
-        <p>Results are still processing...</p>
+        Results are still processing... <button class="btn btn-primary" onClick="window.location.reload();">Refresh</button>
       </div>
     {% endif %}
     {% if request.user == strategy.user %}
