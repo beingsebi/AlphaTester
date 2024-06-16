@@ -68,7 +68,8 @@ class StrategyDetailView(generic.DetailView):
             )
 
             context["results"].profit = round(context["results"].profit, 2)
-            logger.debug(context["results"])
+
+            print(context["results"])
         except Exception as e:
             logger.debug("Error results: " + str(e))
         return context
