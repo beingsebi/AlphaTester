@@ -1,4 +1,4 @@
-class Amount:
+class Amount:  # either fixed or percentage
 
     def __init__(self,
                  fixed: float | None,

@@ -15,15 +15,13 @@ class StrategyDetails:
 
     def __init__(
         self,
-        instrumentName:
-        str,  # has to be the same as the one in the database TODO: (nice to have) dynamic enum or something similar
+        instrumentName: str,  # has to be the same as the one in the database 
+        # | TODO: (nice to have) dynamic enum or something similar
         capitalAllocation:
-        float,  # the currency in which the instrument is traded
+        float,  # using the currency in which the instrument is traded
         timeFrame: Timeframe,
-        buySize:
-        Amount,  # TODO: add flag if this means money or share for both fixed and percentage. now it means money (percentage of free funds)
-        sellSize:
-        Amount,  # TODO: add flag if this means money or share for fixed. now it means money (percentage of current value of invested funds)
+        buySize: Amount,  # this is with respect to money, not to stocks
+        sellSize: Amount,  # this is with respect to money, not to stocks
         takeProfit: Amount | None,
         stopLoss: Amount | None,
         indicators: List[BaseIndicator],
@@ -36,7 +34,6 @@ class StrategyDetails:
         startDatetime: datetime | None = None,
         endDatetime: datetime | None = None,
     ) -> None:
-        # TODO: (nice to have) set tick size for the instrument
         self.instrumentName = instrumentName
         # has to be the same as the one in the database
 

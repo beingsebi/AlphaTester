@@ -5,14 +5,15 @@ from utils.strategy.indicators.baseIndicator import BaseIndicator
 class Signal:
 
     def __init__(
-        self,
-        indicator: BaseIndicator,
-        threshold: float,
-        operator: TypeOfOpOperatorChoices,
+            self,
+            indicator: BaseIndicator,  # indicator that is used
+            threshold: float,  # threshold for the indicator
+            operator:
+        TypeOfOpOperatorChoices,  # indicator.calculatevalue() [operator] threshold
     ) -> None:
         self.indicator = indicator
         self.threshold = threshold
-        # threshold might become Amount type if necessary
+        # TODO? threshold might become Amount type if necessary
         self.operator = operator  # "<=" or ">="
 
     def __str__(self) -> str:

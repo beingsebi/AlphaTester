@@ -53,15 +53,6 @@ class SMA(baseIndicator.BaseIndicator
             return None
         data = StrategyRunner.squashTimestamps(data, self.timeframe)
         index = SourcesToIndex[self.source]
-        # print("---")
-        # for i in data:
-        #     print(i)
-        # print("---")
-        # print(len(data))
-        # current candle is not included in the data
-        # FIX TODO WARNING incomplete candles or maybe even empty??
-        # if len(data) != self.length:
-        #     return None  # not enough data
         avg = sum([x[index] for x in data]) / len(data)
         return avg
 
