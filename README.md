@@ -1,4 +1,4 @@
-![image](https://github.com/beingsebi/AlphaTester/assets/40637022/9ed37302-4fd0-4335-96c9-559d3c3d9b20)# AlphaTester
+# AlphaTester
 Trading strategies backtesting platform 
 
 Web platform that allows users to create, test, and manage automated trading strategies. Users can define their strategies based on various technical indicators and risk management parameters, while simulating performance and exchange fees for multiple financial instruments. 
@@ -7,3 +7,25 @@ Web platform that allows users to create, test, and manage automated trading str
 
 # MOTTO: Any sufficiently advanced technology is indistinguishable from magic.
 ## - Arthur C. Clarke
+
+-----------------------------------------------------------------------------------
+### Diagrams
+![ERD2](https://github.com/beingsebi/AlphaTester/assets/40637022/ffc01d5e-1b9e-471f-8fe8-67728e7ec57e)
+![mermaid-diagram-2024-06-16-012110](https://github.com/beingsebi/AlphaTester/assets/40637022/2d26a0a8-6ad4-4b2b-ab5a-3378b63a9267)
+
+### AI help
+We used chatgpt and github copilot during the development. Here are some of the conversations we had with chatgpt:
+* https://chatgpt.com/share/d54a1459-9d93-4db1-9dbd-57f72ac74c3e
+* https://chatgpt.com/share/99319408-368c-4471-a8d7-eebc704a1e79
+* https://chatgpt.com/share/2593d2de-a6a5-409d-99ec-0a89baafeceb
+* https://chatgpt.com/share/59b71d70-1078-4960-8bf7-0d669d7101f7
+
+### Design Patterns
+We've used the factory design pattern to create [instances of indicators](https://github.com/beingsebi/AlphaTester/blob/master/utils/strategy/indicators/indicatorFactory.py).
+
+### Source control
+Throughout the development process we've used github. Here are some noticeable [pull requests](https://github.com/beingsebi/AlphaTester/pulls?q=is%3Apr+is%3Aclosed) we've made:
+* https://github.com/beingsebi/AlphaTester/pull/26
+* https://github.com/beingsebi/AlphaTester/pull/34
+* https://github.com/beingsebi/AlphaTester/pull/31
+* https://github.com/beingsebi/AlphaTester/pull/22
