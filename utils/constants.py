@@ -30,6 +30,9 @@ class Timeframe(Enum):
     W1 = "1w"
     MN1 = "1M"
 
+    def __str__(self):
+        return self.value
+
 
 TimeframeToMinutes = {
     Timeframe.M1: 1,
@@ -50,6 +53,9 @@ class Sources(Enum):
     HIGH = "HIGH"
     LOW = "LOW"
 
+    def __str__(self):
+        return self.value
+
 
 SourcesToIndex = {
     Sources.OPEN: 2,
@@ -64,6 +70,9 @@ class IndicatorNames(Enum):
     EMA = "EMA"
     RSI = "RSI"
     MACD = "MACD"
+
+    def __str__(self):
+        return self.value
 
 
 class TypeOfSignal(Enum):
@@ -109,8 +118,4 @@ TIMEFRAME_CHOICES = [
     ("D1", "D1"),
     ("W1", "W1"),
     ("MN1", "MN1"),
-]
-
-INSTRUMENTS = [
-    ("ZXAUUSD", "ZXAUUSD"),
 ]

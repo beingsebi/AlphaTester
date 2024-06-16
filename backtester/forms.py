@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.forms import ModelForm, formset_factory
 
-from utils.constants import (INDICATORS_CHOICES, INSTRUMENTS, SIGNALS_CHOICES,
+from utils.constants import (INDICATORS_CHOICES, SIGNALS_CHOICES,
                              SOURCES_CHOICES, TIMEFRAME_CHOICES,
                              TYPE_OF_OPERATOR_CHOICES, TYPE_OF_SIGNAL_CHOICES,
                              Sources)
