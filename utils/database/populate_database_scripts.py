@@ -2,6 +2,7 @@
 Module for connecting to PostgreSQL server and manipulating the database.
 """
 
+import logging
 import os
 import sys
 from typing import List
@@ -11,6 +12,8 @@ import psycopg2
 import sqlalchemy
 
 from utils.constants import DbConstants
+
+logger = logging.getLogger(__name__)
 
 
 def get_csv_files_from_directory(directory_path: str) -> List[str]:
@@ -45,10 +48,10 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
             names=["date", "time", "open", "high", "low", "close", "spread"],
         )
     except FileNotFoundError as e:
-        print(f"Error reading CSV file: {e}")
+        logger.debug(f"Error reading CSV file: {e}")
         return
     except pd.errors.EmptyDataError as e:
-        print(f"Error reading CSV file: {e}")
+        logger.debug(f"Error reading CSV file: {e}")
         return
 
     # if table name is not provided, use the name of the CSV file
@@ -66,7 +69,9 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
                 password=DbConstants.DB_PARAMS["password"],
                 port=DbConstants.DB_PARAMS["port"],
         ) as conn:
-            print("Connected to the PostgreSQL server.", table_name, sep="\n")
+            logger.debug("Connected to the PostgreSQL server.",
+                         table_name,
+                         sep="\n")
 
             create_table_query = f"""
             CREATE TABLE IF NOT EXISTS "{table_name.upper()}" (
@@ -115,10 +120,10 @@ def insert_data_into_table(path_to_csv: str, table_name: str | None = None):
             ON CONFLICT ("date", "time") DO NOTHING;
             """
             cur.execute(query)
-            print("done")
+            logger.debug("done")
 
     except psycopg2.DatabaseError as error:
-        print(error)
+        logger.debug(error)
 
 
 # insert_data_into_table("/home/sebi/Desktop/test_csvs/XAUUSD_2024_02.csv")

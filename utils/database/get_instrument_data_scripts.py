@@ -1,8 +1,11 @@
+import logging
 from datetime import datetime
 
 import psycopg2
 
 from utils.constants import DbConstants
+
+logger = logging.getLogger(__name__)
 
 
 def get_data(
@@ -29,7 +32,7 @@ def get_data(
             data = cur.fetchall()
             return data
     except Exception as e:
-        print("Error: " + str(e))
+        logger.debug("Error: " + str(e))
 
 
 def get_last_available_date(instrument: str):
@@ -49,7 +52,7 @@ def get_last_available_date(instrument: str):
                 return None
             return datetime.combine(data[0][0], data[0][1])
     except Exception as e:
-        print("Error: " + str(e))
+        logger.debug("Error: " + str(e))
 
 
 def get_first_available_date(instrument: str):
@@ -69,4 +72,4 @@ def get_first_available_date(instrument: str):
                 return None
             return datetime.combine(data[0][0], data[0][1])
     except Exception as e:
-        print("Error: " + str(e))
+        logger.debug("Error: " + str(e))

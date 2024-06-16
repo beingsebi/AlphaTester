@@ -1,3 +1,4 @@
+import logging
 import traceback
 from datetime import date, datetime, time, timedelta
 from typing import List
@@ -8,6 +9,8 @@ from utils.database.get_instrument_data_scripts import (
 from utils.strategy.amount import Amount
 from utils.strategy.signal import Signal
 from utils.strategy.strategy import StrategyDetails
+
+logger = logging.getLogger(__name__)
 
 
 class Transaction:
@@ -56,10 +59,10 @@ class StrategyRunner:
         StrategyRunner.fixStartDatetime(strategy)
         StrategyRunner.fixEndDatetime(strategy)
 
-        print("-----")
-        print(strategy.startDatetime)
-        print(strategy.endDatetime)
-        print("-----")
+        logger.debug("-----")
+        logger.debug(strategy.startDatetime)
+        logger.debug(strategy.endDatetime)
+        logger.debug("-----")
 
         if strategy.startDatetime >= strategy.endDatetime:
             raise Exception(
@@ -75,7 +78,8 @@ class StrategyRunner:
             if not data:
                 raise Exception("No data found")
         except Exception as _:
-            traceback.print_exc()
+            tb = traceback.format_exc()
+            logger.debug("An error occurred: %s", tb)
 
         data = StrategyRunner.squashTimestamps(
             data, strategy.timeFrame)  # take into account the timeframe
@@ -426,7 +430,7 @@ class StrategyRunner:
     @staticmethod
     def fixStartDatetime(strategy: StrategyDetails):
         firstAvailableDate = get_first_available_date(strategy.instrumentName)
-        print("ee " + str(firstAvailableDate))
+        logger.debug("ee " + str(firstAvailableDate))
         if firstAvailableDate is None:
             raise Exception("No data found")
         maxim = 0
