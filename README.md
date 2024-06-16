@@ -21,7 +21,11 @@ We used chatgpt and github copilot during the development. Here are some of the 
 * https://chatgpt.com/share/59b71d70-1078-4960-8bf7-0d669d7101f7
 
 ### Design Patterns
-We've used the factory design pattern to create [instances of indicators](https://github.com/beingsebi/AlphaTester/blob/master/utils/strategy/indicators/indicatorFactory.py).
+In our project, we have utilized:
+- The Factory design pattern for creating [instances of indicators](https://github.com/beingsebi/AlphaTester/blob/master/utils/strategy/indicators/indicatorFactory.py).
+- Django's `formset_factory` to generate forms for indicators, as seen in this [code snippet](https://github.com/beingsebi/AlphaTester/blob/master/backtester/forms.py#L50).
+- The Model-View-Controller (MVC) architecture, albeit with Django's unique interpretation. In Django's MVC, the Controller is referred to as the View, and the View is known as the Template. The Model remains the same as in traditional MVC. This design pattern aids in separating responsibilities, thereby enhancing the manageability and comprehensibility of the code.
+
 
 ### Source control
 Throughout the development process we've used github. Here are some noticeable [pull requests](https://github.com/beingsebi/AlphaTester/pulls?q=is%3Apr+is%3Aclosed) we've made:
