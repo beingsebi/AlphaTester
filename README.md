@@ -32,3 +32,8 @@ We used chatgpt and github copilot during the development. Here are some of the 
 * https://chatgpt.com/share/99319408-368c-4471-a8d7-eebc704a1e79
 * https://chatgpt.com/share/2593d2de-a6a5-409d-99ec-0a89baafeceb
 * https://chatgpt.com/share/59b71d70-1078-4960-8bf7-0d669d7101f7
+
+
+### Demo
+
+* [youtube link](https://youtu.be/r74zDLAVwQs)
