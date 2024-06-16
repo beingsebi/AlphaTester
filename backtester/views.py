@@ -26,7 +26,7 @@ class StrategyListView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published strategies."""
-        return Strategy.objects.order_by("-created_at")[:5]
+        return Strategy.objects.order_by("-created_at")
 
 
 class StrategyDetailView(generic.DetailView):
@@ -66,6 +66,8 @@ class StrategyDetailView(generic.DetailView):
                 None,
                 round(context["results"].winningSellingTradesPercentage, 2),
             )
+
+            context["results"].profit = round(context["results"].profit, 2)
             logger.debug(context["results"])
         except Exception as e:
             logger.debug("Error results: " + str(e))

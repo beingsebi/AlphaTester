@@ -27,6 +27,7 @@ class Results:
         averageBuySize: float = 0.0,
         averageSellSize: float = 0.0,
         winningSellingTradesPercentage: float = 0.0,
+        profit: float = 0.0,
     ):
         self.balanceOverTime = balanceOverTime
         self.freeFundsOverTime = freeFundsOverTime
@@ -40,9 +41,8 @@ class Results:
         self.cntSells = cntSells
         self.averageBuySize = averageBuySize  # in money
         self.averageSellSize = averageSellSize  # in money
-        self.winningSellingTradesPercentage = (
-            winningSellingTradesPercentage  # compare selling price to average buy price
-        )
+        self.winningSellingTradesPercentage = winningSellingTradesPercentage  # compare selling price to average buy price
+        self.profit = profit  # in money
 
     def __repr__(self):
         return (
@@ -58,8 +58,8 @@ class Results:
             f"cntSells={self.cntSells}, \n"
             f"averageBuySize={self.averageBuySize}, \n"
             f"averageSellSize={self.averageSellSize}, \n"
-            f"winningSellingTradesPercentage={self.winningSellingTradesPercentage})"
-        )
+            f"winningSellingTradesPercentage={self.winningSellingTradesPercentage}) \n"
+            f"profit={self.profit})")
 
     @staticmethod
     def toJSON(self):
@@ -132,4 +132,10 @@ class ResultsInterpretor:
                                                       results.cntSells)
         else:
             results.winningSellingTradesPercentage = 0
+
+        if len(results.balanceOverTime) > 0:
+            results.profit = results.balanceOverTime[-1] - initialBalance
+        else:
+            results.profit = 0
+
         return results
