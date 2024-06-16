@@ -64,7 +64,6 @@ class StrategyDetailView(generic.DetailView):
                 round(context["results"].winningSellingTradesPercentage, 2),
             )
 
-
             print(context["results"])
         except Exception as e:
             print("Error results: " + str(e))
@@ -155,6 +154,7 @@ class StrategyCreateView(CreateView):
 
         response = super().form_valid(form)
         # Start the expensive task in the background
+        # update_results(self.object.pk)
         expensive_task.delay(self.object.pk)
         return response
 
@@ -196,4 +196,6 @@ class UpdateStrategy(UpdateView):
         response = super().form_valid(form)
         # Start the expensive task in the background
         expensive_task.delay(self.object.pk)
+        # update_results(self.object.pk)
+
         return response

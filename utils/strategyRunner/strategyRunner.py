@@ -94,6 +94,14 @@ class StrategyRunner:
                                 StrategyRunner.liquidate_all(
                                     row, transactions, strategy,
                                     tradingState.shares)
+                                tradingState.free_funds += tradingState.shares * row[
+                                    5]
+                                if strategy.exchangeSellFee is not None:
+                                    if strategy.exchangeSellFee.fixed is not None:
+                                        tradingState.free_funds -= strategy.exchangeSellFee.fixed
+                                    else:
+                                        tradingState.free_funds -= tradingState.shares * row[
+                                            5] * strategy.exchangeSellFee.percentage
                                 tradingState.shares = 0
                         elif strategy.takeProfit.percentage is not None:
                             if row[5] >= tradingState.medium_price * (
@@ -101,6 +109,14 @@ class StrategyRunner:
                                 StrategyRunner.liquidate_all(
                                     row, transactions, strategy,
                                     tradingState.shares)
+                                tradingState.free_funds += tradingState.shares * row[
+                                    5]
+                                if strategy.exchangeSellFee is not None:
+                                    if strategy.exchangeSellFee.fixed is not None:
+                                        tradingState.free_funds -= strategy.exchangeSellFee.fixed
+                                    else:
+                                        tradingState.free_funds -= tradingState.shares * row[
+                                            5] * strategy.exchangeSellFee.percentage
                                 tradingState.shares = 0
                 elif row[5] < tradingState.medium_price:
                     if strategy.stopLoss is not None:
@@ -110,6 +126,14 @@ class StrategyRunner:
                                 StrategyRunner.liquidate_all(
                                     row, transactions, strategy,
                                     tradingState.shares)
+                                tradingState.free_funds += (
+                                    tradingState.shares * row[5])
+                                if strategy.exchangeSellFee is not None:
+                                    if strategy.exchangeSellFee.fixed is not None:
+                                        tradingState.free_funds -= strategy.exchangeSellFee.fixed
+                                    else:
+                                        tradingState.free_funds -= tradingState.shares * row[
+                                            5] * strategy.exchangeSellFee.percentage
                                 tradingState.shares = 0
                         elif strategy.stopLoss.percentage is not None:
                             if row[5] <= tradingState.medium_price * (
@@ -117,6 +141,14 @@ class StrategyRunner:
                                 StrategyRunner.liquidate_all(
                                     row, transactions, strategy,
                                     tradingState.shares)
+                                tradingState.free_funds += tradingState.shares * row[
+                                    5]
+                                if strategy.exchangeSellFee is not None:
+                                    if strategy.exchangeSellFee.fixed is not None:
+                                        tradingState.free_funds -= strategy.exchangeSellFee.fixed
+                                    else:
+                                        tradingState.free_funds -= tradingState.shares * row[
+                                            5] * strategy.exchangeSellFee.percentage
                                 tradingState.shares = 0
 
             StrategyRunner.run_once(row, strategy, transactions, tradingState)
