@@ -1,4 +1,5 @@
 {% extends 'backtester/base.html' %}
+{% load static %}
 
 {% block content %}
   <div class="card">
@@ -32,10 +33,6 @@
       <li class="list-group-item">Start Date Time: {{ strategyDetails.startDatetime }}</li>
       <li class="list-group-item">End Date Time: {{ strategyDetails.endDatetime }}</li>
     </ul>
-    {% comment %}
-  </div>
-  <div class="card">
-    {% endcomment %}
     {% if strategy.results %}
       <div class="card-header">
         <h2>Results</h2>
@@ -73,53 +70,10 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+    // Load the data from the Django template to be used in the JavaScript code that generates the charts
     const dataTimeSeries = {{ results.timeSeries | safe }};
-    const len = dataTimeSeries.length;
-    let ctxFreeFundsOverTime = document.getElementById('chart_freeFundsOverTime').getContext('2d');
-    let dataFreeFundsOverTime = {{ results.freeFundsOverTime | safe }};
-    let chartFreeFundsOverTime = new Chart(ctxFreeFundsOverTime, {
-        type: 'line',
-        data: {
-            labels: dataTimeSeries,
-            datasets: [{
-                label: 'Free Funds Over Time',
-                data: dataFreeFundsOverTime
-            }]
-        },
-        options: {
-          scales: {
-              x: {
-                  ticks: {
-                    callback: function(val, index) {
-                      return index % Math.floor(len/6) === 0 ? this.getLabelForValue(val) : '';
-                    },
-                  }
-              }
-          }
-        }
-      });
-    let ctxBalanceOverTime = document.getElementById('chart_balanceOverTime').getContext('2d');
-    let dataBalanceOverTime = {{ results.balanceOverTime | safe }};
-    let chartBalanceOverTime = new Chart(ctxBalanceOverTime, {
-        type: 'line',
-        data: {
-            labels: dataTimeSeries,
-            datasets: [{
-                label: 'Balance Over Time',
-                data: dataBalanceOverTime
-            }]
-        },
-        options: {
-          scales: {
-              x: {
-                  ticks: {
-                    callback: function(val, index) {
-                      return index % Math.floor(len/6) === 0 ? this.getLabelForValue(val) : '';
-                    },
-                  }
-              }
-          }
-        }
-      });
+    const dataFreeFundsOverTime = {{ results.freeFundsOverTime | safe }};
+    const dataBalanceOverTime = {{ results.balanceOverTime | safe }};
   </script>
+  <script type="text/javascript" src="{% static 'backtester/detail.js' %}"></script>
 {% endblock %}
