@@ -1,5 +1,5 @@
 # AlphaTester
-Trading strategies backtesting platform 
+#### Trading strategies backtesting platform 
 
 Web platform that allows users to create, test, and manage automated trading strategies. Users can define their strategies based on various technical indicators and risk management parameters, while simulating performance and exchange fees for multiple financial instruments. 
 
@@ -25,7 +25,7 @@ We've used the factory design pattern to create [instances of indicators](https:
 
 ### Source control
 Throughout the development process we've used github. Here are some noticeable [pull requests](https://github.com/beingsebi/AlphaTester/pulls?q=is%3Apr+is%3Aclosed) we've made:
-* https://github.com/beingsebi/AlphaTester/pull/26
-* https://github.com/beingsebi/AlphaTester/pull/34
-* https://github.com/beingsebi/AlphaTester/pull/31
-* https://github.com/beingsebi/AlphaTester/pull/22
+* PR https://github.com/beingsebi/AlphaTester/pull/26 fixed a bug
+* PR https://github.com/beingsebi/AlphaTester/pull/34 refactored part of the code
+* PR https://github.com/beingsebi/AlphaTester/pull/22 implemented the strategy runner
+* PR https://github.com/beingsebi/AlphaTester/pull/31 added async functionality for the strategy runner
