@@ -192,6 +192,23 @@ class UpdateStrategy(UpdateView):
         if self.request.user != self.object.user:
             return super().form_invalid(form)
 
+        new_instrument = form.cleaned_data["instrument"].symbol
+        strategyDetails = StrategyDetails.fromJSON(self.object.strategyDetails)
+        strategyDetails.instrumentName = new_instrument
+
+        for indicator in strategyDetails.indicators:
+            indicator.instrumentName = new_instrument
+
+        for buySignal in strategyDetails.buySignals:
+            for signal in buySignal:
+                signal.indicator.instrumentName = new_instrument
+
+        for sellSignal in strategyDetails.sellSignals:
+            for signal in sellSignal:
+                signal.indicator.instrumentName = new_instrument
+
+        self.object.strategyDetails = StrategyDetails.toJSON(strategyDetails)
+
         self.object.results = None  # the following line save the object
         response = super().form_valid(form)
         # Start the expensive task in the background
