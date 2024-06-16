@@ -1,4 +1,4 @@
-name: alphatester2
+name: alphatester
 channels:
   - jiayi_anaconda
   - anaconda
