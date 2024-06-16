@@ -4,7 +4,7 @@ from django.views import generic
 from .models import Instrument
 from .views import *
 
-app_name = "backtester"  # pylint: disable=C0103
+app_name = "backtester"
 #  because it is needed by Django
 
 urlpatterns = [

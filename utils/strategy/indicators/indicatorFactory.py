@@ -4,7 +4,7 @@ from .ema import EMA
 from .sma import SMA
 
 
-class IndicatorFactory:  # pylint: disable=too-few-public-methods
+class IndicatorFactory:
 
     @staticmethod
     def createIndicator(

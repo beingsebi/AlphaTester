@@ -59,11 +59,11 @@ class Results:
         )
 
     @staticmethod
-    def toJSON(self):  # pylint: disable=W0211
+    def toJSON(self):
         return jsonpickle.encode(self)
 
     @staticmethod
-    def fromJSON(JSONstr: str):  # pylint: disable=C0103
+    def fromJSON(JSONstr: str):
         return jsonpickle.decode(JSONstr)
 
 

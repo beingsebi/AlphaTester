@@ -15,10 +15,10 @@ class StrategyDetails:
 
     def __init__(
         self,
-        instrumentName: str,  # has to be the same as the one in the database 
-        # | TODO: (nice to have) dynamic enum or something similar
-        capitalAllocation:
-        float,  # using the currency in which the instrument is traded
+        # has to be the same as the one in the database
+        instrumentName: str,
+        # using the currency in which the instrument is traded
+        capitalAllocation: float,
         timeFrame: Timeframe,
         buySize: Amount,  # this is with respect to money, not to stocks
         sellSize: Amount,  # this is with respect to money, not to stocks
@@ -34,66 +34,66 @@ class StrategyDetails:
         startDatetime: datetime | None = None,
         endDatetime: datetime | None = None,
     ) -> None:
-        self.instrumentName = instrumentName
         # has to be the same as the one in the database
+        self.instrumentName = instrumentName
 
-        self.capitalAllocation = capitalAllocation
         # total Amount of capital allocated to the strategy
+        self.capitalAllocation = capitalAllocation
 
-        self.timeFrame = timeFrame
         # timeFrame of the candles used in the strategy
+        self.timeFrame = timeFrame
 
-        self.buySize = buySize
         # Amount of one buy trade
+        self.buySize = buySize
 
-        self.sellSize = sellSize
         # Amount of one sell trade
+        self.sellSize = sellSize
 
-        # will keep the medium price of the shares bought and will compare with respect to it. not taking into account fees
+        # Will keep the medium price of the shares bought and will compare with respect to it. not taking into account fees.
+        # This is with respect to the ammount traded at one particular time. liquidates all positions
         self.takeProfit = takeProfit
-        # with respect to the ammount traded at one particular time. liquidates all positions
 
+        # with respect to the ammount traded at one particular time. liquidates all positions
         self.stopLoss = stopLoss
-        # with respect to the ammount traded at one particular time. liquidates all positions
 
-        self.indicators = copy.deepcopy(indicators)
         # instances of the indicators used in the strategy with their parameters
+        self.indicators = copy.deepcopy(indicators)
 
-        self.buySignalMode = buySignalsMode
         # "CNF" -> (a1 or a2 or..) and (b1 or...) and ..
         # "DNF" -> (a1 and a2 and..) or (b1 and...) or ..
+        self.buySignalMode = buySignalsMode
 
-        self.buySignals = copy.deepcopy(buySignals)
         # [[Signal("indicator", thresh, ">=")]]
+        self.buySignals = copy.deepcopy(buySignals)
 
-        self.sellSignalMode = sellSignalsMode
         # same as BuySignalMode
+        self.sellSignalMode = sellSignalsMode
 
-        self.sellSignals = copy.deepcopy(sellSignals)
         # same as BuySignals
+        self.sellSignals = copy.deepcopy(sellSignals)
 
-        self.exchangeBuyFee = exchangeBuyFee
         # no exchangeBuyFee (None) or Amount
         # you might want to also take into account the fee for currency conversion
+        self.exchangeBuyFee = exchangeBuyFee
 
-        self.exchangeSellFee = exchangeSellFee
         # no exchangeSellFee (None) or Amount
         # you might want to also take into account the fee for currency conversion
+        self.exchangeSellFee = exchangeSellFee
 
-        self.startDatetime = startDatetime
         # date and time from which the strategy will start trading
         # if none => start trading from the first available date
+        self.startDatetime = startDatetime
 
-        self.endDatetime = endDatetime
         # date and time from which the strategy will stop trading
         # if none => stop trading at the last available date
+        self.endDatetime = endDatetime
 
     @staticmethod
-    def toJSON(self):  # pylint: disable=W0211
+    def toJSON(self):
         return jsonpickle.encode(self)
 
     @staticmethod
-    def fromJSON(JSONstr: str):  # pylint: disable=C0103
+    def fromJSON(JSONstr: str):
         return jsonpickle.decode(JSONstr)
 
     def __str__(self) -> str:
@@ -117,24 +117,3 @@ class StrategyDetails:
 
     def dummyPrint(self):
         print("CapitalAllocation: ", self.capitalAllocation)
-
-
-# example
-# a = StrategyDetails(
-#     200,
-#     Amount(5, None),
-#     "1m",
-#     Amount(1, None),
-#     Amount(1, None),
-#     Amount(0.1, None),
-#     "CNF",
-#     [[Signal("indicator", 1, ">")]],
-#     "DNF",
-#     [[Signal("indicator", 1, ">")]],
-# )
-
-# json_default = StrategyDetails.toJSON(a)
-# print(json_default + "\n\n")
-# b: StrategyDetails = StrategyDetails.fromJSON(json)
-
-# b.dummy_print()
