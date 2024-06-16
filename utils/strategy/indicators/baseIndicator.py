@@ -5,7 +5,7 @@ from utils.constants import IndicatorNames, Timeframe
 
 
 class BaseIndicator(ABC):
-    # TODO: use a static buffer for data  ?? map<instrument,data>
+
     def __init__(
         self,
         instrumentName: str,

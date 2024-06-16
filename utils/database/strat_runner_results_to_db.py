@@ -11,15 +11,18 @@ from utils.strategyRunner.strategyRunner import StrategyRunner, Transaction
 def update_results(strategy_id):
     strategy = Strategy.objects.get(pk=strategy_id)
 
+    # convert the JSON string to a StrategyDetails object
     strat = StrategyDetails.fromJSON(strategy.strategyDetails)
 
+    # run the strategy and get the transactions
     transactions: List[Transaction] = StrategyRunner.run(strat)
 
+    # interpret the transactions and get the results
     results: Results = ResultsInterpretor.interpretResults(
         transactions, strat.capitalAllocation, strat.startDatetime)
-    # print("-----------------------")
-    # print(results)
+
+    # convert the results to a JSON string
     strategy.results = Results.toJSON(results)
-    # todo might have to call json pickle here
-    # strategy.description = "This is a test description"
-    strategy.save()  # django method to save the changes to the database
+
+    # django method to save the changes to the database
+    strategy.save()

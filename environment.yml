@@ -2,8 +2,8 @@ name: alphatester
 channels:
   - jiayi_anaconda
   - anaconda
-  - conda-forge
   - defaults
+  - conda-forge
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
@@ -126,6 +126,7 @@ dependencies:
   - wheel=0.41.2=py310h06a4308_0
   - wrapt=1.14.1=py310h5eee18b_0
   - xz=5.4.6=h5eee18b_0
+  - yapf=0.40.2=py310h06a4308_0
   - zipp=3.17.0=py310h06a4308_0
   - zlib=1.2.13=h5eee18b_0
   - zstd=1.5.5=hc292b87_0

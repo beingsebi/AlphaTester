@@ -52,13 +52,6 @@ class EMA(baseIndicator.BaseIndicator
         data = StrategyRunner.squashTimestamps(data, self.timeframe)
 
         index = SourcesToIndex[self.source]
-        # print("------")
-        # for i in data:
-        #     print(i[index])
-        # print("------")
-        # current candle is not included in the data
-        # if len(data) != self.length: TODO WARNING FIX INCOMPLETE CANDLES
-        #     return None  # not enough data
         alpha = 2 / (self.length + 1)
         ema = data[0][index]  # initialize EMA with first value
         for i in range(1, len(data)):

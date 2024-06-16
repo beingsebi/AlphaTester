@@ -27,7 +27,6 @@ def get_data(
             cur = conn.cursor()
             cur.execute(sql)
             data = cur.fetchall()
-            # print(data)
             return data
     except Exception as e:
         print("Error: " + str(e))
