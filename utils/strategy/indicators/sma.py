@@ -53,6 +53,8 @@ class SMA(baseIndicator.BaseIndicator
             return None
         data = StrategyRunner.squashTimestamps(data, self.timeframe)
         index = SourcesToIndex[self.source]
+        if len(data) == 0:
+            return 0
         avg = sum([x[index] for x in data]) / len(data)
         return avg
 

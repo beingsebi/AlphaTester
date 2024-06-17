@@ -12,7 +12,7 @@ class Signal:
         TypeOfOpOperatorChoices,  # indicator.calculatevalue() [operator] threshold
     ) -> None:
         self.indicator = indicator
-        # threshold might become Amount type if necessary
+        # TODO? threshold might become Amount type if necessary
         self.threshold = threshold
         self.operator = operator  # "<=" or ">="
 

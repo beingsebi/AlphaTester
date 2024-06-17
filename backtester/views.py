@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.urls import reverse_lazy
 from django.views import generic
@@ -15,6 +16,8 @@ from utils.strategyRunner.resultsInterpretor import Results
 
 from .forms import *
 from .models import *
+
+logger = logging.getLogger(__name__)
 
 
 class StrategyListView(generic.ListView):
@@ -35,9 +38,9 @@ class StrategyDetailView(generic.DetailView):
         try:
             context["strategyDetails"] = StrategyDetails.fromJSON(
                 self.object.strategyDetails)
-            print(context["strategyDetails"])
+            logger.debug(context["strategyDetails"])
         except Exception as e:
-            print("Error strategyDetails: " + str(e))
+            logger.debug("Error strategyDetails: " + str(e))
 
         try:
             context["results"] = Results.fromJSON(self.object.results)
@@ -66,9 +69,9 @@ class StrategyDetailView(generic.DetailView):
 
             context["results"].profit = round(context["results"].profit, 2)
 
-            print(context["results"])
+            logger.debug(context["results"])
         except Exception as e:
-            print("Error results: " + str(e))
+            logger.debug("Error results: " + str(e))
         return context
 
 
@@ -121,7 +124,7 @@ class StrategyCreateView(CreateView):
                         sellSignals.append(signal)
         else:
             return self.render_to_response(self.get_context_data(form=form))
-        print(indicator_instances)
+        logger.debug(indicator_instances)
         # We try to create a StrategyDetails object from the form data
         # If we fail, we add an error to the form and return the invalid form
         # Otherwise, we convert the StrategyDetails object to JSON and save it in the form instance
@@ -148,9 +151,8 @@ class StrategyCreateView(CreateView):
                 strategyDetails)
 
         except Exception as e:
-            # TODO: Add logging and replace prints.
-            print("Instanta " + str(form.instance.strategyDetails))
-            print("Eroare " + str(e))
+            logger.debug("Instanta " + str(form.instance.strategyDetails))
+            logger.debug("Eroare " + str(e))
             form.add_error("strategyDetails", str(e))
             return super().form_invalid(form)
 

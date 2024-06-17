@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from typing import List
 
@@ -5,6 +6,8 @@ import jsonpickle
 
 from utils.constants import TypeOfSignal
 from utils.strategyRunner.strategyRunner import Transaction
+
+logger = logging.getLogger(__name__)
 
 
 class Results:
@@ -86,7 +89,8 @@ class ResultsInterpretor:
                 datetime.combine(transaction.date, transaction.time))
             results.cntTrades += 1
             if transaction.type == TypeOfSignal.BUY:
-                print(f"buy {transaction.quantity} @ {transaction.price}")
+                logger.debug(
+                    f"buy {transaction.quantity} @ {transaction.price}")
                 results.cntBuys += 1
                 averageBuyPrice = averageBuyPrice * (
                     stock /
@@ -97,7 +101,8 @@ class ResultsInterpretor:
                 results.totalFees += transaction.fee
                 results.totalBuySize += transaction.price * transaction.quantity
             else:
-                print(f"sell {transaction.quantity} @ {transaction.price}")
+                logger.debug(
+                    f"sell {transaction.quantity} @ {transaction.price}")
 
                 results.cntSells += 1
                 if transaction.price > averageBuyPrice:

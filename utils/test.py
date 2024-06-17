@@ -1,3 +1,4 @@
+# Please move to the root directory of the project before running this script
 import django
 
 django.setup()
