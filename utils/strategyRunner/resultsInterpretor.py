@@ -28,6 +28,8 @@ class Results:
         averageSellSize: float = 0.0,
         winningSellingTradesPercentage: float = 0.0,
         profit: float = 0.0,
+        maxWinningStreak: int = 0,
+        maxLosingStreak: int = 0,
     ):
         self.balanceOverTime = balanceOverTime
         self.freeFundsOverTime = freeFundsOverTime
@@ -43,6 +45,8 @@ class Results:
         self.averageSellSize = averageSellSize  # in money
         self.winningSellingTradesPercentage = winningSellingTradesPercentage  # compare selling price to average buy price
         self.profit = profit  # in money
+        self.maxWinningStreak = maxWinningStreak
+        self.maxLosingStreak = maxLosingStreak
 
     def __repr__(self):
         return (
@@ -83,6 +87,8 @@ class ResultsInterpretor:
         stock = 0
         averageBuyPrice = 0
         winningSellTrades = 0
+        winningStreak = 0
+        losingStreak = 0
 
         for transaction in transactions:
             results.timeSeries.append(
@@ -107,6 +113,19 @@ class ResultsInterpretor:
                 results.cntSells += 1
                 if transaction.price > averageBuyPrice:
                     winningSellTrades += 1
+                    losingStreak = 0
+                    winningStreak += 1
+                    if winningStreak > results.maxWinningStreak:
+                        results.maxWinningStreak = winningStreak
+                elif transaction.price < averageBuyPrice:
+                    losingStreak += 1
+                    winningStreak = 0
+                    if losingStreak > results.maxLosingStreak:
+                        results.maxLosingStreak = losingStreak
+                else:
+                    winningStreak = 0
+                    losingStreak = 0
+
                 stock -= transaction.quantity
                 freeFunds += transaction.price * transaction.quantity - transaction.fee
                 results.totalFees += transaction.fee
