@@ -311,8 +311,7 @@ class StrategyRunner:
         row: tuple,
         strategy: StrategyDetails,
         transactions: List[Transaction],
-        free_funds: float,
-        shares: float,
+        tradingState: TradingState,
         signalType: TypeOfSignal,
     ):
         date_time = datetime.combine(row[0], row[1])
@@ -341,7 +340,7 @@ class StrategyRunner:
 
         if condition == True:
             StrategyRunner.place_order(signalType, strategy, transactions,
-                                       free_funds, shares, row)
+                                       tradingState, row)
 
     @staticmethod
     def place_order(
